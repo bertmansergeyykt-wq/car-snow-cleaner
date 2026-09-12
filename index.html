@@ -4,12 +4,76 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Уборка снега</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #172033;
+    }
+
+    .app {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .icon {
+      font-size: 60px;
+      margin-top: 40px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin: 20px 0 12px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.5;
+      color: #667085;
+    }
+
+    button {
+      width: 100%;
+      padding: 18px;
+      margin-top: 30px;
+      border: none;
+      border-radius: 14px;
+      background: #2481cc;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>❄️ Уборка снега</h1>
-  <p>Закажите исполнителя для очистки автомобиля.</p>
 
-  <button>Заказать уборку</button>
+  <div class="app">
+
+    <div class="icon">❄️</div>
+
+    <h1>Уборка снега с автомобиля</h1>
+
+    <p>
+      Не трать время на очистку машины.
+      Найдём исполнителя рядом с вами.
+    </p>
+
+    <button onclick="order()">
+      Заказать уборку
+    </button>
+
+  </div>
+
+  <script>
+    function order() {
+      alert("Начинаем оформление заказа!");
+    }
+  </script>
+
 </body>
 </html>
