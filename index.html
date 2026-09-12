@@ -10,16 +10,16 @@
 
   <title>Snow Patrol</title>
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Supabase JS v2 -->
+  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Yandex Maps API 2.1 -->
+  <!-- Yandex Maps 2.1 -->
   <script
     src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=c355cb46-e31f-4942-a74d-336abc2cb19a"
     type="text/javascript"
@@ -104,7 +104,7 @@
       position: absolute;
       z-index: 15;
       left: 50%;
-      top: 50%;
+      top: 40%;
       transform: translate(-50%, -100%);
       pointer-events: none;
     }
@@ -118,7 +118,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 20px rgba(255, 79, 135, 0.4);
+      box-shadow:
+        0 6px 20px rgba(255, 79, 135, 0.4);
     }
 
     .marker-pin-inner {
@@ -196,10 +197,6 @@
       color: #991b1b;
       background: #fee2e2;
     }
-
-    .hidden-screen {
-      display: none !important;
-    }
   </style>
 </head>
 
@@ -271,11 +268,13 @@
           <div class="mt-5 space-y-5">
 
             <div class="flex gap-4">
+
               <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
                 📍
               </div>
 
               <div>
+
                 <div class="font-bold text-gray-900">
                   Укажите место
                 </div>
@@ -283,15 +282,20 @@
                 <div class="text-sm text-gray-500 mt-1">
                   Покажите на карте, где находится автомобиль.
                 </div>
+
               </div>
+
             </div>
 
+
             <div class="flex gap-4">
+
               <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
                 🧹
               </div>
 
               <div>
+
                 <div class="font-bold text-gray-900">
                   Выберите помощь
                 </div>
@@ -299,15 +303,20 @@
                 <div class="text-sm text-gray-500 mt-1">
                   Откапывание, буксировка или комплексная помощь.
                 </div>
+
               </div>
+
             </div>
 
+
             <div class="flex gap-4">
+
               <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
                 🚙
               </div>
 
               <div>
+
                 <div class="font-bold text-gray-900">
                   Исполнитель приедет
                 </div>
@@ -315,7 +324,9 @@
                 <div class="text-sm text-gray-500 mt-1">
                   Система найдёт доступного исполнителя.
                 </div>
+
               </div>
+
             </div>
 
           </div>
@@ -326,7 +337,6 @@
 
     </div>
 
-    <!-- Bottom navigation -->
 
     <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
 
@@ -338,10 +348,12 @@
           class="flex flex-col items-center justify-center text-[#ff4f87]"
         >
           <span class="text-xl">🏠</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Главная
           </span>
         </button>
+
 
         <button
           type="button"
@@ -349,10 +361,12 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">📋</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Заказы
           </span>
         </button>
+
 
         <button
           type="button"
@@ -360,6 +374,7 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">👤</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Профиль
           </span>
@@ -385,17 +400,17 @@
 
       <div id="map"></div>
 
-      <!-- Центрированный маркер -->
 
       <div class="map-marker">
 
         <div class="marker-pin">
+
           <div class="marker-pin-inner"></div>
+
         </div>
 
       </div>
 
-      <!-- Верхняя панель -->
 
       <div class="map-overlay">
 
@@ -409,7 +424,6 @@
 
       </div>
 
-      <!-- Нижняя панель -->
 
       <div class="map-bottom-panel">
 
@@ -426,6 +440,7 @@
 
         </div>
 
+
         <div class="relative">
 
           <input
@@ -434,6 +449,7 @@
             placeholder="Определяем адрес..."
             class="w-full h-14 rounded-2xl bg-gray-100 px-4 pr-12 outline-none text-gray-900 focus:ring-2 focus:ring-[#ff4f87]"
           >
+
 
           <button
             type="button"
@@ -445,6 +461,7 @@
           </button>
 
         </div>
+
 
         <button
           id="location-next-button"
@@ -483,13 +500,16 @@
           ←
         </button>
 
+
         <div class="text-sm font-semibold text-[#ff4f87]">
           ШАГ 2
         </div>
 
+
         <h2 class="text-3xl font-black text-gray-900 mt-1">
           Какая помощь нужна?
         </h2>
+
 
         <div
           id="selected-address-preview"
@@ -509,9 +529,9 @@
 
         </div>
 
+
         <div class="mt-5 space-y-3">
 
-          <!-- Service 1 -->
 
           <button
             type="button"
@@ -548,8 +568,6 @@
           </button>
 
 
-          <!-- Service 2 -->
-
           <button
             type="button"
             data-service="Буксировка тросом"
@@ -584,8 +602,6 @@
 
           </button>
 
-
-          <!-- Service 3 -->
 
           <button
             type="button"
@@ -627,6 +643,7 @@
 
     </div>
 
+
     <div class="p-5 bg-white border-t border-gray-100 safe-bottom">
 
       <button
@@ -645,7 +662,7 @@
 
 
   <!-- ========================================================= -->
-  <!-- SEARCHING / SUCCESS -->
+  <!-- SEARCHING -->
   <!-- ========================================================= -->
 
   <section
@@ -661,19 +678,23 @@
 
       </div>
 
+
       <div class="text-sm font-semibold text-[#ff4f87] uppercase">
         Заказ создан
       </div>
 
+
       <h2 class="text-3xl font-black text-gray-900 mt-2">
         Ищем исполнителя
       </h2>
+
 
       <p class="text-gray-500 mt-3 leading-relaxed">
         Ищем ближайшего свободного исполнителя.
         Как только кто-то примет заказ,
         статус изменится.
       </p>
+
 
       <div class="mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm">
 
@@ -691,6 +712,7 @@
       </div>
 
     </div>
+
 
     <div class="p-5 safe-bottom">
 
@@ -734,6 +756,7 @@
 
           </div>
 
+
           <button
             type="button"
             onclick="loadOrdersScreen()"
@@ -743,6 +766,7 @@
           </button>
 
         </div>
+
 
         <div
           id="orders-container"
@@ -778,10 +802,12 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">🏠</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Главная
           </span>
         </button>
+
 
         <button
           type="button"
@@ -789,10 +815,12 @@
           class="flex flex-col items-center justify-center text-[#ff4f87]"
         >
           <span class="text-xl">📋</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Заказы
           </span>
         </button>
+
 
         <button
           type="button"
@@ -800,6 +828,7 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">👤</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Профиль
           </span>
@@ -831,11 +860,13 @@
         Профиль
       </h2>
 
+
       <div class="mt-6 bg-white rounded-3xl p-6 shadow-sm">
 
         <div class="w-16 h-16 rounded-full bg-[#fff0f5] flex items-center justify-center text-3xl">
           👤
         </div>
+
 
         <div
           id="profile-user-id"
@@ -844,6 +875,7 @@
           Пользователь
         </div>
 
+
         <div class="text-sm text-gray-500 mt-1">
           Telegram
         </div>
@@ -851,6 +883,7 @@
       </div>
 
     </div>
+
 
     <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
 
@@ -862,10 +895,12 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">🏠</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Главная
           </span>
         </button>
+
 
         <button
           type="button"
@@ -873,10 +908,12 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">📋</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Заказы
           </span>
         </button>
+
 
         <button
           type="button"
@@ -884,6 +921,7 @@
           class="flex flex-col items-center justify-center text-[#ff4f87]"
         >
           <span class="text-xl">👤</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Профиль
           </span>
@@ -899,6 +937,7 @@
 
 
 <script>
+
   // ============================================================
   // TELEGRAM
   // ============================================================
@@ -906,9 +945,13 @@
   const telegramWebApp =
     window.Telegram?.WebApp || null;
 
+
   if (telegramWebApp) {
+
     telegramWebApp.ready();
+
     telegramWebApp.expand();
+
   }
 
 
@@ -920,14 +963,19 @@
         ?.user
         ?.id;
 
+
     if (telegramId) {
+
       return telegramId;
+
     }
 
-    // Fallback для тестирования
+
+    // Тестовый ID при открытии
     // приложения напрямую в браузере.
 
     return 123456789;
+
   }
 
 
@@ -938,6 +986,7 @@
         ?.initDataUnsafe
         ?.user || null
     );
+
   }
 
 
@@ -948,8 +997,10 @@
   const SUPABASE_URL =
     "https://dghcnwzqqmrsysewnvkn.supabase.co";
 
+
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_OObcKHZ0AGc5AI5c_3KY-Q_GpzEKI8C";
+
 
   const supabaseClient =
     window.supabase.createClient(
@@ -964,45 +1015,25 @@
 
   let map = null;
 
-  let mapPlacemark = null;
-
   let mapInitialized = false;
 
+
   let selectedLocation = {
+
     latitude: null,
+
     longitude: null,
+
     address: ""
+
   };
+
 
   let selectedService = null;
 
   let currentOrders = [];
 
   let isCreatingOrder = false;
-
-
-  // ============================================================
-  // SERVICES
-  // ============================================================
-
-  const services = {
-
-    "Откапывание лопатой": {
-      name: "Откапывание лопатой",
-      price: 500
-    },
-
-    "Буксировка тросом": {
-      name: "Буксировка тросом",
-      price: 1000
-    },
-
-    "Комплекс": {
-      name: "Комплекс",
-      price: 1500
-    }
-
-  };
 
 
   // ============================================================
@@ -1014,9 +1045,12 @@
     const screens =
       document.querySelectorAll(".screen");
 
+
     screens.forEach(
       (screen) => {
+
         screen.classList.remove("active");
+
       }
     );
 
@@ -1028,12 +1062,14 @@
 
 
     if (!target) {
+
       console.error(
         "Экран не найден:",
         screenName
       );
 
       return;
+
     }
 
 
@@ -1047,7 +1083,18 @@
 
           if (map) {
 
-            map.container.fitToViewport();
+            if (
+              typeof map.requestReposition ===
+              "function"
+            ) {
+
+              map.requestReposition();
+
+            } else {
+
+              map.container.fitToViewport();
+
+            }
 
           }
 
@@ -1059,7 +1106,9 @@
 
 
     if (screenName === "profile") {
+
       renderProfile();
+
     }
 
   }
@@ -1072,6 +1121,7 @@
   function openMapScreen() {
 
     showScreen("map");
+
 
     setTimeout(
       () => {
@@ -1092,7 +1142,18 @@
       map
     ) {
 
-      map.container.fitToViewport();
+      if (
+        typeof map.requestReposition ===
+        "function"
+      ) {
+
+        map.requestReposition();
+
+      } else {
+
+        map.container.fitToViewport();
+
+      }
 
       return;
 
@@ -1116,7 +1177,9 @@
       () => {
 
         if (mapInitialized) {
+
           return;
+
         }
 
 
@@ -1130,6 +1193,7 @@
           new ymaps.Map(
             "map",
             {
+
               center:
                 defaultCenter,
 
@@ -1138,6 +1202,7 @@
               controls: [
                 "zoomControl"
               ]
+
             }
           );
 
@@ -1152,8 +1217,11 @@
             const center =
               map.getCenter();
 
+
             if (!center) {
+
               return;
+
             }
 
 
@@ -1178,12 +1246,13 @@
           (event) => {
 
             const coordinates =
-              event.get(
-                "coords"
-              );
+              event.get("coords");
+
 
             if (!coordinates) {
+
               return;
+
             }
 
 
@@ -1214,6 +1283,7 @@
 
     selectedLocation.latitude =
       latitude;
+
 
     selectedLocation.longitude =
       longitude;
@@ -1281,8 +1351,10 @@
         input.value =
           "Адрес не найден";
 
+
         selectedLocation.address =
           "";
+
 
         return;
 
@@ -1339,6 +1411,7 @@
         const latitude =
           position.coords.latitude;
 
+
         const longitude =
           position.coords.longitude;
 
@@ -1349,6 +1422,7 @@
         );
 
       },
+
 
       (error) => {
 
@@ -1364,11 +1438,17 @@
 
       },
 
+
       {
+
         enableHighAccuracy: true,
+
         timeout: 10000,
+
         maximumAge: 30000
+
       }
+
     );
 
   }
@@ -1452,9 +1532,11 @@
 
     buttons.forEach(
       (item) => {
+
         item.classList.remove(
           "selected"
         );
+
       }
     );
 
@@ -1464,18 +1546,16 @@
     );
 
 
-    const serviceName =
-      button.dataset.service;
-
-    const price =
-      Number(
-        button.dataset.price
-      );
-
-
     selectedService = {
-      name: serviceName,
-      price: price
+
+      name:
+        button.dataset.service,
+
+      price:
+        Number(
+          button.dataset.price
+        )
+
     };
 
 
@@ -1508,7 +1588,9 @@
   async function createOrder() {
 
     if (isCreatingOrder) {
+
       return;
+
     }
 
 
@@ -1549,6 +1631,7 @@
     button.disabled =
       true;
 
+
     button.textContent =
       "Создаём заказ...";
 
@@ -1559,9 +1642,11 @@
 
     try {
 
-      // --------------------------------------------------------
+      // ======================================================
       // 1. СОЗДАЁМ ЗАКАЗ
-      // --------------------------------------------------------
+      // ВАЖНО:
+      // колонка называется telegram_user_id
+      // ======================================================
 
       const {
         data,
@@ -1571,7 +1656,7 @@
           .from("orders")
           .insert({
 
-            telegram_id:
+            telegram_user_id:
               telegramId,
 
             latitude:
@@ -1604,6 +1689,7 @@
           error
         );
 
+
         throw new Error(
           error.message
         );
@@ -1626,11 +1712,10 @@
       );
 
 
-      // --------------------------------------------------------
-      // 2. КРИТИЧЕСКИ ВАЖНЫЙ ШАГ
-      // СРАЗУ ПОСЛЕ СОЗДАНИЯ ЗАКАЗА
-      // ВЫЗЫВАЕМ find-executor
-      // --------------------------------------------------------
+      // ======================================================
+      // 2. ИЩЕМ ИСПОЛНИТЕЛЯ
+      // ЧЕРЕЗ УЖЕ СОЗДАННУЮ quick-processor
+      // ======================================================
 
       console.log(
         "Ищем исполнителя для заказа:",
@@ -1638,47 +1723,73 @@
       );
 
 
-      const {
-        data: executorResult,
-        error: executorError
-      } =
-        await supabaseClient.functions.invoke(
-          "find-executor",
-          {
-            body: {
-              orderId: data.id
+      try {
+
+        const {
+          data: executorResult,
+          error: executorError
+        } =
+          await supabaseClient.functions.invoke(
+            "quick-processor",
+            {
+
+              body: {
+
+                action:
+                  "find_performer",
+
+                latitude:
+                  Number(
+                    data.latitude
+                  ),
+
+                longitude:
+                  Number(
+                    data.longitude
+                  )
+
+              }
+
             }
-          }
-        );
+          );
 
 
-      if (executorError) {
+        if (executorError) {
+
+          console.error(
+            "Ошибка поиска исполнителя:",
+            executorError
+          );
+
+        } else {
+
+          console.log(
+            "Результат поиска исполнителя:",
+            executorResult
+          );
+
+
+          // Если исполнитель найден,
+          // можно показать это в консоли.
+          //
+          // Пока статус заказа не меняем,
+          // потому что исполнитель ещё не принял заказ.
+
+        }
+
+      } catch (executorError) {
 
         console.error(
-          "Ошибка Edge Function find-executor:",
+          "Ошибка вызова quick-processor:",
           executorError
-        );
-
-        // ВАЖНО:
-        // Сам заказ уже создан.
-        // Поэтому не считаем создание заказа неудачным.
-        //
-        // Показываем пользователю экран поиска,
-        // а функцию можно будет повторить позже.
-
-      } else {
-
-        console.log(
-          "Результат поиска исполнителя:",
-          executorResult
         );
 
       }
 
 
-      // --------------------------------------------------------
-      // 3. ДОБАВЛЯЕМ ЗАКАЗ В ЛОКАЛЬНЫЙ СПИСОК
-      // --------------------------------------------------------
+      // ======================================================
+      // 3. ДОБАВЛЯЕМ В ЛОКАЛЬНЫЙ СПИСОК
+      // ======================================================
 
       currentOrders = [
         data,
@@ -1686,9 +1797,9 @@
       ];
 
 
-      // --------------------------------------------------------
-      // 4. ПОКАЗЫВАЕМ ЭКРАН ПОИСКА
-      // --------------------------------------------------------
+      // ======================================================
+      // 4. ПОКАЗЫВАЕМ ПОИСК
+      // ======================================================
 
       document.getElementById(
         "success-order-number"
@@ -1735,6 +1846,7 @@
           "bg-gray-300"
         );
 
+
         button.classList.add(
           "bg-[#ff4f87]"
         );
@@ -1763,10 +1875,13 @@
 
     container.innerHTML = `
       <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+
         <div class="spinner mx-auto"></div>
+
         <div class="font-bold text-gray-900 mt-4">
           Загружаем заказы
         </div>
+
       </div>
     `;
 
@@ -1777,23 +1892,30 @@
 
     try {
 
+      // ======================================================
+      // ИСТОРИЮ ЗАГРУЖАЕМ ЧЕРЕЗ quick-processor
+      // ======================================================
+
       const {
         data,
         error
       } =
-        await supabaseClient
-          .from("orders")
-          .select("*")
-          .eq(
-            "telegram_id",
-            telegramId
-          )
-          .order(
-            "created_at",
-            {
-              ascending: false
+        await supabaseClient.functions.invoke(
+          "quick-processor",
+          {
+
+            body: {
+
+              action:
+                "get_orders",
+
+              telegram_user_id:
+                telegramId
+
             }
-          );
+
+          }
+        );
 
 
       if (error) {
@@ -1805,8 +1927,19 @@
       }
 
 
+      if (
+        data?.error
+      ) {
+
+        throw new Error(
+          data.error
+        );
+
+      }
+
+
       currentOrders =
-        data || [];
+        data?.orders || [];
 
 
       renderOrders();
@@ -1821,6 +1954,7 @@
 
 
       container.innerHTML = `
+
         <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
 
           <div class="text-4xl">
@@ -1844,6 +1978,7 @@
           </button>
 
         </div>
+
       `;
 
     }
@@ -1865,6 +2000,7 @@
     ) {
 
       container.innerHTML = `
+
         <div class="bg-white rounded-3xl p-7 text-center shadow-sm">
 
           <div class="text-5xl">
@@ -1889,7 +2025,9 @@
           </button>
 
         </div>
+
       `;
+
 
       return;
 
@@ -1922,6 +2060,7 @@
 
 
     return `
+
       <div class="bg-white rounded-3xl p-5 shadow-sm mb-3">
 
         <div class="flex items-start justify-between gap-3">
@@ -1938,11 +2077,15 @@
 
           </div>
 
+
           <span class="order-status ${status.className}">
+
             ${status.icon}
+
             <span class="ml-1">
               ${status.label}
             </span>
+
           </span>
 
         </div>
@@ -1990,6 +2133,7 @@
 
             </div>
 
+
             <div class="text-xl font-black text-gray-900">
               ${Number(order.price || 0).toLocaleString("ru-RU")} ₽
             </div>
@@ -1999,6 +2143,7 @@
         </div>
 
       </div>
+
     `;
 
   }
@@ -2011,36 +2156,48 @@
       case "accepted":
 
         return {
+
           label:
             "Исполнитель найден",
+
           icon:
             "🚗",
+
           className:
             "status-accepted"
+
         };
 
 
       case "completed":
 
         return {
+
           label:
             "Выполнен",
+
           icon:
             "✅",
+
           className:
             "status-completed"
+
         };
 
 
       case "cancelled":
 
         return {
+
           label:
             "Отменён",
+
           icon:
             "❌",
+
           className:
             "status-cancelled"
+
         };
 
 
@@ -2049,12 +2206,16 @@
       default:
 
         return {
+
           label:
             "Поиск исполнителя",
+
           icon:
             "🔎",
+
           className:
             "status-searching"
+
         };
 
     }
@@ -2079,7 +2240,9 @@
 
 
     if (!element) {
+
       return;
+
     }
 
 
@@ -2112,12 +2275,12 @@
   // UTILITIES
   // ============================================================
 
-  function formatDate(
-    value
-  ) {
+  function formatDate(value) {
 
     if (!value) {
+
       return "—";
+
     }
 
 
@@ -2139,38 +2302,47 @@
     return date.toLocaleString(
       "ru-RU",
       {
+
         day: "2-digit",
+
         month: "2-digit",
+
         year: "numeric",
+
         hour: "2-digit",
+
         minute: "2-digit"
+
       }
     );
 
   }
 
 
-  function escapeHtml(
-    value
-  ) {
+  function escapeHtml(value) {
 
     return String(value)
+
       .replace(
         /&/g,
         "&amp;"
       )
+
       .replace(
         /</g,
         "&lt;"
       )
+
       .replace(
         />/g,
         "&gt;"
       )
+
       .replace(
         /"/g,
         "&quot;"
       )
+
       .replace(
         /'/g,
         "&#039;"
@@ -2229,6 +2401,7 @@
 
     }
   );
+
 </script>
 
 </body>
