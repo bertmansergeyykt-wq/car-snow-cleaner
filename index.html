@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+'''<!DOCTYPE html>
 <html lang="ru">
 
 <head>
@@ -1140,6 +1140,15 @@
 
 
   /* =========================
+     EDGE FUNCTION
+  ========================= */
+
+  const EDGE_FUNCTION_URL =
+    SUPABASE_URL +
+    "/functions/v1/quick-processor";
+
+
+  /* =========================
      ЗАКАЗ
   ========================= */
 
@@ -1158,13 +1167,14 @@
   };
 
 
+  let createdOrder = null;
+
+
   /*
-    Последний созданный заказ.
-    Пока используем его напрямую после
-    успешного создания в Supabase.
+    Все загруженные заказы
   */
 
-  let createdOrder = null;
+  let userOrders = [];
 
 
   /* =========================
@@ -1316,7 +1326,7 @@
 
     if (name === "orders") {
 
-      renderOrders();
+      loadOrders();
 
     }
 
@@ -1590,7 +1600,167 @@
 
 
   /* =========================
-     ОТОБРАЖЕНИЕ ЗАКАЗА
+     TELEGRAM USER ID
+  ========================= */
+
+  function getTelegramUserId() {
+
+    const telegramUser =
+      window.Telegram
+        ?.WebApp
+        ?.initDataUnsafe
+        ?.user;
+
+    return telegramUser?.id || null;
+
+  }
+
+
+  /* =========================
+     ЗАГРУЗКА ЗАКАЗОВ
+  ========================= */
+
+  async function loadOrders() {
+
+    const container =
+      document.getElementById(
+        "orders-container"
+      );
+
+    const telegramUserId =
+      getTelegramUserId();
+
+
+    if (!telegramUserId) {
+
+      console.error(
+        "Telegram user ID не найден"
+      );
+
+      renderOrders();
+
+      return;
+
+    }
+
+
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ⏳
+        </div>
+
+        <div class="empty-title">
+          Загружаем заказы
+        </div>
+
+        <div class="empty-description">
+          Пожалуйста, подождите.
+        </div>
+
+      </div>
+
+    `;
+
+
+    try {
+
+      console.log(
+        "Загружаем заказы пользователя:",
+        telegramUserId
+      );
+
+
+      const response =
+        await fetch(
+          EDGE_FUNCTION_URL,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              "Authorization":
+                "Bearer " +
+                SUPABASE_PUBLISHABLE_KEY,
+
+              "apikey":
+                SUPABASE_PUBLISHABLE_KEY
+            },
+
+            body: JSON.stringify({
+              telegram_user_id:
+                telegramUserId
+            })
+          }
+        );
+
+
+      const result =
+        await response.json();
+
+
+      console.log(
+        "Ответ Edge Function:",
+        result
+      );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          result.error ||
+          "Ошибка загрузки заказов"
+        );
+
+      }
+
+
+      userOrders =
+        result.orders || [];
+
+
+      renderOrders();
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка загрузки заказов:",
+        error
+      );
+
+
+      container.innerHTML = `
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            ⚠️
+          </div>
+
+          <div class="empty-title">
+            Не удалось загрузить заказы
+          </div>
+
+          <div class="empty-description">
+            ${error.message}
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  /* =========================
+     ОТОБРАЖЕНИЕ ЗАКАЗОВ
   ========================= */
 
   function renderOrders() {
@@ -1600,120 +1770,181 @@
         "orders-container"
       );
 
-    const empty =
-      document.getElementById(
-        "orders-empty"
-      );
 
+    if (!userOrders.length) {
 
-    if (!createdOrder) {
+      container.innerHTML = `
 
-      empty.style.display =
-        "block";
+        <div
+          id="orders-empty"
+          class="empty-state"
+        >
+
+          <div class="empty-icon">
+            📋
+          </div>
+
+          <div class="empty-title">
+            Здесь пока пусто
+          </div>
+
+          <div class="empty-description">
+            Ваши заказы появятся здесь.
+          </div>
+
+        </div>
+
+      `;
+
+      document
+        .getElementById(
+          "orders-badge"
+        )
+        .classList.remove(
+          "visible"
+        );
 
       return;
 
     }
 
 
-    empty.style.display =
-      "none";
+    document
+      .getElementById(
+        "orders-badge"
+      )
+      .classList.add(
+        "visible"
+      );
 
 
-    const date =
-      createdOrder.created_at
-        ? new Date(
-            createdOrder.created_at
-          ).toLocaleString(
-            "ru-RU",
-            {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit"
-            }
-          )
-        : "";
+    container.innerHTML =
+      userOrders
+        .map(function(orderItem) {
+
+          const date =
+            orderItem.created_at
+              ? new Date(
+                  orderItem.created_at
+                ).toLocaleString(
+                  "ru-RU",
+                  {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  }
+                )
+              : "";
 
 
-    container.innerHTML = `
-
-      <div class="order-card">
-
-        <div class="order-card-header">
-
-          <div class="order-card-number">
-            Заказ #${createdOrder.id}
-          </div>
-
-          <div class="order-status">
-            🔎 Ищем исполнителя
-          </div>
-
-        </div>
+          let statusText =
+            "🔎 Ищем исполнителя";
 
 
-        <div class="order-row">
+          if (
+            orderItem.status ===
+            "accepted"
+          ) {
 
-          <div class="order-label">
-            Услуга
-          </div>
+            statusText =
+              "🚗 Исполнитель найден";
 
-          <div class="order-value">
-            ${createdOrder.service}
-          </div>
-
-        </div>
+          }
 
 
-        <div class="order-row">
+          if (
+            orderItem.status ===
+            "completed"
+          ) {
 
-          <div class="order-label">
-            Адрес
-          </div>
+            statusText =
+              "✅ Выполнен";
 
-          <div class="order-value">
-            ${createdOrder.address}
-          </div>
-
-        </div>
+          }
 
 
-        <div class="order-row">
+          return `
 
-          <div class="order-label">
-            Стоимость
-          </div>
+            <div class="order-card">
 
-          <div class="order-value">
-            ${createdOrder.price} ₽
-          </div>
+              <div class="order-card-header">
 
-        </div>
-
-
-        ${
-          date
-            ? `
-              <div class="order-row">
-
-                <div class="order-label">
-                  Создан
+                <div class="order-card-number">
+                  Заказ #${orderItem.id}
                 </div>
 
-                <div class="order-value">
-                  ${date}
+                <div class="order-status">
+                  ${statusText}
                 </div>
 
               </div>
-            `
-            : ""
-        }
 
-      </div>
 
-    `;
+              <div class="order-row">
+
+                <div class="order-label">
+                  Услуга
+                </div>
+
+                <div class="order-value">
+                  ${orderItem.service || "—"}
+                </div>
+
+              </div>
+
+
+              <div class="order-row">
+
+                <div class="order-label">
+                  Адрес
+                </div>
+
+                <div class="order-value">
+                  ${orderItem.address || "—"}
+                </div>
+
+              </div>
+
+
+              <div class="order-row">
+
+                <div class="order-label">
+                  Стоимость
+                </div>
+
+                <div class="order-value">
+                  ${orderItem.price || 0} ₽
+                </div>
+
+              </div>
+
+
+              ${
+                date
+                  ? `
+                    <div class="order-row">
+
+                      <div class="order-label">
+                        Создан
+                      </div>
+
+                      <div class="order-value">
+                        ${date}
+                      </div>
+
+                    </div>
+                  `
+                  : ""
+              }
+
+            </div>
+
+          `;
+
+        })
+        .join("");
 
   }
 
@@ -1724,120 +1955,160 @@
 
   async function createOrder() {
 
-  const button =
-    document.getElementById(
-      "create-order-button"
-    );
+    const button =
+      document.getElementById(
+        "create-order-button"
+      );
 
-  button.disabled = true;
 
-  button.textContent =
-    "⏳ Создаём заказ...";
+    button.disabled = true;
 
-  try {
 
-    console.log(
-      "Отправляем заказ в Supabase..."
-    );
+    button.textContent =
+      "⏳ Создаём заказ...";
 
-    const telegramUser =
-      window.Telegram?.WebApp?.initDataUnsafe?.user;
 
-    const telegramUserId =
-      telegramUser?.id || null;
+    try {
 
-    console.log(
-      "Telegram user ID:",
-      telegramUserId
-    );
+      console.log(
+        "Отправляем заказ в Supabase..."
+      );
 
-    const {
-      data,
-      error
-    } = await supabaseClient
-      .from("orders")
-      .insert({
-        telegram_user_id:
-          telegramUserId,
 
-        latitude:
-          order.latitude,
+      const telegramUserId =
+        getTelegramUserId();
 
-        longitude:
-          order.longitude,
 
-        address:
-          order.address,
+      console.log(
+        "Telegram user ID:",
+        telegramUserId
+      );
 
-        service:
-          services[
-            order.service
-          ].name,
 
-        price:
-          order.price,
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("orders")
+        .insert({
 
-        status:
-          "searching"
-      })
-      .select()
-      .single();
+          telegram_user_id:
+            telegramUserId,
 
-    if (error) {
+          latitude:
+            order.latitude,
+
+          longitude:
+            order.longitude,
+
+          address:
+            order.address,
+
+          service:
+            services[
+              order.service
+            ].name,
+
+          price:
+            order.price,
+
+          status:
+            "searching"
+
+        })
+        .select()
+        .single();
+
+
+      if (error) {
+
+        console.error(
+          "Supabase error:",
+          error
+        );
+
+        throw error;
+
+      }
+
+
+      console.log(
+        "Заказ создан:",
+        data
+      );
+
+
+      createdOrder =
+        data;
+
+
+      /*
+        Добавляем новый заказ
+        сразу в локальный список,
+        чтобы он появился мгновенно.
+      */
+
+      userOrders = [
+        data,
+        ...userOrders
+      ];
+
+
+      document.getElementById(
+        "order-number"
+      ).textContent =
+        "#" + data.id;
+
+
+      document
+        .getElementById(
+          "orders-badge"
+        )
+        .classList.add(
+          "visible"
+        );
+
+
+      showScreen("success");
+
+
+    } catch (error) {
 
       console.error(
-        "Supabase error:",
+        "Ошибка создания заказа:",
         error
       );
 
-      throw error;
-    }
 
-    console.log(
-      "Заказ создан:",
-      data
-    );
-
-    createdOrder = data;
-
-    document.getElementById(
-      "order-number"
-    ).textContent =
-      "#" + data.id;
-
-    document
-      .getElementById(
-        "orders-badge"
-      )
-      .classList.add(
-        "visible"
+      alert(
+        "Не удалось создать заказ.\n\n" +
+        error.message
       );
 
-    showScreen("success");
 
-  } catch (error) {
+    } finally {
 
-    console.error(
-      "Ошибка создания заказа:",
-      error
-    );
+      button.disabled = false;
 
-    alert(
-      "Не удалось создать заказ.\n\n" +
-      error.message
-    );
 
-  } finally {
+      button.textContent =
+        "🚗 Заказать исполнителя";
 
-    button.disabled = false;
+    }
 
-    button.textContent =
-      "🚗 Заказать исполнителя";
   }
-}
+
+
+  /* =========================
+     ПЕРВИЧЕСКАЯ ЗАГРУЗКА
+  ========================= */
+
+  console.log(
+    "Telegram user ID:",
+    getTelegramUserId()
+  );
 
 </script>
 
 </body>
 </html>
-```
