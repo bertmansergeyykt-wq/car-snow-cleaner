@@ -1100,6 +1100,11 @@
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
     );
+  console.log("Supabase:", {
+  url: SUPABASE_URL,
+  keyExists: !!SUPABASE_PUBLISHABLE_KEY,
+  keyLength: SUPABASE_PUBLISHABLE_KEY.length
+});
 
 
   /* =========================
