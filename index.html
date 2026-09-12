@@ -18,495 +18,279 @@
 
   <style>
 
-    * {
-      box-sizing: border-box;
-    }
-
-    :root {
-      --pink: #ff4f87;
-      --pink-dark: #ed3972;
-      --pink-light: #fff0f5;
-      --bg: #f8f8fa;
-      --text: #17171c;
-      --muted: #85858d;
-      --white: #ffffff;
-      --border: #eeeeef;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Arial,
-        sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    body {
-      min-height: 100vh;
-    }
-
-    button,
-    input {
-      font-family: inherit;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 520px;
-      min-height: 100vh;
-      margin: 0 auto;
-      background: var(--bg);
-      position: relative;
-      padding-bottom: 90px;
-    }
-
-    /* =========================
-       ЭКРАНЫ
-    ========================= */
-
-    .screen {
-      display: none;
-      min-height: calc(100vh - 90px);
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    /* =========================
-       ГЛАВНЫЙ ЭКРАН
-    ========================= */
-
-    .home-screen {
-      min-height: calc(100vh - 90px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 26px 20px 40px;
-    }
-
-    .home-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .logo span {
-      color: var(--pink);
-    }
-
-    .home-content {
-      text-align: center;
-      margin-top: auto;
-      margin-bottom: auto;
-      padding: 20px 10px;
-    }
-
-    .snow-icon {
-      width: 92px;
-      height: 92px;
-      margin: 0 auto 28px;
-      border-radius: 30px;
-      background: var(--pink-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 50px;
-    }
-
-    .home-title {
-      font-size: 34px;
-      line-height: 1.1;
-      font-weight: 850;
-      margin: 0 0 16px;
-      letter-spacing: -1px;
-    }
-
-    .home-description {
-      font-size: 17px;
-      line-height: 1.5;
-      color: var(--muted);
-      margin: 0 auto;
-      max-width: 360px;
-    }
-
-    .main-order-button {
-      width: 100%;
-      border: 0;
-      border-radius: 18px;
-      padding: 19px 20px;
-      background: var(--pink);
-      color: white;
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 10px 25px rgba(255, 79, 135, 0.25);
-    }
-
-    .main-order-button:active {
-      transform: scale(0.98);
-    }
-
-    /* =========================
-       ВЕРХНИЙ HEADER
-    ========================= */
-
-    .top-header {
-      height: 70px;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--pink);
-      color: white;
-    }
-
-    .header-title {
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .header-back {
-      border: 0;
-      background: transparent;
-      color: white;
-      font-size: 26px;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    /* =========================
-       КАРТА
-    ========================= */
-
-    .map-screen {
-      min-height: calc(100vh - 90px);
-      position: relative;
-    }
-
-    .map-container {
-      position: relative;
-      width: 100%;
-      height: calc(100vh - 90px);
-      min-height: 600px;
-    }
-
-    #map {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .map-marker {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -100%);
-      z-index: 1000;
-      font-size: 46px;
-      pointer-events: none;
-      filter: drop-shadow(0 4px 4px rgba(0,0,0,0.25));
-    }
-
-    /* =========================
-       ПЛАВАЮЩАЯ КАРТОЧКА
-    ========================= */
-
-    .map-card {
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: 22px;
-      z-index: 2000;
-
-      background: var(--pink);
-      color: white;
-
-      border-radius: 24px;
-      padding: 20px;
-
-      box-shadow:
-        0 12px 35px rgba(0,0,0,0.18);
-    }
-
-    .map-card-title {
-      font-size: 21px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-
-    .map-card-description {
-      font-size: 14px;
-      line-height: 1.4;
-      opacity: 0.9;
-      margin-bottom: 15px;
-    }
-
-    .address-input {
-      width: 100%;
-      border: 0;
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 16px;
-      outline: none;
-      background: white;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-
-    .select-location-button {
-      width: 100%;
-      border: 0;
-      border-radius: 14px;
-      padding: 15px;
-      background: white;
-      color: var(--pink-dark);
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .select-location-button:active {
-      transform: scale(0.98);
-    }
-
-    .coordinates {
-      font-size: 11px;
-      opacity: 0.7;
-      margin-top: 8px;
-    }
-
-    .error {
-      color: white;
-      font-size: 13px;
-      margin-top: 8px;
-    }
-
-    /* =========================
-       УСЛУГИ
-    ========================= */
-
-    .content-screen {
-      padding: 20px;
-    }
-
-    .section-title {
-      font-size: 29px;
-      line-height: 1.15;
-      margin: 20px 0 8px;
-      font-weight: 850;
-    }
-
-    .section-description {
-      font-size: 16px;
-      line-height: 1.5;
-      color: var(--muted);
-      margin: 0 0 20px;
-    }
-
-    .service {
-      background: white;
-      border: 2px solid transparent;
-      border-radius: 20px;
-      padding: 19px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.04);
-    }
-
-    .service.selected {
-      border-color: var(--pink);
-      background: var(--pink-light);
-    }
-
-    .service-title {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-
-    .service-description {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .service-price {
-      margin-top: 12px;
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .button {
-      width: 100%;
-      border: 0;
-      border-radius: 16px;
-      padding: 17px;
-      margin-top: 10px;
-      font-size: 17px;
-      font-weight: 800;
-      background: var(--pink);
-      color: white;
-      cursor: pointer;
-    }
-
-    .button.secondary {
-      background: #eeeeef;
-      color: var(--text);
-    }
-
-    /* =========================
-       ЗАКАЗЫ
-    ========================= */
-
-    .empty-state {
-      text-align: center;
-      padding: 90px 20px;
-    }
-
-    .empty-icon {
-      font-size: 60px;
-      margin-bottom: 20px;
-    }
-
-    .empty-title {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .empty-description {
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    /* =========================
-       ПРОФИЛЬ
-    ========================= */
-
-    .profile-card {
-      background: white;
-      border-radius: 22px;
-      padding: 22px;
-      margin-top: 25px;
-    }
-
-    .profile-avatar {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: var(--pink-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 34px;
-      margin-bottom: 15px;
-    }
-
-    .profile-name {
-      font-size: 22px;
-      font-weight: 800;
-    }
-
-    /* =========================
-       НИЖНЯЯ НАВИГАЦИЯ
-    ========================= */
-
-    .bottom-nav {
-      position: fixed;
-      left: 50%;
-      bottom: 0;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 520px;
-      height: 82px;
-      background: white;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 5000;
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-
-    .nav-item {
-      position: relative;
-      border: 0;
-      background: transparent;
-      color: #9999a1;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      min-width: 65px;
-    }
-
-    .nav-item.active {
-      color: var(--pink);
-    }
-
-    .nav-icon {
-      font-size: 23px;
-      line-height: 1;
-    }
-
-    .badge {
-      position: absolute;
-      top: -3px;
-      right: 12px;
-      min-width: 17px;
-      height: 17px;
-      padding: 0 4px;
-      border-radius: 20px;
-      background: var(--pink);
-      color: white;
-      font-size: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-    }
-
-    /* =========================
-       АДАПТИВ
-    ========================= */
-
-    @media (max-height: 700px) {
-
-      .snow-icon {
-        width: 75px;
-        height: 75px;
-        font-size: 40px;
-        margin-bottom: 18px;
-      }
-
-      .home-title {
-        font-size: 29px;
-      }
-
-      .map-container {
-        min-height: 520px;
-      }
-
-    }
-
-  </style>
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body {
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Arial,
+      sans-serif;
+
+    background: #f4f7fb;
+    color: #172033;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 520px;
+    height: 100vh;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 24px 18px 40px;
+    overflow: hidden;
+  }
+
+  .screen {
+    display: none;
+    height: 100%;
+  }
+
+  .screen.active {
+    display: block;
+  }
+
+  .hero {
+    padding-top: 45px;
+  }
+
+  .snow {
+    font-size: 64px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 32px;
+    line-height: 1.15;
+    margin: 0 0 14px;
+  }
+
+  h2 {
+    font-size: 27px;
+    margin: 20px 0 10px;
+  }
+
+  p {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #667085;
+    margin: 0 0 20px;
+  }
+
+  .button {
+    width: 100%;
+    border: 0;
+    border-radius: 16px;
+    padding: 17px 20px;
+    margin-top: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #2481cc;
+    color: white;
+  }
+
+  .button:active {
+    transform: scale(0.98);
+  }
+
+  .button.secondary {
+    background: #e7eef5;
+    color: #172033;
+  }
+
+  /* КАРТА */
+
+  .map-wrapper {
+    margin-top: 20px;
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+  }
+
+  #map {
+    width: 100%;
+    height: 360px;
+    touch-action: none;
+  }
+
+  .map-hint {
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 14px;
+    color: #667085;
+    background: white;
+  }
+
+  /* Фиксированная метка */
+
+  .map-marker {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+      translate(-50%, -100%);
+
+    z-index: 1000;
+
+    font-size: 42px;
+
+    pointer-events: none;
+
+    filter:
+      drop-shadow(0 3px 3px rgba(0,0,0,0.25));
+  }
+
+  .location-box {
+    margin-top: 18px;
+    padding: 18px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+  }
+
+  .location-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .address-input {
+    width: 100%;
+    border: 1px solid #d9dee7;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    color: #172033;
+  }
+
+  .address-input:focus {
+    border-color: #2481cc;
+  }
+
+  .coordinates {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #98a2b3;
+  }
+
+  .service {
+    background: white;
+    border: 2px solid transparent;
+    border-radius: 18px;
+    padding: 18px;
+    margin-top: 14px;
+    cursor: pointer;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+  }
+
+  .service.selected {
+    border-color: #2481cc;
+    background: #eef7ff;
+  }
+
+  .service-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .service-description {
+    color: #667085;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .service-price {
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .summary {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 22px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid #edf0f4;
+  }
+
+  .summary-row:last-child {
+    border-bottom: none;
+  }
+
+  .summary-label {
+    color: #667085;
+  }
+
+  .summary-value {
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .total {
+    font-size: 23px;
+    font-weight: 800;
+    margin-top: 15px;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 15px;
+    color: #2481cc;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .success {
+    text-align: center;
+    padding-top: 70px;
+  }
+
+  .success-icon {
+    font-size: 75px;
+    margin-bottom: 20px;
+  }
+
+  .order-number {
+    font-size: 16px;
+    color: #667085;
+    margin-top: 15px;
+  }
+
+  .error {
+    color: #d92d20;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+</style>
 </head>
 
 <body>
