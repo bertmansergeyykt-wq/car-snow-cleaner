@@ -231,8 +231,8 @@ export async function reverseGeocode(
     const result =
       await ymaps.geocode(
         [
-          latitude,
-          longitude
+          longitude,
+          latitude
         ],
         {
           results: 1
