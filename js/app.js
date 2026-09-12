@@ -39,6 +39,17 @@ import {
 
 
 // ============================================================
+// SUPABASE
+// ============================================================
+
+const SUPABASE_FUNCTION_URL =
+  "https://dghcnwzqqmrsysewnvkn.supabase.co/functions/v1/quick-processor";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_OObcKHZ0AGc5AI5c_3KY-Q_GpzEKI8C";
+
+
+// ============================================================
 // TELEGRAM
 // ============================================================
 
@@ -106,17 +117,16 @@ async function registerTelegramUser() {
 
     const response =
       await fetch(
-        "https://dghcnwzqqmrsysewnvkn.supabase.co/functions/v1/quick-processor",
+        SUPABASE_FUNCTION_URL,
         {
           method: "POST",
 
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
 
             "Authorization":
-              `Bearer ${
-                window.Telegram?.WebApp?.initData || ""
-              }`
+              `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
           },
 
           body: JSON.stringify({
@@ -149,6 +159,10 @@ async function registerTelegramUser() {
     );
 
 
+    // --------------------------------------------------------
+    // Ошибка HTTP
+    // --------------------------------------------------------
+
     if (!response.ok) {
 
       console.error(
@@ -164,6 +178,10 @@ async function registerTelegramUser() {
 
     }
 
+
+    // --------------------------------------------------------
+    // Пользователь получен
+    // --------------------------------------------------------
 
     console.log(
       "Telegram пользователь:",
