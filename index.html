@@ -10,18 +10,21 @@
 
   <title>Snow Patrol</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <!-- Telegram -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+  <!-- Yandex Maps -->
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=c355cb46-e31f-4942-a74d-336abc2cb19a&lang=ru_RU"></script>
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script
-    src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=c355cb46-e31f-4942-a74d-336abc2cb19a"
-    type="text/javascript"
-  ></script>
-
   <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     html,
     body {
       margin: 0;
@@ -29,134 +32,314 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #fff0f5;
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: #f6f7fb;
+      color: #171717;
     }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       APP
+       ========================================================= */
 
     #app {
       width: 100%;
-      height: 100%;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
+    }
+
+    #content {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      position: relative;
     }
 
     .screen {
       display: none;
       width: 100%;
       height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-bottom: 24px;
     }
 
     .screen.active {
-      display: flex;
+      display: block;
     }
 
-    .safe-bottom {
-      padding-bottom: max(
-        20px,
-        env(safe-area-inset-bottom)
-      );
+    .screen-inner {
+      padding: 20px;
     }
 
-    .map-screen {
-      position: relative;
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .header {
+      padding: 22px 20px 16px;
+      background: #ff4f9a;
+      color: white;
+    }
+
+    .header-small {
+      font-size: 14px;
+      opacity: .9;
+      margin-bottom: 5px;
+    }
+
+    .header-title {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    /* =========================================================
+       HOME
+       ========================================================= */
+
+    .home-title {
+      margin-top: 10px;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .home-subtitle {
+      margin-top: 8px;
+      color: #707070;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .main-order-button {
       width: 100%;
-      height: 100%;
-      background: #fff;
+      margin-top: 25px;
+      min-height: 70px;
+      border-radius: 22px;
+      background: #ff4f9a;
+      color: white;
+      font-size: 21px;
+      font-weight: 800;
+      box-shadow: 0 8px 25px rgba(255, 79, 154, .25);
+    }
+
+    .main-order-button:active {
+      transform: scale(.98);
+    }
+
+    .quick-card {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 20px;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,.05);
+    }
+
+    .quick-card-title {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .quick-card-text {
+      margin-top: 7px;
+      font-size: 14px;
+      color: #777;
+      line-height: 1.4;
+    }
+
+    /* =========================================================
+       MAP
+       ========================================================= */
+
+    #map-screen {
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .map-header {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 10;
+      background: white;
+      border-radius: 16px;
+      padding: 13px 16px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.12);
+    }
+
+    .map-header-title {
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .map-header-text {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #777;
     }
 
     #map {
-      position: absolute;
-      inset: 0;
       width: 100%;
       height: 100%;
     }
 
-    .map-overlay {
+    .map-center-marker {
       position: absolute;
-      z-index: 10;
-      left: 16px;
-      right: 16px;
-      top: 16px;
-    }
-
-    .map-bottom-panel {
-      position: absolute;
-      z-index: 20;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: white;
-      border-radius: 28px 28px 0 0;
-      padding: 18px 16px;
-      box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.12);
-    }
-
-    .map-marker {
-      position: absolute;
-      z-index: 15;
+      z-index: 8;
+      top: 50%;
       left: 50%;
-      top: 40%;
       transform: translate(-50%, -100%);
       pointer-events: none;
+      font-size: 42px;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,.3));
     }
 
-    .marker-pin {
-      width: 42px;
-      height: 42px;
-      border-radius: 50% 50% 50% 0;
-      background: #ff4f87;
-      transform: rotate(-45deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow:
-        0 6px 20px rgba(255, 79, 135, 0.4);
-    }
-
-    .marker-pin-inner {
-      width: 15px;
-      height: 15px;
+    .map-bottom {
+      position: absolute;
+      z-index: 10;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      padding: 15px;
+      border-radius: 20px;
       background: white;
-      border-radius: 50%;
+      box-shadow: 0 5px 25px rgba(0,0,0,.15);
+    }
+
+    .coordinates {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 8px;
+    }
+
+    #address {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .map-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .map-button {
+      flex: 1;
+      min-height: 48px;
+      border-radius: 13px;
+      background: #f0f0f0;
+      font-weight: 700;
+    }
+
+    .map-button.primary {
+      background: #ff4f9a;
+      color: white;
+    }
+
+    .location-error {
+      margin-top: 8px;
+      color: #e53935;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       SERVICES
+       ========================================================= */
+
+    .section-title {
+      font-size: 25px;
+      font-weight: 800;
+      margin-bottom: 18px;
     }
 
     .service-card {
-      transition:
-        transform 0.15s ease,
-        border-color 0.15s ease,
-        box-shadow 0.15s ease;
+      width: 100%;
+      background: white;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-align: left;
+      box-shadow: 0 4px 18px rgba(0,0,0,.05);
     }
 
-    .service-card:active {
-      transform: scale(0.98);
+    .service-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      background: #fff0f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 27px;
+      flex-shrink: 0;
     }
 
-    .service-card.selected {
-      border-color: #ff4f87;
-      background: #fff0f5;
-      box-shadow:
-        0 0 0 2px rgba(255, 79, 135, 0.12);
+    .service-name {
+      font-size: 17px;
+      font-weight: 750;
     }
 
-    .bottom-nav {
-      padding-bottom: max(
-        8px,
-        env(safe-area-inset-bottom)
-      );
+    .service-price {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #777;
     }
 
-    .spinner {
-      width: 42px;
-      height: 42px;
-      border: 4px solid #ffd1df;
-      border-top-color: #ff4f87;
+    /* =========================================================
+       SEARCHING
+       ========================================================= */
+
+    .searching-container {
+      padding: 35px 20px;
+      text-align: center;
+    }
+
+    .searching-icon {
+      font-size: 60px;
+      margin-top: 30px;
+    }
+
+    .searching-title {
+      margin-top: 20px;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .searching-text {
+      margin-top: 10px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    .loader {
+      width: 45px;
+      height: 45px;
+      margin: 25px auto;
+      border: 4px solid #eee;
+      border-top-color: #ff4f9a;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin 1s linear infinite;
     }
 
     @keyframes spin {
@@ -165,33 +348,325 @@
       }
     }
 
-    .order-status {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
+    /* =========================================================
+       ACTIVE ORDER
+       ========================================================= */
+
+    .active-order-card {
+      margin: 20px;
+      background: white;
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 5px 25px rgba(0,0,0,.07);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 20px;
+      background: #e8f8ed;
+      color: #188542;
+      font-size: 13px;
       font-weight: 700;
     }
 
-    .status-searching {
-      color: #a16207;
-      background: #fef3c7;
+    .active-order-title {
+      margin-top: 15px;
+      font-size: 23px;
+      font-weight: 800;
     }
 
-    .status-accepted {
-      color: #166534;
-      background: #dcfce7;
+    .order-info {
+      margin-top: 16px;
     }
 
-    .status-completed {
-      color: #1d4ed8;
-      background: #dbeafe;
+    .order-info-row {
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
     }
 
-    .status-cancelled {
-      color: #991b1b;
-      background: #fee2e2;
+    .order-info-label {
+      color: #888;
+      font-size: 12px;
+    }
+
+    .order-info-value {
+      margin-top: 4px;
+      font-size: 16px;
+      font-weight: 650;
+    }
+
+    .action-button {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 18px;
+      border-radius: 15px;
+      background: #ff4f9a;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .action-button.secondary {
+      background: #eee;
+      color: #222;
+    }
+
+    /* =========================================================
+       ORDERS
+       ========================================================= */
+
+    .order-card {
+      background: white;
+      border-radius: 18px;
+      padding: 17px;
+      margin-bottom: 12px;
+      box-shadow: 0 3px 15px rgba(0,0,0,.05);
+    }
+
+    .order-card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .order-service {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .order-price {
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .order-address {
+      margin-top: 9px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .order-date {
+      margin-top: 8px;
+      color: #999;
+      font-size: 12px;
+    }
+
+    .empty {
+      padding: 45px 20px;
+      text-align: center;
+      color: #888;
+    }
+
+    /* =========================================================
+       PROFILE
+       ========================================================= */
+
+    .profile-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.05);
+    }
+
+    .profile-avatar {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: #ff4f9a;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 13px;
+    }
+
+    .profile-name {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .profile-id {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .profile-menu {
+      margin-top: 15px;
+    }
+
+    .profile-menu-button {
+      width: 100%;
+      min-height: 52px;
+      padding: 0 16px;
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 10px;
+      text-align: left;
+      font-weight: 700;
+      box-shadow: 0 2px 12px rgba(0,0,0,.04);
+    }
+
+    /* =========================================================
+       PERFORMER
+       ========================================================= */
+
+    .performer-header {
+      padding: 22px 20px;
+      background: #222;
+      color: white;
+    }
+
+    .performer-header-title {
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .performer-status-card {
+      margin: 18px 20px;
+      padding: 18px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+    }
+
+    .performer-status-label {
+      color: #888;
+      font-size: 13px;
+    }
+
+    .performer-status {
+      margin-top: 6px;
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    .status-available {
+      color: #159447;
+    }
+
+    .status-busy {
+      color: #e57d00;
+    }
+
+    .status-error {
+      color: #e53935;
+    }
+
+    .refresh-button {
+      margin-top: 13px;
+      width: 100%;
+      min-height: 45px;
+      border-radius: 13px;
+      background: #f0f0f0;
+      font-weight: 700;
+    }
+
+    .performer-orders-title {
+      padding: 0 20px;
+      font-size: 21px;
+      font-weight: 800;
+      margin-top: 25px;
+      margin-bottom: 12px;
+    }
+
+    .performer-order-card {
+      margin: 0 20px 12px;
+      padding: 18px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.05);
+    }
+
+    .performer-order-service {
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .performer-order-price {
+      margin-top: 8px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .performer-order-address {
+      margin-top: 10px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .performer-order-distance {
+      margin-top: 8px;
+      color: #888;
+      font-size: 13px;
+    }
+
+    .accept-button {
+      width: 100%;
+      margin-top: 15px;
+      min-height: 50px;
+      border-radius: 14px;
+      background: #ff4f9a;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    /* =========================================================
+       BOTTOM NAV
+       ========================================================= */
+
+    #bottom-nav {
+      flex-shrink: 0;
+      height: 72px;
+      padding: 6px 8px;
+      padding-bottom: max(6px, env(safe-area-inset-bottom));
+      background: white;
+      border-top: 1px solid #eee;
+      display: flex;
+      z-index: 100;
+    }
+
+    .nav-button {
+      flex: 1;
+      background: transparent;
+      color: #999;
+      font-size: 11px;
+      font-weight: 650;
+      border-radius: 14px;
+    }
+
+    .nav-button.active {
+      color: #ff4f9a;
+      background: #fff0f7;
+    }
+
+    .nav-icon {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 2px;
+    }
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    #toast {
+      position: fixed;
+      z-index: 999;
+      left: 20px;
+      right: 20px;
+      bottom: 90px;
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: rgba(30,30,30,.94);
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      display: none;
     }
   </style>
 </head>
@@ -200,1251 +675,693 @@
 
 <div id="app">
 
-  <!-- ======================================================== -->
-  <!-- HOME -->
-  <!-- ======================================================== -->
+  <div id="content">
 
-  <section
-    id="screen-home"
-    class="screen active flex-col bg-[#fff0f5]"
-  >
+    <!-- =====================================================
+         HOME
+         ===================================================== -->
 
-    <div class="flex-1 overflow-y-auto">
+    <section id="home-screen" class="screen active">
 
-      <div class="px-5 pt-8">
+      <div class="header">
+        <div class="header-small">Snow Patrol</div>
+        <div class="header-title">Помощь рядом</div>
+      </div>
 
-        <div class="mb-8">
+      <div class="screen-inner">
 
-          <div class="text-sm font-semibold text-[#ff4f87] mb-2">
-            SNOW PATROL
-          </div>
+        <div class="home-title">
+          Застряли в снегу?
+        </div>
 
-          <h1 class="text-3xl font-black text-gray-900 leading-tight">
-            Помощь вашему<br>
-            автомобилю
-          </h1>
-
-          <p class="mt-3 text-gray-500 leading-relaxed">
-            Если автомобиль застрял в снегу —
-            вызовите исполнителя прямо через приложение.
-          </p>
-
+        <div class="home-subtitle">
+          Найдём человека, который поможет очистить автомобиль или вытащить его из снега.
         </div>
 
         <button
-          type="button"
+          class="main-order-button"
           onclick="openMapScreen()"
-          class="w-full rounded-3xl bg-[#ff4f87] text-white px-6 py-7 shadow-lg shadow-pink-200 active:scale-[0.98] transition"
         >
-
-          <div class="text-5xl mb-4">
-            🚗
-          </div>
-
-          <div class="text-2xl font-black">
-            Заказать помощь
-          </div>
-
-          <div class="mt-2 text-sm text-pink-100">
-            Укажите место автомобиля
-          </div>
-
+          🚗 Заказать уборку
         </button>
 
-      </div>
-
-      <div class="px-5 mt-6 pb-8">
-
-        <div class="bg-white rounded-3xl p-5 shadow-sm">
-
-          <div class="text-lg font-bold text-gray-900">
+        <div class="quick-card">
+          <div class="quick-card-title">
             Как это работает?
           </div>
 
-          <div class="mt-5 space-y-5">
-
-            <div class="flex gap-4">
-
-              <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
-                📍
-              </div>
-
-              <div>
-
-                <div class="font-bold text-gray-900">
-                  Укажите место
-                </div>
-
-                <div class="text-sm text-gray-500 mt-1">
-                  Покажите на карте, где находится автомобиль.
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="flex gap-4">
-
-              <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
-                🧹
-              </div>
-
-              <div>
-
-                <div class="font-bold text-gray-900">
-                  Выберите помощь
-                </div>
-
-                <div class="text-sm text-gray-500 mt-1">
-                  Откапывание, буксировка или комплексная помощь.
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="flex gap-4">
-
-              <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
-                🚙
-              </div>
-
-              <div>
-
-                <div class="font-bold text-gray-900">
-                  Исполнитель приедет
-                </div>
-
-                <div class="text-sm text-gray-500 mt-1">
-                  Система найдёт доступного исполнителя.
-                </div>
-
-              </div>
-
-            </div>
-
+          <div class="quick-card-text">
+            1. Укажите место автомобиля.<br>
+            2. Выберите услугу.<br>
+            3. Ближайший исполнитель получит заказ.
           </div>
-
         </div>
 
       </div>
 
-    </div>
+    </section>
 
-    <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
 
-      <div class="grid grid-cols-3 h-16">
+    <!-- =====================================================
+         MAP
+         ===================================================== -->
 
-        <button
-          type="button"
-          onclick="showScreen('home')"
-          class="flex flex-col items-center justify-center text-[#ff4f87]"
-        >
-          <span class="text-xl">🏠</span>
+    <section id="map-screen" class="screen">
 
-          <span class="text-[11px] font-semibold mt-1">
-            Главная
-          </span>
+      <div class="map-header">
+        <div class="map-header-title">
+          Где находится автомобиль?
+        </div>
 
-        </button>
-
-        <button
-          type="button"
-          onclick="loadOrdersScreen()"
-          class="flex flex-col items-center justify-center text-gray-400"
-        >
-          <span class="text-xl">📋</span>
-
-          <span class="text-[11px] font-semibold mt-1">
-            Заказы
-          </span>
-
-        </button>
-
-        <button
-          type="button"
-          onclick="showScreen('profile')"
-          class="flex flex-col items-center justify-center text-gray-400"
-        >
-          <span class="text-xl">👤</span>
-
-          <span class="text-[11px] font-semibold mt-1">
-            Профиль
-          </span>
-
-        </button>
-
+        <div class="map-header-text">
+          Передвиньте карту так, чтобы метка оказалась на автомобиле
+        </div>
       </div>
-
-    </nav>
-
-  </section>
-
-
-  <!-- ======================================================== -->
-  <!-- MAP -->
-  <!-- ======================================================== -->
-
-  <section
-    id="screen-map"
-    class="screen flex-col"
-  >
-
-    <div class="map-screen">
 
       <div id="map"></div>
 
-      <div class="map-marker">
-
-        <div class="marker-pin">
-
-          <div class="marker-pin-inner"></div>
-
-        </div>
-
+      <div class="map-center-marker">
+        📍
       </div>
 
-      <div class="map-overlay">
+      <div class="map-bottom">
 
-        <button
-          type="button"
-          onclick="showScreen('home')"
-          class="w-11 h-11 rounded-full bg-white shadow-lg flex items-center justify-center text-xl"
+        <div
+          id="coordinates"
+          class="coordinates"
         >
-          ←
-        </button>
-
-      </div>
-
-      <div class="map-bottom-panel">
-
-        <div class="text-center mb-3">
-
-          <div class="font-black text-gray-900 text-lg">
-            Где находится автомобиль?
-          </div>
-
-          <div class="text-sm text-gray-500 mt-1">
-            Передвиньте карту так, чтобы маркер оказался
-            над автомобилем
-          </div>
-
+          Координаты не выбраны
         </div>
 
-        <div class="relative">
+        <input
+          id="address"
+          type="text"
+          placeholder="Введите адрес"
+        >
 
-          <input
-            id="address-input"
-            type="text"
-            placeholder="Определяем адрес..."
-            class="w-full h-14 rounded-2xl bg-gray-100 px-4 pr-12 outline-none text-gray-900 focus:ring-2 focus:ring-[#ff4f87]"
-          >
+        <div
+          id="location-error"
+          class="location-error"
+        ></div>
+
+        <div class="map-buttons">
 
           <button
-            type="button"
+            class="map-button"
             onclick="useCurrentLocation()"
-            class="absolute right-2 top-2 w-10 h-10 rounded-xl bg-white shadow-sm text-lg"
-            title="Моё местоположение"
           >
-            📍
-          </button>
-
-        </div>
-
-        <button
-          id="location-next-button"
-          type="button"
-          onclick="continueFromLocation()"
-          class="mt-3 w-full h-14 rounded-2xl bg-[#ff4f87] text-white font-bold text-lg active:scale-[0.98] transition"
-        >
-          Далее
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ======================================================== -->
-  <!-- SERVICES -->
-  <!-- ======================================================== -->
-
-  <section
-    id="screen-services"
-    class="screen flex-col bg-[#fff0f5]"
-  >
-
-    <div class="flex-1 overflow-y-auto">
-
-      <div class="px-5 pt-6 pb-8">
-
-        <button
-          type="button"
-          onclick="showScreen('map')"
-          class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-xl mb-6"
-        >
-          ←
-        </button>
-
-        <div class="text-sm font-semibold text-[#ff4f87]">
-          ШАГ 2
-        </div>
-
-        <h2 class="text-3xl font-black text-gray-900 mt-1">
-          Какая помощь нужна?
-        </h2>
-
-        <div
-          id="selected-address-preview"
-          class="mt-4 bg-white rounded-2xl p-4 shadow-sm"
-        >
-
-          <div class="text-xs text-gray-400 font-semibold uppercase">
-            Место
-          </div>
-
-          <div
-            id="selected-address-text"
-            class="font-semibold text-gray-900 mt-1"
-          >
-            Адрес не выбран
-          </div>
-
-        </div>
-
-        <div class="mt-5 space-y-3">
-
-          <button
-            type="button"
-            data-service="Откапывание лопатой"
-            data-price="500"
-            onclick="selectService(this)"
-            class="service-card w-full text-left bg-white border-2 border-transparent rounded-3xl p-5 shadow-sm"
-          >
-
-            <div class="flex items-center gap-4">
-
-              <div class="w-14 h-14 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-3xl">
-                🧹
-              </div>
-
-              <div class="flex-1">
-
-                <div class="font-black text-gray-900 text-lg">
-                  Откапывание лопатой
-                </div>
-
-                <div class="text-sm text-gray-500 mt-1">
-                  Поможем освободить автомобиль из снега.
-                </div>
-
-              </div>
-
-              <div class="font-black text-gray-900">
-                500 ₽
-              </div>
-
-            </div>
-
+            📍 Моё место
           </button>
 
           <button
-            type="button"
-            data-service="Буксировка тросом"
-            data-price="1000"
-            onclick="selectService(this)"
-            class="service-card w-full text-left bg-white border-2 border-transparent rounded-3xl p-5 shadow-sm"
+            class="map-button primary"
+            onclick="continueFromLocation()"
           >
-
-            <div class="flex items-center gap-4">
-
-              <div class="w-14 h-14 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-3xl">
-                🪢
-              </div>
-
-              <div class="flex-1">
-
-                <div class="font-black text-gray-900 text-lg">
-                  Буксировка тросом
-                </div>
-
-                <div class="text-sm text-gray-500 mt-1">
-                  Вытащим автомобиль из снежного плена.
-                </div>
-
-              </div>
-
-              <div class="font-black text-gray-900">
-                1 000 ₽
-              </div>
-
-            </div>
-
-          </button>
-
-          <button
-            type="button"
-            data-service="Комплекс"
-            data-price="1500"
-            onclick="selectService(this)"
-            class="service-card w-full text-left bg-white border-2 border-transparent rounded-3xl p-5 shadow-sm"
-          >
-
-            <div class="flex items-center gap-4">
-
-              <div class="w-14 h-14 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-3xl">
-                🚗
-              </div>
-
-              <div class="flex-1">
-
-                <div class="font-black text-gray-900 text-lg">
-                  Комплекс
-                </div>
-
-                <div class="text-sm text-gray-500 mt-1">
-                  Откапывание и буксировка.
-                </div>
-
-              </div>
-
-              <div class="font-black text-gray-900">
-                1 500 ₽
-              </div>
-
-            </div>
-
+            Далее
           </button>
 
         </div>
 
       </div>
 
-    </div>
-
-    <div class="p-5 bg-white border-t border-gray-100 safe-bottom">
-
-      <button
-        id="create-order-button"
-        type="button"
-        onclick="createOrder()"
-        disabled
-        class="w-full h-14 rounded-2xl bg-gray-300 text-white font-bold text-lg transition"
-      >
-        Заказать исполнителя
-      </button>
-
-    </div>
-
-  </section>
+    </section>
 
 
-  <!-- ======================================================== -->
-  <!-- SEARCHING -->
-  <!-- ======================================================== -->
+    <!-- =====================================================
+         SERVICES
+         ===================================================== -->
 
-  <section
-    id="screen-searching"
-    class="screen flex-col bg-[#fff0f5]"
-  >
+    <section id="services-screen" class="screen">
 
-    <div class="flex-1 overflow-y-auto">
+      <div class="screen-inner">
 
-      <div class="flex flex-col items-center justify-center px-6 text-center min-h-full pb-8">
-
-        <div
-          id="searching-icon"
-          class="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center mb-7"
-        >
-          <div class="spinner"></div>
+        <div class="section-title">
+          Выберите услугу
         </div>
 
-        <div
-          id="searching-label"
-          class="text-sm font-semibold text-[#ff4f87] uppercase"
+        <button
+          class="service-card"
+          onclick="selectService('Уборка снега', 300)"
         >
-          Заказ создан
+          <div class="service-icon">❄️</div>
+
+          <div>
+            <div class="service-name">
+              Уборка снега
+            </div>
+
+            <div class="service-price">
+              от 300 ₽
+            </div>
+          </div>
+        </button>
+
+
+        <button
+          class="service-card"
+          onclick="selectService('Снег + стёкла', 500)"
+        >
+          <div class="service-icon">🚘</div>
+
+          <div>
+            <div class="service-name">
+              Снег + стёкла
+            </div>
+
+            <div class="service-price">
+              от 500 ₽
+            </div>
+          </div>
+        </button>
+
+
+        <button
+          class="service-card"
+          onclick="selectService('Откапывание лопатой', 500)"
+        >
+          <div class="service-icon">🛠️</div>
+
+          <div>
+            <div class="service-name">
+              Откапывание лопатой
+            </div>
+
+            <div class="service-price">
+              500 ₽
+            </div>
+          </div>
+        </button>
+
+
+        <button
+          class="service-card"
+          onclick="selectService('Полная очистка', 800)"
+        >
+          <div class="service-icon">🚙</div>
+
+          <div>
+            <div class="service-name">
+              Полная очистка
+            </div>
+
+            <div class="service-price">
+              800 ₽
+            </div>
+          </div>
+        </button>
+
+
+        <button
+          class="service-card"
+          onclick="selectService('Буксировка тросом', 1000)"
+        >
+          <div class="service-icon">🪢</div>
+
+          <div>
+            <div class="service-name">
+              Буксировка тросом
+            </div>
+
+            <div class="service-price">
+              1000 ₽
+            </div>
+          </div>
+        </button>
+
+
+        <button
+          class="service-card"
+          onclick="selectService('Комплекс', 1500)"
+        >
+          <div class="service-icon">⭐</div>
+
+          <div>
+            <div class="service-name">
+              Комплекс
+            </div>
+
+            <div class="service-price">
+              1500 ₽
+            </div>
+          </div>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCHING
+         ===================================================== -->
+
+    <section id="searching-screen" class="screen">
+
+      <div class="searching-container">
+
+        <div class="searching-icon">
+          🔎
         </div>
 
-        <h2
-          id="searching-title"
-          class="text-3xl font-black text-gray-900 mt-2"
-        >
+        <div class="searching-title">
           Ищем исполнителя
-        </h2>
-
-        <p
-          id="searching-description"
-          class="text-gray-500 mt-3 leading-relaxed"
-        >
-          Ищем ближайшего свободного исполнителя.
-          Как только кто-то примет заказ,
-          статус изменится.
-        </p>
-
-        <div
-          id="performer-card"
-          class="hidden mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm"
-        >
-
-          <div class="text-xs uppercase font-semibold text-gray-400">
-            Исполнитель
-          </div>
-
-          <div
-            id="performer-name"
-            class="text-2xl font-black text-gray-900 mt-1"
-          >
-            —
-          </div>
-
-          <div class="text-sm text-gray-500 mt-2">
-            Свободный исполнитель найден
-          </div>
-
         </div>
 
-        <div class="mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm">
-
-          <div class="text-xs uppercase font-semibold text-gray-400">
-            Номер заказа
-          </div>
-
-          <div
-            id="success-order-number"
-            class="text-2xl font-black text-gray-900 mt-1"
-          >
-            —
-          </div>
-
+        <div class="searching-text">
+          Ищем ближайшего свободного человека рядом с вашим автомобилем.
         </div>
 
-        <button
-          id="complete-order-button"
-          type="button"
-          onclick="completeCurrentOrder()"
-          class="hidden mt-5 w-full max-w-sm h-14 rounded-2xl bg-[#ff4f87] text-white font-bold text-lg active:scale-[0.98] transition"
-        >
-          ✅ Завершить заказ
-        </button>
-
-        <div
-          id="completed-message"
-          class="hidden mt-5 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm"
-        >
-
-          <div class="text-4xl">
-            🎉
-          </div>
-
-          <div class="font-black text-gray-900 text-xl mt-3">
-            Заказ завершён
-          </div>
-
-          <div class="text-sm text-gray-500 mt-2">
-            Спасибо! Исполнитель снова доступен для новых заказов.
-          </div>
-
-        </div>
+        <div class="loader"></div>
 
       </div>
 
-    </div>
-
-    <div class="p-5 safe-bottom">
-
-      <button
-        type="button"
-        onclick="loadOrdersScreen()"
-        class="w-full h-14 rounded-2xl bg-white border border-gray-200 text-gray-900 font-bold text-lg"
-      >
-        📋 Мои заказы
-      </button>
-
-    </div>
-
-  </section>
+    </section>
 
 
-  <!-- ======================================================== -->
-  <!-- ORDERS -->
-  <!-- ======================================================== -->
+    <!-- =====================================================
+         ACTIVE ORDER
+         ===================================================== -->
 
-  <section
-    id="screen-orders"
-    class="screen flex-col bg-[#fff0f5]"
-  >
+    <section id="active-screen" class="screen">
 
-    <div class="flex-1 overflow-y-auto">
+      <div class="header">
+        <div class="header-small">
+          Snow Patrol
+        </div>
 
-      <div class="px-5 pt-7 pb-8">
+        <div class="header-title">
+          Ваш заказ
+        </div>
+      </div>
 
-        <div class="flex items-center justify-between">
+      <div
+        id="active-order-container"
+      ></div>
 
-          <div>
+    </section>
 
-            <div class="text-sm font-semibold text-[#ff4f87]">
-              SNOW PATROL
-            </div>
 
-            <h2 class="text-3xl font-black text-gray-900 mt-1">
-              Мои заказы
-            </h2>
+    <!-- =====================================================
+         ORDERS
+         ===================================================== -->
 
+    <section id="orders-screen" class="screen">
+
+      <div class="screen-inner">
+
+        <div class="section-title">
+          Мои заказы
+        </div>
+
+        <div id="orders-list"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROFILE
+         ===================================================== -->
+
+    <section id="profile-screen" class="screen">
+
+      <div class="screen-inner">
+
+        <div class="section-title">
+          Профиль
+        </div>
+
+        <div class="profile-card">
+
+          <div
+            id="profile-avatar"
+            class="profile-avatar"
+          >
+            👤
           </div>
 
-          <button
-            type="button"
-            onclick="loadOrdersScreen()"
-            class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center"
+          <div
+            id="profile-name"
+            class="profile-name"
           >
-            ↻
+            Пользователь
+          </div>
+
+          <div
+            id="profile-id"
+            class="profile-id"
+          >
+            ID: —
+          </div>
+
+        </div>
+
+        <div class="profile-menu">
+
+          <button
+            class="profile-menu-button"
+            onclick="openPerformerScreen()"
+          >
+            🚗 Режим исполнителя
           </button>
 
         </div>
 
-        <div
-          id="orders-container"
-          class="mt-6"
-        >
+      </div>
 
-          <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+    </section>
 
-            <div class="text-4xl">
-              📋
-            </div>
 
-            <div class="font-bold text-gray-900 mt-3">
-              Загружаем заказы
-            </div>
+    <!-- =====================================================
+         PERFORMER
+         ===================================================== -->
 
-          </div>
+    <section id="performer-screen" class="screen">
 
+      <div class="performer-header">
+
+        <div class="performer-header-title">
+          Режим исполнителя
         </div>
 
       </div>
 
-    </div>
 
-    <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
+      <div class="performer-status-card">
 
-      <div class="grid grid-cols-3 h-16">
-
-        <button
-          type="button"
-          onclick="showScreen('home')"
-          class="flex flex-col items-center justify-center text-gray-400"
-        >
-          <span class="text-xl">🏠</span>
-
-          <span class="text-[11px] font-semibold mt-1">
-            Главная
-          </span>
-
-        </button>
-
-        <button
-          type="button"
-          onclick="loadOrdersScreen()"
-          class="flex flex-col items-center justify-center text-[#ff4f87]"
-        >
-          <span class="text-xl">📋</span>
-
-          <span class="text-[11px] font-semibold mt-1">
-            Заказы
-          </span>
-
-        </button>
-
-        <button
-          type="button"
-          onclick="showScreen('profile')"
-          class="flex flex-col items-center justify-center text-gray-400"
-        >
-          <span class="text-xl">👤</span>
-
-          <span class="text-[11px] font-semibold mt-1">
-            Профиль
-          </span>
-
-        </button>
-
-      </div>
-
-    </nav>
-
-  </section>
-
-
-  <!-- ======================================================== -->
-  <!-- PROFILE -->
-  <!-- ======================================================== -->
-
-  <section
-    id="screen-profile"
-    class="screen flex-col bg-[#fff0f5]"
-  >
-
-    <div class="flex-1 overflow-y-auto px-5 pt-8 pb-8">
-
-      <div class="text-sm font-semibold text-[#ff4f87]">
-        SNOW PATROL
-      </div>
-
-      <h2 class="text-3xl font-black text-gray-900 mt-1">
-        Профиль
-      </h2>
-
-      <div class="mt-6 bg-white rounded-3xl p-6 shadow-sm">
-
-        <div class="w-16 h-16 rounded-full bg-[#fff0f5] flex items-center justify-center text-3xl">
-          👤
+        <div class="performer-status-label">
+          Ваш статус
         </div>
 
         <div
-          id="profile-user-id"
-          class="mt-4 font-bold text-gray-900"
+          id="performer-status"
+          class="performer-status status-error"
         >
-          Пользователь
+          Проверяем...
         </div>
 
-        <div class="text-sm text-gray-500 mt-1">
-          Telegram
-        </div>
-
-      </div>
-
-
-      <!-- РЕЖИМ ИСПОЛНИТЕЛЯ -->
-
-      <button
-        type="button"
-        onclick="openPerformerScreen()"
-        class="mt-4 w-full bg-gray-900 text-white rounded-3xl p-5 text-left shadow-sm active:scale-[0.98] transition"
-      >
-
-        <div class="flex items-center gap-4">
-
-          <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center text-3xl">
-            🚙
-          </div>
-
-          <div class="flex-1">
-
-            <div class="font-black text-lg">
-              Я исполнитель
-            </div>
-
-            <div class="text-sm text-gray-300 mt-1">
-              Принимать заказы на уборку снега
-            </div>
-
-          </div>
-
-          <div class="text-2xl">
-            →
-          </div>
-
-        </div>
-
-      </button>
-
-    </div>
-
-    <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
-
-      <div class="grid grid-cols-3 h-16">
-
         <button
-          type="button"
-          onclick="showScreen('home')"
-          class="flex flex-col items-center justify-center text-gray-400"
+          class="refresh-button"
+          onclick="loadPerformer()"
         >
-          <span class="text-xl">🏠</span>
-
-          <span class="text-[11px] font-semibold mt-1">
-            Главная
-          </span>
-
-        </button>
-
-        <button
-          type="button"
-          onclick="loadOrdersScreen()"
-          class="flex flex-col items-center justify-center text-gray-400"
-        >
-          <span class="text-xl">📋</span>
-
-          <span class="text-[11px] font-semibold mt-1">
-            Заказы
-          </span>
-
-        </button>
-
-        <button
-          type="button"
-          onclick="showScreen('profile')"
-          class="flex flex-col items-center justify-center text-[#ff4f87]"
-        >
-          <span class="text-xl">👤</span>
-
-          <span class="text-[11px] font-semibold mt-1">
-            Профиль
-          </span>
-
+          🔄 Обновить
         </button>
 
       </div>
 
-    </nav>
 
-  </section>
-
-
-  <!-- ======================================================== -->
-  <!-- PERFORMER -->
-  <!-- ======================================================== -->
-
-  <section
-    id="screen-performer"
-    class="screen flex-col bg-[#f5f5f5]"
-  >
-
-    <div class="flex-1 overflow-y-auto">
-
-      <div class="px-5 pt-7 pb-8">
-
-        <div class="flex items-center gap-3">
-
-          <button
-            type="button"
-            onclick="showScreen('profile')"
-            class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-xl"
-          >
-            ←
-          </button>
-
-          <div>
-
-            <div class="text-sm font-semibold text-[#ff4f87]">
-              SNOW PATROL
-            </div>
-
-            <h2 class="text-3xl font-black text-gray-900">
-              Исполнитель
-            </h2>
-
-          </div>
-
-        </div>
-
-
-        <!-- СТАТУС -->
-
-        <div class="mt-6 bg-white rounded-3xl p-5 shadow-sm">
-
-          <div class="flex items-center justify-between">
-
-            <div>
-
-              <div class="text-xs uppercase font-semibold text-gray-400">
-                Ваш статус
-              </div>
-
-              <div
-                id="performer-status-text"
-                class="text-2xl font-black text-gray-900 mt-1"
-              >
-                Проверяем...
-              </div>
-
-            </div>
-
-            <div
-              id="performer-status-icon"
-              class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-3xl"
-            >
-              ⏳
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- АКТИВНЫЙ ЗАКАЗ -->
-
-        <div
-          id="performer-active-order"
-          class="hidden mt-4"
-        >
-
-          <div class="bg-gray-900 text-white rounded-3xl p-6 shadow-lg">
-
-            <div class="text-sm text-gray-300">
-              АКТИВНЫЙ ЗАКАЗ
-            </div>
-
-            <div
-              id="performer-active-order-number"
-              class="text-3xl font-black mt-1"
-            >
-              #—
-            </div>
-
-            <div class="mt-5">
-
-              <div class="text-xs text-gray-400">
-                Услуга
-              </div>
-
-              <div
-                id="performer-active-service"
-                class="font-bold text-lg mt-1"
-              >
-                —
-              </div>
-
-            </div>
-
-            <div class="mt-4">
-
-              <div class="text-xs text-gray-400">
-                Адрес
-              </div>
-
-              <div
-                id="performer-active-address"
-                class="font-bold mt-1"
-              >
-                —
-              </div>
-
-            </div>
-
-            <div class="flex items-end justify-between mt-5">
-
-              <div>
-
-                <div class="text-xs text-gray-400">
-                  Стоимость
-                </div>
-
-                <div
-                  id="performer-active-price"
-                  class="text-2xl font-black mt-1"
-                >
-                  0 ₽
-                </div>
-
-              </div>
-
-              <div
-                id="performer-active-distance"
-                class="text-sm text-gray-300"
-              >
-                —
-              </div>
-
-            </div>
-
-            <button
-              id="performer-complete-button"
-              type="button"
-              onclick="completePerformerOrder()"
-              class="mt-6 w-full h-14 rounded-2xl bg-[#ff4f87] text-white font-black text-lg active:scale-[0.98] transition"
-            >
-              ✅ Завершить заказ
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <!-- СПИСОК ЗАКАЗОВ -->
-
-        <div
-          id="performer-orders-section"
-          class="mt-5"
-        >
-
-          <div class="flex items-center justify-between">
-
-            <div>
-
-              <div class="text-xs uppercase font-semibold text-gray-400">
-                Доступные заказы
-              </div>
-
-              <div class="text-xl font-black text-gray-900 mt-1">
-                Заказы рядом
-              </div>
-
-            </div>
-
-            <button
-              type="button"
-              onclick="loadAvailableOrders()"
-              class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-lg"
-            >
-              ↻
-            </button>
-
-          </div>
-
-          <div
-            id="performer-orders-container"
-            class="mt-4"
-          >
-
-            <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
-
-              <div class="spinner mx-auto"></div>
-
-              <div class="font-bold text-gray-900 mt-4">
-                Загружаем заказы
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- ОБНОВИТЬ -->
-
-        <button
-          type="button"
-          onclick="loadAvailableOrders()"
-          class="mt-5 w-full h-14 rounded-2xl bg-white border border-gray-200 text-gray-900 font-bold"
-        >
-          🔄 Обновить заказы
-        </button>
-
+      <div class="performer-orders-title">
+        Доступные заказы
       </div>
 
-    </div>
+      <div id="performer-orders"></div>
+
+    </section>
+
+  </div>
 
 
-    <div class="p-5 bg-white border-t border-gray-100 safe-bottom">
+  <!-- =======================================================
+       BOTTOM NAV
+       ======================================================= -->
 
-      <button
-        type="button"
-        onclick="showScreen('profile')"
-        class="w-full h-14 rounded-2xl bg-gray-100 text-gray-900 font-bold"
-      >
-        ← Вернуться в профиль
-      </button>
+  <nav id="bottom-nav">
 
-    </div>
+    <button
+      class="nav-button active"
+      data-screen="home-screen"
+      onclick="showScreen('home-screen')"
+    >
+      <span class="nav-icon">🏠</span>
+      Главная
+    </button>
 
-  </section>
+    <button
+      class="nav-button"
+      data-screen="orders-screen"
+      onclick="showScreen('orders-screen')"
+    >
+      <span class="nav-icon">📋</span>
+      Заказы
+    </button>
+
+    <button
+      class="nav-button"
+      data-screen="profile-screen"
+      onclick="showScreen('profile-screen')"
+    >
+      <span class="nav-icon">👤</span>
+      Профиль
+    </button>
+
+  </nav>
 
 </div>
 
 
+<div id="toast"></div>
+
+
 <script>
 
-  // ============================================================
-  // TELEGRAM
-  // ============================================================
-
-  const telegramWebApp =
-    window.Telegram?.WebApp || null;
-
-
-  if (telegramWebApp) {
-
-    telegramWebApp.ready();
-
-    telegramWebApp.expand();
-
-  }
-
-
-  function getTelegramUserId() {
-
-    const telegramId =
-      telegramWebApp
-        ?.initDataUnsafe
-        ?.user
-        ?.id;
-
-
-    if (telegramId) {
-
-      return telegramId;
-
-    }
-
-
-    return 123456789;
-
-  }
-
-
-  function getTelegramUser() {
-
-    return (
-      telegramWebApp
-        ?.initDataUnsafe
-        ?.user || null
-    );
-
-  }
-
-
-  // ============================================================
-  // SUPABASE
-  // ============================================================
+  /* ===========================================================
+     НАСТРОЙКИ
+     =========================================================== */
 
   const SUPABASE_URL =
     "https://dghcnwzqqmrsysewnvkn.supabase.co";
 
-
-  const SUPABASE_PUBLISHABLE_KEY =
+  const SUPABASE_KEY =
     "sb_publishable_OObcKHZ0AGc5AI5c_3KY-Q_GpzEKI8C";
+
+  const EDGE_FUNCTION_URL =
+    "https://dghcnwzqqmrsysewnvkn.supabase.co/functions/v1/quick-processor";
+
+
+  /*
+    ВАЖНО:
+
+    Это тестовый исполнитель из таблицы performers.
+
+    Мы НЕ будем искать его по Telegram ID.
+
+    Для прототипа используем непосредственно id = 1.
+  */
+
+  const TEST_PERFORMER_ID = 1;
 
 
   const supabaseClient =
     window.supabase.createClient(
       SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
+      SUPABASE_KEY
     );
 
 
-  // ============================================================
-  // APP STATE
-  // ============================================================
+  /* ===========================================================
+     СОСТОЯНИЕ
+     =========================================================== */
 
   let map = null;
-
   let mapInitialized = false;
 
-
   let selectedLocation = {
-
     latitude: null,
-
     longitude: null,
-
     address: ""
-
   };
-
 
   let selectedService = null;
 
   let currentOrders = [];
 
-  let isCreatingOrder = false;
-
-
-  // Текущий активный заказ клиента
-
   let currentActiveOrderId = null;
 
   let currentActivePerformerId = null;
 
-  let isCompletingOrder = false;
-
-
-  // ============================================================
-  // ИСПОЛНИТЕЛЬ
-  // ============================================================
-
-  // ВРЕМЕННО для теста используем нашего исполнителя ID = 1
-
-  const TEST_PERFORMER_ID = 1;
-
-
   let performerData = null;
-
-  let performerLatitude = 56.8389;
-
-  let performerLongitude = 60.6057;
 
   let performerActiveOrder = null;
 
-  let isAcceptingPerformerOrder = false;
-
-  let isCompletingPerformerOrder = false;
+  let isCreatingOrder = false;
 
 
-  // ============================================================
-  // SCREEN MANAGEMENT
-  // ============================================================
+  /* ===========================================================
+     TELEGRAM
+     =========================================================== */
 
-  function showScreen(screenName) {
+  const tg =
+    window.Telegram &&
+    window.Telegram.WebApp
+      ? window.Telegram.WebApp
+      : null;
 
-    const screens =
-      document.querySelectorAll(".screen");
+
+  if (tg) {
+    tg.ready();
+    tg.expand();
+
+    try {
+      tg.setHeaderColor("#ff4f9a");
+      tg.setBackgroundColor("#f6f7fb");
+    } catch (e) {}
+  }
 
 
-    screens.forEach(
-      (screen) => {
+  function getTelegramUserId() {
+
+    /*
+      В Telegram получаем настоящий ID.
+
+      Если приложение открыто обычным браузером,
+      используем тестовый ID.
+    */
+
+    if (
+      tg &&
+      tg.initDataUnsafe &&
+      tg.initDataUnsafe.user &&
+      tg.initDataUnsafe.user.id
+    ) {
+
+      return Number(
+        tg.initDataUnsafe.user.id
+      );
+
+    }
+
+    return 123456789;
+  }
+
+
+  function getTelegramUser() {
+
+    if (
+      tg &&
+      tg.initDataUnsafe &&
+      tg.initDataUnsafe.user
+    ) {
+
+      return tg.initDataUnsafe.user;
+
+    }
+
+    return {
+      id: 123456789,
+      first_name: "Тестовый пользователь",
+      username: ""
+    };
+  }
+
+
+  /* ===========================================================
+     TOAST
+     =========================================================== */
+
+  function showToast(message) {
+
+    const toast =
+      document.getElementById("toast");
+
+    toast.textContent = message;
+    toast.style.display = "block";
+
+    clearTimeout(
+      window.toastTimer
+    );
+
+    window.toastTimer =
+      setTimeout(() => {
+
+        toast.style.display = "none";
+
+      }, 3000);
+  }
+
+
+  /* ===========================================================
+     ЭКРАНЫ
+     =========================================================== */
+
+  function showScreen(screenId) {
+
+    document
+      .querySelectorAll(".screen")
+      .forEach(screen => {
 
         screen.classList.remove("active");
 
-      }
-    );
+      });
 
 
     const target =
-      document.getElementById(
-        "screen-" + screenName
-      );
+      document.getElementById(screenId);
+
+    if (target) {
+      target.classList.add("active");
+      target.scrollTop = 0;
+    }
 
 
-    if (!target) {
+    document
+      .querySelectorAll(".nav-button")
+      .forEach(button => {
 
-      console.error(
-        "Экран не найден:",
-        screenName
-      );
+        button.classList.remove("active");
 
-      return;
+        if (
+          button.dataset.screen === screenId
+        ) {
+
+          button.classList.add("active");
+
+        }
+
+      });
+
+
+    /*
+      Для специальных экранов нижнее меню
+      не показываем.
+    */
+
+    const bottomNav =
+      document.getElementById("bottom-nav");
+
+    const specialScreens = [
+      "map-screen",
+      "services-screen",
+      "searching-screen",
+      "active-screen",
+      "performer-screen"
+    ];
+
+    if (
+      specialScreens.includes(screenId)
+    ) {
+
+      bottomNav.style.display = "none";
+
+    } else {
+
+      bottomNav.style.display = "flex";
 
     }
 
 
-    target.classList.add("active");
+    if (
+      screenId === "orders-screen"
+    ) {
 
-
-    if (screenName === "map") {
-
-      setTimeout(
-        () => {
-
-          if (map) {
-
-            if (
-              typeof map.requestReposition ===
-              "function"
-            ) {
-
-              map.requestReposition();
-
-            } else {
-
-              map.container.fitToViewport();
-
-            }
-
-          }
-
-        },
-        100
-      );
+      loadOrdersScreen();
 
     }
 
 
-    if (screenName === "profile") {
+    if (
+      screenId === "profile-screen"
+    ) {
 
       renderProfile();
 
@@ -1453,45 +1370,33 @@
   }
 
 
-  // ============================================================
-  // MAP
-  // ============================================================
+  /* ===========================================================
+     HOME → MAP
+     =========================================================== */
 
   function openMapScreen() {
 
-    showScreen("map");
+    showScreen("map-screen");
 
+    setTimeout(() => {
 
-    setTimeout(
-      () => {
+      initializeMap();
 
-        initializeMap();
-
-      },
-      100
-    );
+    }, 100);
 
   }
 
 
+  /* ===========================================================
+     КАРТА
+     =========================================================== */
+
   function initializeMap() {
 
-    if (
-      mapInitialized &&
-      map
-    ) {
+    if (mapInitialized) {
 
-      if (
-        typeof map.requestReposition ===
-        "function"
-      ) {
-
-        map.requestReposition();
-
-      } else {
-
+      if (map) {
         map.container.fitToViewport();
-
       }
 
       return;
@@ -1503,8 +1408,8 @@
       typeof ymaps === "undefined"
     ) {
 
-      alert(
-        "Яндекс Карты ещё загружаются. Попробуйте ещё раз."
+      showToast(
+        "Карта ещё загружается..."
       );
 
       return;
@@ -1512,158 +1417,177 @@
     }
 
 
-    ymaps.ready(
-      () => {
+    ymaps.ready(() => {
 
-        if (mapInitialized) {
-
-          return;
-
-        }
-
-
-        const defaultCenter = [
-          56.8389,
-          60.6057
-        ];
-
-
-        map =
-          new ymaps.Map(
-            "map",
-            {
-
-              center:
-                defaultCenter,
-
-              zoom: 13,
-
-              controls: [
-                "zoomControl"
-              ]
-
-            }
-          );
-
-
-        mapInitialized = true;
-
-
-        map.events.add(
-          "actionend",
-          () => {
-
-            const center =
-              map.getCenter();
-
-
-            if (!center) {
-
-              return;
-
-            }
-
-
-            selectedLocation.latitude =
-              center[0];
-
-            selectedLocation.longitude =
-              center[1];
-
-
-            reverseGeocode(
-              center[0],
-              center[1]
-            );
-
-          }
-        );
-
-
-        map.events.add(
-          "click",
-          (event) => {
-
-            const coordinates =
-              event.get("coords");
-
-
-            if (!coordinates) {
-
-              return;
-
-            }
-
-
-            setMapLocation(
-              coordinates[0],
-              coordinates[1]
-            );
-
-          }
-        );
-
-
-        setMapLocation(
-          defaultCenter[0],
-          defaultCenter[1]
-        );
-
+      if (mapInitialized) {
+        return;
       }
-    );
+
+
+      map =
+        new ymaps.Map(
+          "map",
+          {
+            center: [
+              56.8389,
+              60.6057
+            ],
+            zoom: 14,
+            controls: [
+              "zoomControl"
+            ]
+          },
+          {
+            suppressMapOpenBlock: true
+          }
+        );
+
+
+      map.events.add(
+        "boundschange",
+        updateMapLocation
+      );
+
+
+      mapInitialized = true;
+
+
+      updateMapLocation();
+
+    });
 
   }
 
 
-  function setMapLocation(
-    latitude,
-    longitude
-  ) {
+  function updateMapLocation() {
+
+    if (!map) {
+      return;
+    }
+
+
+    const center =
+      map.getCenter();
+
 
     selectedLocation.latitude =
-      latitude;
-
+      Number(center[0]);
 
     selectedLocation.longitude =
-      longitude;
+      Number(center[1]);
 
 
-    if (map) {
+    document.getElementById(
+      "coordinates"
+    ).textContent =
+      "Координаты: " +
+      selectedLocation.latitude.toFixed(6) +
+      ", " +
+      selectedLocation.longitude.toFixed(6);
 
-      map.setCenter(
-        [
-          latitude,
-          longitude
-        ],
-        16,
-        {
-          duration: 250
-        }
+  }
+
+
+  /* ===========================================================
+     ГЕОЛОКАЦИЯ
+     =========================================================== */
+
+  function useCurrentLocation() {
+
+    if (
+      !navigator.geolocation
+    ) {
+
+      showToast(
+        "Геолокация недоступна"
       );
+
+      return;
 
     }
 
 
-    reverseGeocode(
-      latitude,
-      longitude
+    navigator.geolocation.getCurrentPosition(
+
+      position => {
+
+        const latitude =
+          Number(
+            position.coords.latitude
+          );
+
+        const longitude =
+          Number(
+            position.coords.longitude
+          );
+
+
+        selectedLocation.latitude =
+          latitude;
+
+        selectedLocation.longitude =
+          longitude;
+
+
+        if (map) {
+
+          map.setCenter(
+            [
+              latitude,
+              longitude
+            ],
+            16
+          );
+
+        }
+
+        reverseGeocode(
+          latitude,
+          longitude
+        );
+
+      },
+
+      error => {
+
+        console.error(
+          "Geolocation error:",
+          error
+        );
+
+        showToast(
+          "Не удалось получить геолокацию"
+        );
+
+      },
+
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000
+      }
+
     );
 
   }
 
+
+  /* ===========================================================
+     ОБРАТНОЕ ГЕОКОДИРОВАНИЕ
+     =========================================================== */
 
   async function reverseGeocode(
     latitude,
     longitude
   ) {
 
-    const input =
+    const addressInput =
       document.getElementById(
-        "address-input"
+        "address"
       );
 
 
-    input.value =
+    addressInput.value =
       "Определяем адрес...";
 
 
@@ -1674,10 +1598,7 @@
           [
             latitude,
             longitude
-          ],
-          {
-            results: 1
-          }
+          ]
         );
 
 
@@ -1687,15 +1608,9 @@
 
       if (!firstGeoObject) {
 
-        input.value =
-          "Адрес не найден";
-
-
-        selectedLocation.address =
-          "";
-
-
-        return;
+        throw new Error(
+          "Адрес не найден"
+        );
 
       }
 
@@ -1704,521 +1619,668 @@
         firstGeoObject.getAddressLine();
 
 
-      selectedLocation.address =
+      addressInput.value =
         address || "";
 
 
-      input.value =
-        address ||
-        "Адрес не найден";
+      selectedLocation.address =
+        address || "";
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
       console.error(
-        "Ошибка геокодирования:",
+        "Geocode error:",
         error
       );
 
 
-      input.value =
-        "Не удалось определить адрес";
+      addressInput.value =
+        "";
+
+
+      selectedLocation.address =
+        "";
+
+
+      document.getElementById(
+        "location-error"
+      ).textContent =
+        "Введите адрес вручную.";
 
     }
 
   }
 
 
-  async function useCurrentLocation() {
-
-    if (
-      !navigator.geolocation
-    ) {
-
-      alert(
-        "Геолокация недоступна в этом браузере."
-      );
-
-      return;
-
-    }
-
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-
-        const latitude =
-          position.coords.latitude;
-
-
-        const longitude =
-          position.coords.longitude;
-
-
-        setMapLocation(
-          latitude,
-          longitude
-        );
-
-      },
-
-
-      (error) => {
-
-        console.error(
-          "Ошибка геолокации:",
-          error
-        );
-
-
-        alert(
-          "Не удалось получить ваше местоположение."
-        );
-
-      },
-
-
-      {
-
-        enableHighAccuracy: true,
-
-        timeout: 10000,
-
-        maximumAge: 30000
-
-      }
-
-    );
-
-  }
-
-
-  // ============================================================
-  // LOCATION
-  // ============================================================
+  /* ===========================================================
+     ПРОДОЛЖИТЬ С КАРТЫ
+     =========================================================== */
 
   function continueFromLocation() {
 
+    if (
+      !map ||
+      selectedLocation.latitude === null ||
+      selectedLocation.longitude === null
+    ) {
+
+      showToast(
+        "Сначала выберите место на карте"
+      );
+
+      return;
+
+    }
+
+
     const addressInput =
       document.getElementById(
-        "address-input"
+        "address"
       );
 
 
-    const manuallyEditedAddress =
+    const address =
       addressInput.value.trim();
 
 
-    if (
-      !selectedLocation.latitude ||
-      !selectedLocation.longitude
-    ) {
+    if (!address) {
 
-      alert(
-        "Сначала выберите место на карте."
+      showToast(
+        "Введите адрес"
       );
+
+      addressInput.focus();
 
       return;
 
     }
 
 
-    if (
-      manuallyEditedAddress
-    ) {
-
-      selectedLocation.address =
-        manuallyEditedAddress;
-
-    }
-
-
-    if (
-      !selectedLocation.address
-    ) {
-
-      alert(
-        "Не удалось определить адрес. Укажите адрес вручную."
-      );
-
-      return;
-
-    }
+    selectedLocation.address =
+      address;
 
 
     document.getElementById(
-      "selected-address-text"
-    ).textContent =
-      selectedLocation.address;
+      "location-error"
+    ).textContent = "";
 
 
-    showScreen("services");
+    showScreen(
+      "services-screen"
+    );
 
   }
 
 
-  // ============================================================
-  // SERVICES
-  // ============================================================
+  /* ===========================================================
+     ВЫБОР УСЛУГИ
+     =========================================================== */
 
-  function selectService(button) {
+  function selectService(
+    service,
+    price
+  ) {
 
-    const buttons =
-      document.querySelectorAll(
-        ".service-card"
+    if (
+      selectedLocation.latitude === null ||
+      selectedLocation.longitude === null
+    ) {
+
+      showToast(
+        "Сначала выберите место"
       );
 
+      return;
 
-    buttons.forEach(
-      (item) => {
-
-        item.classList.remove(
-          "selected"
-        );
-
-      }
-    );
-
-
-    button.classList.add(
-      "selected"
-    );
+    }
 
 
     selectedService = {
-
-      name:
-        button.dataset.service,
-
-      price:
-        Number(
-          button.dataset.price
-        )
-
+      service,
+      price
     };
 
 
-    const orderButton =
-      document.getElementById(
-        "create-order-button"
-      );
-
-
-    orderButton.disabled =
-      false;
-
-
-    orderButton.classList.remove(
-      "bg-gray-300"
-    );
-
-
-    orderButton.classList.add(
-      "bg-[#ff4f87]"
-    );
+    createOrder();
 
   }
 
 
-  // ============================================================
-  // SHOW SEARCHING
-  // ============================================================
+  /* ===========================================================
+     СОЗДАНИЕ ЗАКАЗА
+     =========================================================== */
 
-  function showSearching(orderId) {
+  async function createOrder() {
 
-    const icon =
-      document.getElementById(
-        "searching-icon"
+    if (isCreatingOrder) {
+      return;
+    }
+
+
+    if (!selectedService) {
+
+      showToast(
+        "Выберите услугу"
       );
 
+      return;
 
-    const label =
-      document.getElementById(
-        "searching-label"
-      );
+    }
 
 
-    const title =
-      document.getElementById(
-        "searching-title"
-      );
+    isCreatingOrder = true;
 
 
-    const description =
-      document.getElementById(
-        "searching-description"
-      );
-
-
-    const performerCard =
-      document.getElementById(
-        "performer-card"
-      );
-
-
-    const completeButton =
-      document.getElementById(
-        "complete-order-button"
-      );
-
-
-    const completedMessage =
-      document.getElementById(
-        "completed-message"
-      );
-
-
-    icon.innerHTML = `
-      <div class="spinner"></div>
-    `;
-
-
-    label.textContent =
-      "Заказ создан";
-
-
-    title.textContent =
-      "Ищем исполнителя";
-
-
-    description.textContent =
-      "Ищем ближайшего свободного исполнителя.";
-
-
-    performerCard.classList.add(
-      "hidden"
+    showScreen(
+      "searching-screen"
     );
 
 
-    completeButton.classList.add(
-      "hidden"
-    );
+    const telegramUserId =
+      getTelegramUserId();
 
 
-    completedMessage.classList.add(
-      "hidden"
-    );
+    try {
+
+      /*
+        1. СОЗДАЁМ ЗАКАЗ
+      */
+
+      const {
+        data: order,
+        error
+      } =
+        await supabaseClient
+          .from("orders")
+          .insert({
+
+            latitude:
+              Number(
+                selectedLocation.latitude
+              ),
+
+            longitude:
+              Number(
+                selectedLocation.longitude
+              ),
+
+            address:
+              selectedLocation.address,
+
+            service:
+              selectedService.service,
+
+            price:
+              Number(
+                selectedService.price
+              ),
+
+            status:
+              "searching",
+
+            telegram_user_id:
+              telegramUserId
+
+          })
+          .select()
+          .single();
 
 
-    document.getElementById(
-      "success-order-number"
-    ).textContent =
-      "#" + orderId;
+      if (error) {
+
+        throw error;
+
+      }
 
 
-    showScreen("searching");
+      currentActiveOrderId =
+        order.id;
+
+
+      /*
+        2. ИЩЕМ ИСПОЛНИТЕЛЯ
+      */
+
+      const performerResult =
+        await callEdgeFunction({
+
+          action:
+            "find_performer",
+
+          latitude:
+            Number(
+              selectedLocation.latitude
+            ),
+
+          longitude:
+            Number(
+              selectedLocation.longitude
+            )
+
+        });
+
+
+      console.log(
+        "find_performer:",
+        performerResult
+      );
+
+
+      const performer =
+        performerResult &&
+        performerResult.performer
+          ? performerResult.performer
+          : null;
+
+
+      /*
+        Если исполнителя нет,
+        оставляем заказ searching.
+      */
+
+      if (!performer) {
+
+        renderSearchingNoPerformer();
+
+        isCreatingOrder = false;
+
+        return;
+
+      }
+
+
+      /*
+        3. ПРИНИМАЕМ ЗАКАЗ ИСПОЛНИТЕЛЕМ
+      */
+
+      const acceptedResult =
+        await callEdgeFunction({
+
+          action:
+            "accept_order",
+
+          order_id:
+            Number(
+              order.id
+            ),
+
+          performer_id:
+            Number(
+              performer.id
+            )
+
+        });
+
+
+      console.log(
+        "accept_order:",
+        acceptedResult
+      );
+
+
+      currentActivePerformerId =
+        Number(
+          performer.id
+        );
+
+
+      if (
+        acceptedResult &&
+        acceptedResult.order
+      ) {
+
+        showPerformerFound(
+          acceptedResult.order,
+          performer
+        );
+
+      } else {
+
+        showPerformerFound(
+          order,
+          performer
+        );
+
+      }
+
+
+      isCreatingOrder = false;
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Create order error:",
+        error
+      );
+
+
+      isCreatingOrder = false;
+
+
+      showToast(
+        "Ошибка создания заказа: " +
+        (
+          error.message ||
+          "неизвестная ошибка"
+        )
+      );
+
+
+      showScreen(
+        "home-screen"
+      );
+
+    }
 
   }
 
 
-  // ============================================================
-  // SHOW FOUND PERFORMER
-  // ============================================================
+  /* ===========================================================
+     ПОКАЗ ИСПОЛНИТЕЛЯ
+     =========================================================== */
 
   function showPerformerFound(
-    orderId,
+    order,
     performer
   ) {
 
-    const icon =
+    currentActiveOrderId =
+      Number(order.id);
+
+    currentActivePerformerId =
+      Number(performer.id);
+
+
+    const container =
       document.getElementById(
-        "searching-icon"
+        "active-order-container"
       );
 
 
-    const label =
-      document.getElementById(
-        "searching-label"
-      );
+    container.innerHTML = `
+
+      <div class="active-order-card">
+
+        <div class="status-badge">
+          Исполнитель найден
+        </div>
+
+        <div class="active-order-title">
+          Помощь уже в пути 🚗
+        </div>
+
+        <div class="order-info">
+
+          <div class="order-info-row">
+
+            <div class="order-info-label">
+              Услуга
+            </div>
+
+            <div class="order-info-value">
+              ${escapeHtml(order.service)}
+            </div>
+
+          </div>
 
 
-    const title =
-      document.getElementById(
-        "searching-title"
-      );
+          <div class="order-info-row">
+
+            <div class="order-info-label">
+              Адрес
+            </div>
+
+            <div class="order-info-value">
+              ${escapeHtml(order.address || "Адрес не указан")}
+            </div>
+
+          </div>
 
 
-    const description =
-      document.getElementById(
-        "searching-description"
-      );
+          <div class="order-info-row">
+
+            <div class="order-info-label">
+              Исполнитель
+            </div>
+
+            <div class="order-info-value">
+              ${escapeHtml(performer.name || "Исполнитель")}
+            </div>
+
+          </div>
 
 
-    const performerCard =
-      document.getElementById(
-        "performer-card"
-      );
+          <div class="order-info-row">
+
+            <div class="order-info-label">
+              Стоимость
+            </div>
+
+            <div class="order-info-value">
+              ${Number(order.price)} ₽
+            </div>
+
+          </div>
+
+        </div>
 
 
-    const completeButton =
-      document.getElementById(
-        "complete-order-button"
-      );
+        <button
+          class="action-button"
+          onclick="completeCurrentOrder()"
+        >
+          Завершить заказ
+        </button>
 
-
-    const completedMessage =
-      document.getElementById(
-        "completed-message"
-      );
-
-
-    icon.innerHTML = `
-      <div class="text-5xl">
-        🚗
       </div>
+
     `;
 
 
-    label.textContent =
-      "Исполнитель найден";
-
-
-    title.textContent =
-      "Помощь уже в пути";
-
-
-    description.textContent =
-      "Мы нашли свободного исполнителя для вашего заказа.";
-
-
-    document.getElementById(
-      "performer-name"
-    ).textContent =
-      performer?.name ||
-      "Исполнитель";
-
-
-    performerCard.classList.remove(
-      "hidden"
+    showScreen(
+      "active-screen"
     );
-
-
-    completeButton.classList.remove(
-      "hidden"
-    );
-
-
-    completedMessage.classList.add(
-      "hidden"
-    );
-
-
-    document.getElementById(
-      "success-order-number"
-    ).textContent =
-      "#" + orderId;
-
-
-    showScreen("searching");
 
   }
 
 
-  // ============================================================
-  // ACCEPT ORDER — КЛИЕНТ
-  // ============================================================
+  function renderSearchingNoPerformer() {
 
-  async function acceptOrder(
-    orderId,
-    performerId
+    const container =
+      document.querySelector(
+        "#searching-screen .searching-container"
+      );
+
+
+    container.innerHTML = `
+
+      <div class="searching-icon">
+        🕐
+      </div>
+
+      <div class="searching-title">
+        Ищем исполнителя
+      </div>
+
+      <div class="searching-text">
+        Сейчас свободного исполнителя нет.
+        Ваш заказ сохранён и остаётся в поиске.
+      </div>
+
+      <button
+        class="action-button"
+        onclick="showScreen('home-screen')"
+      >
+        На главную
+      </button>
+
+    `;
+
+  }
+
+
+  /* ===========================================================
+     ЗАВЕРШЕНИЕ ЗАКАЗА КЛИЕНТОМ
+     =========================================================== */
+
+  async function completeCurrentOrder() {
+
+    if (
+      !currentActiveOrderId ||
+      !currentActivePerformerId
+    ) {
+
+      showToast(
+        "Активный заказ не найден"
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      await callEdgeFunction({
+
+        action:
+          "complete_order",
+
+        order_id:
+          Number(
+            currentActiveOrderId
+          ),
+
+        performer_id:
+          Number(
+            currentActivePerformerId
+          )
+
+      });
+
+
+      showToast(
+        "Заказ завершён"
+      );
+
+
+      currentActiveOrderId =
+        null;
+
+      currentActivePerformerId =
+        null;
+
+
+      selectedService =
+        null;
+
+
+      showScreen(
+        "home-screen"
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Complete order error:",
+        error
+      );
+
+
+      showToast(
+        "Не удалось завершить заказ: " +
+        (
+          error.message ||
+          "ошибка"
+        )
+      );
+
+    }
+
+  }
+
+
+  /* ===========================================================
+     SUPABASE EDGE FUNCTION
+     =========================================================== */
+
+  async function callEdgeFunction(
+    payload
   ) {
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.functions.invoke(
-        "quick-processor",
+    console.log(
+      "Edge Function request:",
+      payload
+    );
+
+
+    const response =
+      await fetch(
+        EDGE_FUNCTION_URL,
         {
 
-          body: {
+          method: "POST",
 
-            action:
-              "accept_order",
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
 
-            order_id:
-              orderId,
-
-            performer_id:
-              performerId
-
-          }
+          body:
+            JSON.stringify(payload)
 
         }
       );
 
 
-    if (error) {
+    const text =
+      await response.text();
+
+
+    let data;
+
+
+    try {
+
+      data =
+        JSON.parse(text);
+
+    }
+
+    catch (e) {
 
       throw new Error(
-        error.message
+        "Сервер вернул некорректный ответ: " +
+        text
       );
 
     }
 
 
-    if (
-      data?.error
-    ) {
+    console.log(
+      "Edge Function response:",
+      data
+    );
+
+
+    if (!response.ok) {
 
       throw new Error(
-        data.error
+        data.error ||
+        "Ошибка сервера " +
+        response.status
       );
 
     }
 
 
-    return data?.order || null;
-
-  }
-
-
-  // ============================================================
-  // COMPLETE ORDER
-  // ============================================================
-
-  async function completeOrder(
-    orderId,
-    performerId
-  ) {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.functions.invoke(
-        "quick-processor",
-        {
-
-          body: {
-
-            action:
-              "complete_order",
-
-            order_id:
-              orderId,
-
-            performer_id:
-              performerId
-
-          }
-
-        }
-      );
-
-
-    if (error) {
-
-      throw new Error(
-        error.message
-      );
-
-    }
-
-
-    if (
-      data?.error
-    ) {
+    if (data.error) {
 
       throw new Error(
         data.error
@@ -2232,593 +2294,66 @@
   }
 
 
-  // ============================================================
-  // COMPLETE CURRENT ORDER — КЛИЕНТ
-  // ============================================================
+  /* ===========================================================
+     ИСТОРИЯ ЗАКАЗОВ
+     =========================================================== */
 
-  async function completeCurrentOrder() {
+  async function loadOrdersScreen() {
 
-    if (isCompletingOrder) {
-
-      return;
-
-    }
-
-
-    if (!currentActiveOrderId) {
-
-      alert(
-        "Активный заказ не найден."
-      );
-
-      return;
-
-    }
-
-
-    if (!currentActivePerformerId) {
-
-      alert(
-        "Исполнитель заказа не найден."
-      );
-
-      return;
-
-    }
-
-
-    const button =
+    const container =
       document.getElementById(
-        "complete-order-button"
+        "orders-list"
       );
 
 
-    isCompletingOrder =
-      true;
-
-
-    button.disabled =
-      true;
-
-
-    button.textContent =
-      "Завершаем заказ...";
+    container.innerHTML = `
+      <div class="empty">
+        Загружаем заказы...
+      </div>
+    `;
 
 
     try {
 
       const result =
-        await completeOrder(
-          currentActiveOrderId,
-          currentActivePerformerId
-        );
+        await callEdgeFunction({
 
-
-      if (
-        !result?.success
-      ) {
-
-        throw new Error(
-          "Не удалось завершить заказ."
-        );
-
-      }
-
-
-      const localOrder =
-        currentOrders.find(
-          (order) =>
-            String(order.id) ===
-            String(currentActiveOrderId)
-        );
-
-
-      if (localOrder) {
-
-        localOrder.status =
-          "completed";
-
-      }
-
-
-      button.classList.add(
-        "hidden"
-      );
-
-
-      document.getElementById(
-        "completed-message"
-      ).classList.remove(
-        "hidden"
-      );
-
-
-      document.getElementById(
-        "searching-icon"
-      ).innerHTML = `
-        <div class="text-5xl">
-          ✅
-        </div>
-      `;
-
-
-      document.getElementById(
-        "searching-label"
-      ).textContent =
-        "Заказ завершён";
-
-
-      document.getElementById(
-        "searching-title"
-      ).textContent =
-        "Готово!";
-
-
-      document.getElementById(
-        "searching-description"
-      ).textContent =
-        "Исполнитель освобождён и снова доступен для новых заказов.";
-
-
-      currentActiveOrderId =
-        null;
-
-
-      currentActivePerformerId =
-        null;
-
-
-    } catch (error) {
-
-      console.error(
-        "Ошибка завершения заказа:",
-        error
-      );
-
-
-      alert(
-        "Не удалось завершить заказ.\n\n" +
-        error.message
-      );
-
-
-      button.disabled =
-        false;
-
-
-      button.textContent =
-        "✅ Завершить заказ";
-
-    } finally {
-
-      isCompletingOrder =
-        false;
-
-    }
-
-  }
-
-
-  // ============================================================
-  // CREATE ORDER
-  // ============================================================
-
-  async function createOrder() {
-
-    if (isCreatingOrder) {
-
-      return;
-
-    }
-
-
-    if (
-      !selectedLocation.latitude ||
-      !selectedLocation.longitude
-    ) {
-
-      alert(
-        "Не выбрано место автомобиля."
-      );
-
-      return;
-
-    }
-
-
-    if (!selectedService) {
-
-      alert(
-        "Выберите услугу."
-      );
-
-      return;
-
-    }
-
-
-    isCreatingOrder = true;
-
-
-    const button =
-      document.getElementById(
-        "create-order-button"
-      );
-
-
-    button.disabled =
-      true;
-
-
-    button.textContent =
-      "Создаём заказ...";
-
-
-    const telegramId =
-      getTelegramUserId();
-
-
-    try {
-
-      const {
-        data,
-        error
-      } =
-      await supabaseClient
-        .from("orders")
-        .insert({
+          action:
+            "get_orders",
 
           telegram_user_id:
-            telegramId,
-
-          latitude:
-            selectedLocation.latitude,
-
-          longitude:
-            selectedLocation.longitude,
-
-          address:
-            selectedLocation.address,
-
-          service:
-            selectedService.name,
-
-          price:
-            selectedService.price,
-
-          status:
-            "searching"
-
-        })
-        .select()
-        .single();
-
-
-      if (error) {
-
-        throw new Error(
-          error.message
-        );
-
-      }
-
-
-      if (!data) {
-
-        throw new Error(
-          "Supabase не вернул созданный заказ."
-        );
-
-      }
-
-
-      currentActiveOrderId =
-        data.id;
-
-      currentActivePerformerId =
-        null;
-
-
-      let foundPerformer =
-        null;
-
-
-      try {
-
-        const {
-          data: executorResult,
-          error: executorError
-        } =
-          await supabaseClient.functions.invoke(
-            "quick-processor",
-            {
-
-              body: {
-
-                action:
-                  "find_performer",
-
-                latitude:
-                  Number(
-                    data.latitude
-                  ),
-
-                longitude:
-                  Number(
-                    data.longitude
-                  )
-
-              }
-
-            }
-          );
-
-
-        if (executorError) {
-
-          console.error(
-            "Ошибка поиска исполнителя:",
-            executorError
-          );
-
-        } else if (
-          executorResult?.performer
-        ) {
-
-          foundPerformer =
-            executorResult.performer;
-
-        }
-
-      } catch (executorError) {
-
-        console.error(
-          "Ошибка вызова quick-processor:",
-          executorError
-        );
-
-      }
-
-
-      if (foundPerformer) {
-
-        try {
-
-          const acceptedOrder =
-            await acceptOrder(
-              data.id,
-              foundPerformer.id
-            );
-
-
-          if (acceptedOrder) {
-
-            data.status =
-              acceptedOrder.status;
-
-          } else {
-
-            data.status =
-              "accepted";
-
-          }
-
-
-          currentActivePerformerId =
-            foundPerformer.id;
-
-
-        } catch (acceptError) {
-
-          console.error(
-            "Не удалось принять заказ:",
-            acceptError
-          );
-
-
-          currentActivePerformerId =
-            null;
-
-        }
-
-      }
-
-
-      currentOrders = [
-        data,
-        ...currentOrders
-      ];
-
-
-      if (
-        foundPerformer &&
-        currentActivePerformerId
-      ) {
-
-        showPerformerFound(
-          data.id,
-          foundPerformer
-        );
-
-      } else {
-
-        showSearching(
-          data.id
-        );
-
-      }
-
-
-    } catch (error) {
-
-      console.error(
-        "Ошибка:",
-        error
-      );
-
-
-      currentActiveOrderId =
-        null;
-
-      currentActivePerformerId =
-        null;
-
-
-      alert(
-        "Не удалось создать заказ.\n\n" +
-        error.message
-      );
-
-
-    } finally {
-
-      isCreatingOrder =
-        false;
-
-
-      button.disabled =
-        false;
-
-
-      button.textContent =
-        "Заказать исполнителя";
-
-
-      if (
-        selectedService
-      ) {
-
-        button.classList.remove(
-          "bg-gray-300"
-        );
-
-
-        button.classList.add(
-          "bg-[#ff4f87]"
-        );
-
-      }
-
-    }
-
-  }
-
-
-  // ============================================================
-  // ORDERS
-  // ============================================================
-
-  async function loadOrdersScreen() {
-
-    showScreen("orders");
-
-
-    const container =
-      document.getElementById(
-        "orders-container"
-      );
-
-
-    container.innerHTML = `
-      <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
-
-        <div class="spinner mx-auto"></div>
-
-        <div class="font-bold text-gray-900 mt-4">
-          Загружаем заказы
-        </div>
-
-      </div>
-    `;
-
-
-    const telegramId =
-      getTelegramUserId();
-
-
-    try {
-
-      const {
-        data,
-        error
-      } =
-      await supabaseClient.functions.invoke(
-        "quick-processor",
-        {
-
-          body: {
-
-            action:
-              "get_orders",
-
-            telegram_user_id:
-              telegramId
-
-          }
-
-        }
-      );
-
-
-      if (error) {
-
-        throw new Error(
-          error.message
-        );
-
-      }
-
-
-      if (
-        data?.error
-      ) {
-
-        throw new Error(
-          data.error
-        );
-
-      }
+            Number(
+              getTelegramUserId()
+            )
+
+        });
 
 
       currentOrders =
-        data?.orders || [];
+        Array.isArray(result.orders)
+          ? result.orders
+          : [];
 
 
       renderOrders();
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
       console.error(
-        "Ошибка загрузки заказов:",
+        "Orders error:",
         error
       );
 
 
       container.innerHTML = `
 
-        <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
-
-          <div class="text-4xl">
-            ⚠️
-          </div>
-
-          <div class="font-bold text-gray-900 mt-3">
-            Не удалось загрузить заказы
-          </div>
-
-          <div class="text-sm text-gray-500 mt-2">
-            ${escapeHtml(error.message)}
-          </div>
-
-          <button
-            type="button"
-            onclick="loadOrdersScreen()"
-            class="mt-5 px-5 h-11 rounded-xl bg-[#ff4f87] text-white font-bold"
-          >
-            Повторить
-          </button>
-
+        <div class="empty">
+          Не удалось загрузить заказы.<br><br>
+          ${escapeHtml(
+            error.message || ""
+          )}
         </div>
 
       `;
@@ -2832,44 +2367,21 @@
 
     const container =
       document.getElementById(
-        "orders-container"
+        "orders-list"
       );
 
 
     if (
-      !currentOrders ||
-      currentOrders.length === 0
+      !currentOrders.length
     ) {
 
       container.innerHTML = `
 
-        <div class="bg-white rounded-3xl p-7 text-center shadow-sm">
-
-          <div class="text-5xl">
-            🚗
-          </div>
-
-          <div class="font-black text-gray-900 text-lg mt-4">
-            Заказов пока нет
-          </div>
-
-          <div class="text-sm text-gray-500 mt-2">
-            Если автомобиль застрял в снегу,
-            мы поможем.
-          </div>
-
-          <button
-            type="button"
-            onclick="openMapScreen()"
-            class="mt-5 w-full h-12 rounded-2xl bg-[#ff4f87] text-white font-bold"
-          >
-            🚗 Заказать помощь
-          </button>
-
+        <div class="empty">
+          У вас пока нет заказов.
         </div>
 
       `;
-
 
       return;
 
@@ -2878,16 +2390,15 @@
 
     container.innerHTML =
       currentOrders
-        .map(
-          (order) =>
-            createOrderCard(order)
-        )
+        .map(createOrderCard)
         .join("");
 
   }
 
 
-  function createOrderCard(order) {
+  function createOrderCard(
+    order
+  ) {
 
     const status =
       getStatusInfo(
@@ -2895,93 +2406,41 @@
       );
 
 
-    const date =
-      formatDate(
-        order.created_at
-      );
-
-
     return `
 
-      <div class="bg-white rounded-3xl p-5 shadow-sm mb-3">
+      <div class="order-card">
 
-        <div class="flex items-start justify-between gap-3">
+        <div class="order-card-top">
 
-          <div>
-
-            <div class="text-xs text-gray-400 font-semibold">
-              ЗАКАЗ
-            </div>
-
-            <div class="font-black text-gray-900 text-xl mt-1">
-              #${escapeHtml(String(order.id))}
-            </div>
-
+          <div class="order-service">
+            ${escapeHtml(
+              order.service
+            )}
           </div>
 
-
-          <span class="order-status ${status.className}">
-
-            ${status.icon}
-
-            <span class="ml-1">
-              ${status.label}
-            </span>
-
-          </span>
+          <div class="order-price">
+            ${Number(
+              order.price
+            )} ₽
+          </div>
 
         </div>
 
 
-        <div class="mt-5 space-y-3">
-
-          <div>
-
-            <div class="text-xs text-gray-400">
-              Услуга
-            </div>
-
-            <div class="font-semibold text-gray-900 mt-1">
-              ${escapeHtml(order.service || "—")}
-            </div>
-
-          </div>
+        <div class="order-address">
+          📍 ${escapeHtml(
+            order.address ||
+            "Адрес не указан"
+          )}
+        </div>
 
 
-          <div>
-
-            <div class="text-xs text-gray-400">
-              Адрес
-            </div>
-
-            <div class="font-semibold text-gray-900 mt-1">
-              ${escapeHtml(order.address || "—")}
-            </div>
-
-          </div>
-
-
-          <div class="flex items-end justify-between">
-
-            <div>
-
-              <div class="text-xs text-gray-400">
-                Создан
-              </div>
-
-              <div class="font-semibold text-gray-900 mt-1">
-                ${escapeHtml(date)}
-              </div>
-
-            </div>
-
-
-            <div class="text-xl font-black text-gray-900">
-              ${Number(order.price || 0).toLocaleString("ru-RU")} ₽
-            </div>
-
-          </div>
-
+        <div class="order-date">
+          ${formatDate(
+            order.created_at
+          )}
+          ·
+          ${status.text}
         </div>
 
       </div>
@@ -2991,83 +2450,41 @@
   }
 
 
-  function getStatusInfo(status) {
+  function getStatusInfo(
+    status
+  ) {
 
-    switch (status) {
+    const statuses = {
 
-      case "accepted":
+      searching: {
+        text: "Ищем исполнителя"
+      },
 
-        return {
+      accepted: {
+        text: "Исполнитель найден"
+      },
 
-          label:
-            "Исполнитель найден",
+      completed: {
+        text: "Завершён"
+      }
 
-          icon:
-            "🚗",
-
-          className:
-            "status-accepted"
-
-        };
-
-
-      case "completed":
-
-        return {
-
-          label:
-            "Выполнен",
-
-          icon:
-            "✅",
-
-          className:
-            "status-completed"
-
-        };
+    };
 
 
-      case "cancelled":
-
-        return {
-
-          label:
-            "Отменён",
-
-          icon:
-            "❌",
-
-          className:
-            "status-cancelled"
-
-        };
-
-
-      case "searching":
-
-      default:
-
-        return {
-
-          label:
-            "Поиск исполнителя",
-
-          icon:
-            "🔎",
-
-          className:
-            "status-searching"
-
-        };
-
-    }
+    return (
+      statuses[status] ||
+      {
+        text:
+          status || "Неизвестно"
+      }
+    );
 
   }
 
 
-  // ============================================================
-  // PROFILE
-  // ============================================================
+  /* ===========================================================
+     ПРОФИЛЬ
+     =========================================================== */
 
   function renderProfile() {
 
@@ -3075,173 +2492,239 @@
       getTelegramUser();
 
 
-    const element =
-      document.getElementById(
-        "profile-user-id"
-      );
+    const name =
+      [
+        user.first_name,
+        user.last_name
+      ]
+        .filter(Boolean)
+        .join(" ") ||
+      user.username ||
+      "Пользователь";
 
 
-    if (!element) {
-
-      return;
-
-    }
-
-
-    if (user) {
-
-      const name =
-        [
-          user.first_name,
-          user.last_name
-        ]
-          .filter(Boolean)
-          .join(" ");
+    document.getElementById(
+      "profile-name"
+    ).textContent =
+      name;
 
 
-      element.textContent =
-        name ||
-        ("ID: " + user.id);
+    document.getElementById(
+      "profile-id"
+    ).textContent =
+      "ID: " +
+      getTelegramUserId();
 
-    } else {
 
-      element.textContent =
-        "Тестовый пользователь";
+    const firstLetter =
+      name
+        .trim()
+        .charAt(0)
+        .toUpperCase();
 
-    }
+
+    document.getElementById(
+      "profile-avatar"
+    ).textContent =
+      firstLetter || "👤";
 
   }
 
 
-  // ============================================================
-  // ============================================================
-  // РЕЖИМ ИСПОЛНИТЕЛЯ
-  // ============================================================
-  // ============================================================
+  /* ===========================================================
+     ===========================================================
+     РЕЖИМ ИСПОЛНИТЕЛЯ
+     ===========================================================
+     =========================================================== */
 
 
-  // ============================================================
-  // ОТКРЫТЬ ЭКРАН ИСПОЛНИТЕЛЯ
-  // ============================================================
+  function openPerformerScreen() {
 
-  async function openPerformerScreen() {
-
-    showScreen("performer");
+    showScreen(
+      "performer-screen"
+    );
 
 
-    const statusText =
+    loadPerformer();
+
+  }
+
+
+  /*
+    КЛЮЧЕВОЙ МОМЕНТ.
+
+    Мы НЕ пытаемся определить исполнителя
+    через telegram_user_id.
+
+    Для тестирования напрямую используем:
+
+        id = 1
+
+    А координаты берём из самой записи исполнителя.
+
+    Сначала отправляем известные координаты
+    тестового исполнителя.
+
+    Backend возвращает:
+
+        performer: {
+          id: 1,
+          ...
+          status: "available"
+        }
+
+    Именно result.performer,
+    а не result.data.performer.
+  */
+
+
+  async function loadPerformer() {
+
+    const statusElement =
       document.getElementById(
-        "performer-status-text"
+        "performer-status"
       );
 
 
-    const statusIcon =
-      document.getElementById(
-        "performer-status-icon"
-      );
+    statusElement.className =
+      "performer-status";
 
 
-    statusText.textContent =
+    statusElement.textContent =
       "Проверяем...";
-
-
-    statusIcon.textContent =
-      "⏳";
 
 
     try {
 
-      // Получаем исполнителя
+      const result =
+        await callEdgeFunction({
 
-      const {
-        data,
-        error
-      } =
-        await supabaseClient
-          .from("performers")
-          .select("*")
-          .eq(
-            "id",
-            TEST_PERFORMER_ID
-          )
-          .maybeSingle();
+          action:
+            "get_available_orders",
+
+          performer_id:
+            Number(
+              TEST_PERFORMER_ID
+            ),
+
+          /*
+            Координаты тестового исполнителя
+            из таблицы performers.
+          */
+
+          latitude:
+            56.8389,
+
+          longitude:
+            60.6057
+
+        });
 
 
-      if (error) {
+      console.log(
+        "PERFORMER RESULT:",
+        result
+      );
+
+
+      /*
+        ВАЖНО:
+
+        Edge Function возвращает:
+
+        {
+          orders: [...],
+          performer: {...}
+        }
+
+        Поэтому читаем именно:
+
+        result.performer
+      */
+
+      if (
+        !result ||
+        !result.performer
+      ) {
 
         throw new Error(
-          error.message
-        );
-
-      }
-
-
-      if (!data) {
-
-        throw new Error(
-          "Исполнитель с ID 1 не найден."
+          "Edge Function не вернула данные исполнителя"
         );
 
       }
 
 
       performerData =
-        data;
+        result.performer;
 
 
-      performerLatitude =
+      /*
+        Дополнительная проверка.
+
+        Если backend вернул другого исполнителя,
+        не принимаем его как тестового.
+      */
+
+      if (
         Number(
-          data.latitude ||
-          56.8389
+          performerData.id
+        ) !==
+        Number(
+          TEST_PERFORMER_ID
+        )
+      ) {
+
+        throw new Error(
+          "Получен другой исполнитель"
         );
 
-
-      performerLongitude =
-        Number(
-          data.longitude ||
-          60.6057
-        );
+      }
 
 
-      updatePerformerStatus();
+      renderPerformerStatus();
 
 
-      await loadAvailableOrders();
+      /*
+        Получаем доступные заказы
+      */
+
+      renderPerformerOrders(
+        result.orders || []
+      );
 
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
       console.error(
-        "Ошибка загрузки исполнителя:",
+        "LOAD PERFORMER ERROR:",
         error
       );
 
 
-      statusText.textContent =
+      statusElement.className =
+        "performer-status status-error";
+
+
+      statusElement.textContent =
         "Ошибка";
 
 
-      statusIcon.textContent =
-        "⚠️";
-
-
       document.getElementById(
-        "performer-orders-container"
+        "performer-orders"
       ).innerHTML = `
 
-        <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+        <div class="empty">
 
-          <div class="text-4xl">
-            ⚠️
-          </div>
+          Не удалось получить данные исполнителя.
 
-          <div class="font-bold text-gray-900 mt-3">
-            Не удалось загрузить режим исполнителя
-          </div>
+          <br><br>
 
-          <div class="text-sm text-gray-500 mt-2">
-            ${escapeHtml(error.message)}
-          </div>
+          ${escapeHtml(
+            error.message ||
+            "Неизвестная ошибка"
+          )}
 
         </div>
 
@@ -3252,29 +2735,25 @@
   }
 
 
-  // ============================================================
-  // СТАТУС ИСПОЛНИТЕЛЯ
-  // ============================================================
+  function renderPerformerStatus() {
 
-  function updatePerformerStatus() {
+    const element =
+      document.getElementById(
+        "performer-status"
+      );
+
 
     if (!performerData) {
+
+      element.className =
+        "performer-status status-error";
+
+      element.textContent =
+        "Ошибка";
 
       return;
 
     }
-
-
-    const statusText =
-      document.getElementById(
-        "performer-status-text"
-      );
-
-
-    const statusIcon =
-      document.getElementById(
-        "performer-status-icon"
-      );
 
 
     if (
@@ -3282,326 +2761,167 @@
       "available"
     ) {
 
-      statusText.textContent =
-        "Свободен";
+      element.className =
+        "performer-status status-available";
 
-
-      statusText.className =
-        "text-2xl font-black text-green-600 mt-1";
-
-
-      statusIcon.textContent =
-        "🟢";
-
-
-      statusIcon.className =
-        "w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center text-3xl";
-
-    } else {
-
-      statusText.textContent =
-        "Занят";
-
-
-      statusText.className =
-        "text-2xl font-black text-orange-600 mt-1";
-
-
-      statusIcon.textContent =
-        "🚗";
-
-
-      statusIcon.className =
-        "w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl";
-
-    }
-
-  }
-
-
-  // ============================================================
-  // ЗАГРУЗКА ДОСТУПНЫХ ЗАКАЗОВ
-  // ============================================================
-
-  async function loadAvailableOrders() {
-
-    const container =
-      document.getElementById(
-        "performer-orders-container"
-      );
-
-
-    if (!container) {
+      element.textContent =
+        "🟢 Свободен";
 
       return;
 
     }
 
 
-    container.innerHTML = `
+    if (
+      performerData.status ===
+      "busy"
+    ) {
 
-      <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+      element.className =
+        "performer-status status-busy";
 
-        <div class="spinner mx-auto"></div>
+      element.textContent =
+        "🟠 Занят";
 
-        <div class="font-bold text-gray-900 mt-4">
-          Ищем заказы рядом...
-        </div>
+      return;
 
-      </div>
-
-    `;
-
-
-    try {
-
-      // Если данные исполнителя ещё не загружены
-
-      if (!performerData) {
-
-        const {
-          data,
-          error
-        } =
-          await supabaseClient
-            .from("performers")
-            .select("*")
-            .eq(
-              "id",
-              TEST_PERFORMER_ID
-            )
-            .maybeSingle();
+    }
 
 
-        if (error) {
-
-          throw new Error(
-            error.message
-          );
-
-        }
+    element.className =
+      "performer-status status-error";
 
 
-        if (!data) {
+    element.textContent =
+      "Неизвестный статус";
 
-          throw new Error(
-            "Исполнитель не найден."
-          );
-
-        }
+  }
 
 
-        performerData =
-          data;
+  /* ===========================================================
+     ЗАКАЗЫ ИСПОЛНИТЕЛЯ
+     =========================================================== */
+
+  function renderPerformerOrders(
+    orders
+  ) {
+
+    const container =
+      document.getElementById(
+        "performer-orders"
+      );
 
 
-        performerLatitude =
-          Number(
-            data.latitude ||
-            56.8389
-          );
+    /*
+      Если исполнитель занят,
+      показываем его активный заказ.
+
+      Для текущего прототипа
+      active order определяем
+      через заказ со статусом accepted.
+    */
+
+    if (
+      performerData &&
+      performerData.status ===
+      "busy"
+    ) {
+
+      const activeOrder =
+        orders.find(
+          order =>
+            order.status ===
+            "accepted"
+        );
 
 
-        performerLongitude =
-          Number(
-            data.longitude ||
-            60.6057
-          );
+      if (activeOrder) {
 
-
-        updatePerformerStatus();
-
-      }
-
-
-      // Если исполнитель занят,
-      // новые заказы ему не показываем
-
-      if (
-        performerData.status ===
-        "busy"
-      ) {
-
-        renderPerformerBusy();
+        renderPerformerActiveOrder(
+          activeOrder
+        );
 
         return;
 
       }
 
 
-      const {
-        data: result,
-        error
-      } =
-        await supabaseClient.functions.invoke(
-          "quick-processor",
-          {
+      /*
+        accepted-заказ может не попасть
+        в список searching.
 
-            body: {
-
-              action:
-                "get_available_orders",
-
-              latitude:
-                performerLatitude,
-
-              longitude:
-                performerLongitude,
-
-              performer_id:
-                TEST_PERFORMER_ID
-
-            }
-
-          }
-        );
-
-
-      if (error) {
-
-        throw new Error(
-          error.message
-        );
-
-      }
-
-
-      if (
-        result?.error
-      ) {
-
-        throw new Error(
-          result.error
-        );
-
-      }
-
-
-      const orders =
-        result?.orders || [];
-
-
-      renderAvailableOrders(
-        orders
-      );
-
-
-    } catch (error) {
-
-      console.error(
-        "Ошибка получения заказов:",
-        error
-      );
-
+        Поэтому показываем сообщение.
+      */
 
       container.innerHTML = `
 
-        <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+        <div class="empty">
 
-          <div class="text-4xl">
-            ⚠️
-          </div>
+          Вы сейчас заняты.
 
-          <div class="font-bold text-gray-900 mt-3">
-            Не удалось получить заказы
-          </div>
+          <br><br>
 
-          <div class="text-sm text-gray-500 mt-2">
-            ${escapeHtml(error.message)}
-          </div>
-
-          <button
-            type="button"
-            onclick="loadAvailableOrders()"
-            class="mt-5 px-5 h-11 rounded-xl bg-[#ff4f87] text-white font-bold"
-          >
-            Повторить
-          </button>
+          После завершения заказа
+          снова станете свободны.
 
         </div>
 
       `;
 
+      return;
+
     }
-
-  }
-
-
-  // ============================================================
-  // ПОКАЗ ЗАНЯТОГО ИСПОЛНИТЕЛЯ
-  // ============================================================
-
-  function renderPerformerBusy() {
-
-    const container =
-      document.getElementById(
-        "performer-orders-container"
-      );
-
-
-    container.innerHTML = `
-
-      <div class="bg-white rounded-3xl p-7 text-center shadow-sm">
-
-        <div class="text-5xl">
-          🚗
-        </div>
-
-        <div class="font-black text-gray-900 text-lg mt-4">
-          Вы сейчас заняты
-        </div>
-
-        <div class="text-sm text-gray-500 mt-2">
-          Завершите текущий заказ,
-          чтобы получать новые.
-        </div>
-
-      </div>
-
-    `;
-
-  }
-
-
-  // ============================================================
-  // СПИСОК ДОСТУПНЫХ ЗАКАЗОВ
-  // ============================================================
-
-  function renderAvailableOrders(
-    orders
-  ) {
-
-    const container =
-      document.getElementById(
-        "performer-orders-container"
-      );
 
 
     if (
       !orders ||
-      orders.length === 0
+      !orders.length
     ) {
 
       container.innerHTML = `
 
-        <div class="bg-white rounded-3xl p-7 text-center shadow-sm">
+        <div class="empty">
 
-          <div class="text-5xl">
-            ❄️
-          </div>
+          🕐
 
-          <div class="font-black text-gray-900 text-lg mt-4">
-            Пока нет заказов
-          </div>
+          <br><br>
 
-          <div class="text-sm text-gray-500 mt-2">
-            Новые заявки появятся здесь автоматически.
-          </div>
+          Сейчас доступных заказов нет.
 
         </div>
 
       `;
 
+      return;
+
+    }
+
+
+    /*
+      Показываем только searching.
+    */
+
+    const availableOrders =
+      orders.filter(
+        order =>
+          order.status ===
+          "searching"
+      );
+
+
+    if (
+      !availableOrders.length
+    ) {
+
+      container.innerHTML = `
+
+        <div class="empty">
+
+          Сейчас доступных заказов нет.
+
+        </div>
+
+      `;
 
       return;
 
@@ -3609,120 +2929,76 @@
 
 
     container.innerHTML =
-      orders
+      availableOrders
         .map(
-          (order) =>
-            createPerformerOrderCard(
-              order
-            )
+          createPerformerOrderCard
         )
         .join("");
 
   }
 
 
-  // ============================================================
-  // КАРТОЧКА ЗАКАЗА ИСПОЛНИТЕЛЯ
-  // ============================================================
-
   function createPerformerOrderCard(
     order
   ) {
 
     const distance =
-      Number(
-        order.distance_km || 0
-      );
-
-
-    const price =
-      Number(
-        order.price || 0
-      );
+      order.distance_km !== undefined
+        ? Number(
+            order.distance_km
+          ).toFixed(2) +
+          " км"
+        : "—";
 
 
     return `
 
-      <div class="bg-white rounded-3xl p-5 shadow-sm mb-3">
+      <div class="performer-order-card">
 
-        <div class="flex items-start justify-between gap-3">
+        <div class="performer-order-service">
 
-          <div>
-
-            <div class="text-xs text-gray-400 font-semibold">
-              ЗАКАЗ
-            </div>
-
-            <div class="font-black text-gray-900 text-2xl mt-1">
-              #${escapeHtml(String(order.id))}
-            </div>
-
-          </div>
-
-          <div class="text-right">
-
-            <div class="text-xs text-gray-400">
-              Расстояние
-            </div>
-
-            <div class="font-black text-[#ff4f87] mt-1">
-              ${distance.toFixed(2)} км
-            </div>
-
-          </div>
+          ${escapeHtml(
+            order.service
+          )}
 
         </div>
 
 
-        <div class="mt-5">
+        <div class="performer-order-price">
 
-          <div class="text-xs text-gray-400">
-            Услуга
-          </div>
-
-          <div class="font-black text-gray-900 text-lg mt-1">
-            ${escapeHtml(order.service || "—")}
-          </div>
+          ${Number(
+            order.price
+          )} ₽
 
         </div>
 
 
-        <div class="mt-4">
+        <div class="performer-order-address">
 
-          <div class="text-xs text-gray-400">
-            Адрес
-          </div>
+          📍
 
-          <div class="font-semibold text-gray-900 mt-1 leading-relaxed">
-            ${escapeHtml(order.address || "—")}
-          </div>
+          ${escapeHtml(
+            order.address ||
+            "Адрес не указан"
+          )}
 
         </div>
 
 
-        <div class="flex items-end justify-between mt-5">
+        <div class="performer-order-distance">
 
-          <div>
-
-            <div class="text-xs text-gray-400">
-              Оплата
-            </div>
-
-            <div class="text-2xl font-black text-gray-900 mt-1">
-              ${price.toLocaleString("ru-RU")} ₽
-            </div>
-
-          </div>
+          📏 Расстояние: ${distance}
 
         </div>
 
 
         <button
-          type="button"
+          class="accept-button"
           onclick="acceptPerformerOrder(${Number(order.id)})"
-          class="mt-5 w-full h-14 rounded-2xl bg-[#ff4f87] text-white font-black text-lg active:scale-[0.98] transition"
         >
-          🚗 Принять заказ
+
+          Принять заказ
+
         </button>
 
       </div>
@@ -3732,458 +3008,308 @@
   }
 
 
-  // ============================================================
-  // ПРИНЯТЬ ЗАКАЗ ИСПОЛНИТЕЛЕМ
-  // ============================================================
+  /* ===========================================================
+     ПРИНЯТЬ ЗАКАЗ ИСПОЛНИТЕЛЕМ
+     =========================================================== */
 
   async function acceptPerformerOrder(
     orderId
   ) {
 
-    if (isAcceptingPerformerOrder) {
+    if (
+      !performerData
+    ) {
+
+      showToast(
+        "Данные исполнителя ещё не загружены"
+      );
 
       return;
 
     }
 
 
-    isAcceptingPerformerOrder =
-      true;
+    if (
+      performerData.status !==
+      "available"
+    ) {
+
+      showToast(
+        "Вы сейчас заняты"
+      );
+
+      return;
+
+    }
 
 
     try {
 
-      if (!performerData) {
-
-        throw new Error(
-          "Данные исполнителя не загружены."
-        );
-
-      }
+      showToast(
+        "Принимаем заказ..."
+      );
 
 
-      if (
-        performerData.status !==
-        "available"
-      ) {
+      const result =
+        await callEdgeFunction({
 
-        alert(
-          "Вы уже заняты другим заказом."
-        );
+          action:
+            "accept_order",
 
-        return;
+          order_id:
+            Number(orderId),
 
-      }
+          performer_id:
+            Number(
+              TEST_PERFORMER_ID
+            )
 
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.functions.invoke(
-          "quick-processor",
-          {
-
-            body: {
-
-              action:
-                "accept_order",
-
-              order_id:
-                orderId,
-
-              performer_id:
-                TEST_PERFORMER_ID
-
-            }
-
-          }
-        );
+        });
 
 
-      if (error) {
-
-        throw new Error(
-          error.message
-        );
-
-      }
+      console.log(
+        "ACCEPT PERFORMER RESULT:",
+        result
+      );
 
 
       if (
-        data?.error
+        result &&
+        result.order
       ) {
 
-        throw new Error(
-          data.error
+        performerData.status =
+          "busy";
+
+
+        performerActiveOrder =
+          result.order;
+
+
+        renderPerformerStatus();
+
+
+        renderPerformerActiveOrder(
+          result.order
+        );
+
+
+        showToast(
+          "Заказ принят"
         );
 
       }
 
+    }
 
-      if (!data?.success) {
-
-        throw new Error(
-          "Заказ не был принят."
-        );
-
-      }
-
-
-      performerActiveOrder =
-        data.order;
-
-
-      // Исполнитель становится занят
-
-      performerData.status =
-        "busy";
-
-
-      updatePerformerStatus();
-
-
-      renderPerformerActiveOrder();
-
-
-      // Обновляем список
-
-      await loadAvailableOrders();
-
-
-    } catch (error) {
+    catch (error) {
 
       console.error(
-        "Ошибка принятия заказа:",
+        "Accept performer order error:",
         error
       );
 
 
-      alert(
-        "Не удалось принять заказ.\n\n" +
-        error.message
+      showToast(
+        "Не удалось принять заказ: " +
+        (
+          error.message ||
+          "ошибка"
+        )
       );
 
-    } finally {
 
-      isAcceptingPerformerOrder =
-        false;
+      /*
+        После ошибки обновляем состояние.
+      */
+
+      await loadPerformer();
 
     }
 
   }
 
 
-  // ============================================================
-  // ПОКАЗ АКТИВНОГО ЗАКАЗА
-  // ============================================================
+  /* ===========================================================
+     АКТИВНЫЙ ЗАКАЗ ИСПОЛНИТЕЛЯ
+     =========================================================== */
 
-  function renderPerformerActiveOrder() {
+  function renderPerformerActiveOrder(
+    order
+  ) {
 
-    const wrapper =
+    const container =
       document.getElementById(
-        "performer-active-order"
+        "performer-orders"
       );
 
 
-    const number =
-      document.getElementById(
-        "performer-active-order-number"
-      );
+    performerActiveOrder =
+      order;
 
 
-    const service =
-      document.getElementById(
-        "performer-active-service"
-      );
+    container.innerHTML = `
+
+      <div class="performer-order-card">
+
+        <div class="status-badge">
+          Заказ принят
+        </div>
 
 
-    const address =
-      document.getElementById(
-        "performer-active-address"
-      );
+        <div class="performer-order-service"
+             style="margin-top:15px;">
+
+          ${escapeHtml(
+            order.service
+          )}
+
+        </div>
 
 
-    const price =
-      document.getElementById(
-        "performer-active-price"
-      );
+        <div class="performer-order-price">
+
+          ${Number(
+            order.price
+          )} ₽
+
+        </div>
 
 
-    const distance =
-      document.getElementById(
-        "performer-active-distance"
-      );
+        <div class="performer-order-address">
+
+          📍
+
+          ${escapeHtml(
+            order.address ||
+            "Адрес не указан"
+          )}
+
+        </div>
 
 
-    if (!performerActiveOrder) {
+        <button
+          class="accept-button"
+          onclick="completePerformerOrder(${Number(order.id)})"
+        >
 
-      wrapper.classList.add(
-        "hidden"
-      );
+          Завершить заказ
 
-      return;
+        </button>
 
-    }
+      </div>
 
-
-    wrapper.classList.remove(
-      "hidden"
-    );
-
-
-    number.textContent =
-      "#" +
-      performerActiveOrder.id;
-
-
-    service.textContent =
-      performerActiveOrder.service ||
-      "—";
-
-
-    address.textContent =
-      performerActiveOrder.address ||
-      "—";
-
-
-    price.textContent =
-      Number(
-        performerActiveOrder.price ||
-        0
-      ).toLocaleString(
-        "ru-RU"
-      ) +
-      " ₽";
-
-
-    if (
-      performerActiveOrder.distance_km
-    ) {
-
-      distance.textContent =
-        Number(
-          performerActiveOrder.distance_km
-        ).toFixed(2) +
-        " км";
-
-    } else {
-
-      distance.textContent =
-        "Заказ принят";
-
-    }
+    `;
 
   }
 
 
-  // ============================================================
-  // ЗАВЕРШИТЬ ЗАКАЗ ИСПОЛНИТЕЛЕМ
-  // ============================================================
+  /* ===========================================================
+     ЗАВЕРШИТЬ ЗАКАЗ ИСПОЛНИТЕЛЕМ
+     =========================================================== */
 
-  async function completePerformerOrder() {
-
-    if (
-      isCompletingPerformerOrder
-    ) {
-
-      return;
-
-    }
-
-
-    if (
-      !performerActiveOrder
-    ) {
-
-      alert(
-        "Активный заказ не найден."
-      );
-
-      return;
-
-    }
-
-
-    isCompletingPerformerOrder =
-      true;
-
-
-    const button =
-      document.getElementById(
-        "performer-complete-button"
-      );
-
-
-    button.disabled =
-      true;
-
-
-    button.textContent =
-      "Завершаем заказ...";
-
+  async function completePerformerOrder(
+    orderId
+  ) {
 
     try {
 
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.functions.invoke(
-          "quick-processor",
-          {
-
-            body: {
-
-              action:
-                "complete_order",
-
-              order_id:
-                performerActiveOrder.id,
-
-              performer_id:
-                TEST_PERFORMER_ID
-
-            }
-
-          }
-        );
+      showToast(
+        "Завершаем заказ..."
+      );
 
 
-      if (error) {
+      const result =
+        await callEdgeFunction({
 
-        throw new Error(
-          error.message
-        );
+          action:
+            "complete_order",
 
-      }
+          order_id:
+            Number(orderId),
 
+          performer_id:
+            Number(
+              TEST_PERFORMER_ID
+            )
 
-      if (
-        data?.error
-      ) {
-
-        throw new Error(
-          data.error
-        );
-
-      }
+        });
 
 
-      if (!data?.success) {
+      console.log(
+        "COMPLETE PERFORMER RESULT:",
+        result
+      );
 
-        throw new Error(
-          "Не удалось завершить заказ."
-        );
-
-      }
-
-
-      // Очищаем активный заказ
 
       performerActiveOrder =
         null;
 
 
-      // Освобождаем исполнителя локально
+      if (
+        performerData
+      ) {
 
-      performerData.status =
-        "available";
+        performerData.status =
+          "available";
 
-
-      updatePerformerStatus();
-
-
-      renderPerformerActiveOrder();
+      }
 
 
-      // Показываем сообщение
-
-      const container =
-        document.getElementById(
-          "performer-orders-container"
-        );
+      renderPerformerStatus();
 
 
-      container.innerHTML = `
-
-        <div class="bg-white rounded-3xl p-7 text-center shadow-sm">
-
-          <div class="text-5xl">
-            🎉
-          </div>
-
-          <div class="font-black text-gray-900 text-lg mt-4">
-            Заказ завершён
-          </div>
-
-          <div class="text-sm text-gray-500 mt-2">
-            Вы снова доступны для новых заказов.
-          </div>
-
-        </div>
-
-      `;
-
-
-      // Через небольшую паузу загружаем новые заказы
-
-      setTimeout(
-        () => {
-
-          loadAvailableOrders();
-
-        },
-        1200
+      showToast(
+        "Заказ завершён"
       );
 
 
-    } catch (error) {
+      /*
+        Заново загружаем список заказов.
+      */
+
+      await loadPerformer();
+
+    }
+
+    catch (error) {
 
       console.error(
-        "Ошибка завершения заказа:",
+        "Complete performer order error:",
         error
       );
 
 
-      alert(
-        "Не удалось завершить заказ.\n\n" +
-        error.message
+      showToast(
+        "Не удалось завершить заказ: " +
+        (
+          error.message ||
+          "ошибка"
+        )
       );
-
-
-      button.disabled =
-        false;
-
-
-      button.textContent =
-        "✅ Завершить заказ";
-
-    } finally {
-
-      isCompletingPerformerOrder =
-        false;
 
     }
 
   }
 
 
-  // ============================================================
-  // UTILITIES
-  // ============================================================
+  /* ===========================================================
+     ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+     =========================================================== */
 
-  function formatDate(value) {
+  function formatDate(
+    dateString
+  ) {
 
-    if (!value) {
-
-      return "—";
-
+    if (!dateString) {
+      return "";
     }
 
 
     const date =
-      new Date(value);
+      new Date(
+        dateString
+      );
 
 
     if (
@@ -4192,7 +3318,7 @@
       )
     ) {
 
-      return "—";
+      return "";
 
     }
 
@@ -4200,47 +3326,39 @@
     return date.toLocaleString(
       "ru-RU",
       {
-
         day: "2-digit",
-
         month: "2-digit",
-
-        year: "numeric",
-
         hour: "2-digit",
-
         minute: "2-digit"
-
       }
     );
 
   }
 
 
-  function escapeHtml(value) {
+  function escapeHtml(
+    value
+  ) {
 
-    return String(value)
-
+    return String(
+      value ?? ""
+    )
       .replace(
         /&/g,
         "&amp;"
       )
-
       .replace(
         /</g,
         "&lt;"
       )
-
       .replace(
         />/g,
         "&gt;"
       )
-
       .replace(
         /"/g,
         "&quot;"
       )
-
       .replace(
         /'/g,
         "&#039;"
@@ -4249,47 +3367,9 @@
   }
 
 
-  // ============================================================
-  // ADDRESS INPUT
-  // ============================================================
-
-  document
-    .getElementById(
-      "address-input"
-    )
-    .addEventListener(
-      "input",
-      function () {
-
-        selectedLocation.address =
-          this.value.trim();
-
-      }
-    );
-
-
-  // ============================================================
-  // TELEGRAM BACK BUTTON
-  // ============================================================
-
-  if (telegramWebApp) {
-
-    telegramWebApp.BackButton.onClick(
-      () => {
-
-        showScreen("home");
-
-        telegramWebApp.BackButton.hide();
-
-      }
-    );
-
-  }
-
-
-  // ============================================================
-  // INITIALIZATION
-  // ============================================================
+  /* ===========================================================
+     СТАРТ
+     =========================================================== */
 
   document.addEventListener(
     "DOMContentLoaded",
