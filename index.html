@@ -1591,6 +1591,7 @@
         data,
         error
       } = await supabaseClient
+        console.log("Supabase auth:", await supabaseClient.auth.getSession());
         .from("orders")
         .insert({
 
