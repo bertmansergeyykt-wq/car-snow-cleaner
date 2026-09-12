@@ -14,6 +14,7 @@ import { showScreen } from "./screens.js";
 // ============================================
 
 export function openMapScreen() {
+
   showScreen("map");
 
   setTimeout(() => {
@@ -28,12 +29,11 @@ export function openMapScreen() {
 
 export function initializeMap() {
 
-  // Если карта уже создана —
-  // просто обновляем её размеры
   if (mapInitialized && map) {
 
     if (
-      typeof map.container?.fitToViewport === "function"
+      typeof map.container?.fitToViewport ===
+      "function"
     ) {
       map.container.fitToViewport();
     }
@@ -42,7 +42,6 @@ export function initializeMap() {
   }
 
 
-  // Проверяем наличие Yandex Maps API
   if (typeof ymaps === "undefined") {
 
     alert(
@@ -55,7 +54,6 @@ export function initializeMap() {
 
   ymaps.ready(() => {
 
-    // Защита от повторной инициализации
     if (mapInitialized) {
       return;
     }
@@ -68,7 +66,6 @@ export function initializeMap() {
     ];
 
 
-    // Создаём карту
     const newMap = new ymaps.Map(
       "map",
       {
@@ -81,7 +78,6 @@ export function initializeMap() {
     );
 
 
-    // Сохраняем карту в state
     setMap(newMap);
     setMapInitialized(true);
 
@@ -117,8 +113,8 @@ export function initializeMap() {
 
 
         reverseGeocode(
-          longitude,
-          latitude
+          latitude,
+          longitude
         );
       }
     );
@@ -222,17 +218,33 @@ export async function reverseGeocode(
   }
 
 
+  // Показываем пользователю,
+  // что адрес сейчас определяется
+
   addressInput.value =
     "Определяем адрес...";
 
 
+  selectedLocation.address = "";
+
+
   try {
+
+    // ========================================
+    // ВАЖНО:
+    //
+    // Yandex Maps Map использует:
+    // [latitude, longitude]
+    //
+    // Геокодер Yandex принимает:
+    // [longitude, latitude]
+    // ========================================
 
     const result =
       await ymaps.geocode(
         [
-          latitude,
-          longitude
+          longitude,
+          latitude
         ],
         {
           results: 1
@@ -260,13 +272,33 @@ export async function reverseGeocode(
       firstGeoObject.getAddressLine();
 
 
-    selectedLocation.address =
-      address || "";
+    if (!address) {
 
+      addressInput.value =
+        "Адрес не найден";
+
+      selectedLocation.address =
+        "";
+
+      return;
+    }
+
+
+    // ========================================
+    // СОХРАНЯЕМ АДРЕС
+    // ========================================
+
+    selectedLocation.address =
+      address;
 
     addressInput.value =
-      address ||
-      "Адрес не найден";
+      address;
+
+
+    console.log(
+      "Адрес определён:",
+      address
+    );
 
 
   } catch (error) {
