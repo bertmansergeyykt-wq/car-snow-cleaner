@@ -54,16 +54,24 @@ const SUPABASE_PUBLISHABLE_KEY =
 initTelegram();
 
 // ============================================================
+// TELEGRAM BACK BUTTON
+// ============================================================
+
+if (telegramWebApp) {
+  telegramWebApp.BackButton.onClick(() => {
+    showScreen("home");
+  });
+}
+
+// ============================================================
 // РЕГИСТРАЦИЯ TELEGRAM-ПОЛЬЗОВАТЕЛЯ
 // ============================================================
 
 async function registerTelegramUser() {
-
   const telegramUserId =
     getTelegramUserId();
 
   if (!telegramUserId) {
-
     console.warn(
       "Регистрация пропущена: Telegram пользователь не найден."
     );
@@ -87,7 +95,6 @@ async function registerTelegramUser() {
   );
 
   try {
-
     const response =
       await fetch(
         SUPABASE_FUNCTION_URL,
@@ -127,7 +134,6 @@ async function registerTelegramUser() {
     );
 
     if (!response.ok) {
-
       console.error(
         "Ошибка регистрации пользователя:",
         JSON.stringify(
@@ -146,13 +152,10 @@ async function registerTelegramUser() {
     );
 
     if (data.created) {
-
       console.log(
         "Новый пользователь зарегистрирован."
       );
-
     } else {
-
       console.log(
         "Пользователь уже существует."
       );
@@ -241,12 +244,14 @@ document.addEventListener(
 
           selectedLocation.address =
             addressInput.value.trim();
+
         }
       );
+
     }
 
     // ========================================================
-    // РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ
+    // РЕГИСТРИРУЕМ TELEGRAM-ПОЛЬЗОВАТЕЛЯ
     // ========================================================
 
     await registerTelegramUser();
@@ -262,5 +267,6 @@ document.addEventListener(
     // ========================================================
 
     showScreen("home");
+
   }
 );
