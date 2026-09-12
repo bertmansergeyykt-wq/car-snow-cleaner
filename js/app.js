@@ -1,6 +1,4 @@
-import {
-  initTelegram
-} from "./telegram.js";
+import { initTelegram } from "./telegram.js";
 
 import {
   showScreen,
@@ -34,167 +32,127 @@ import {
 } from "./state.js";
 
 
-/* =========================================================
-   ИНИЦИАЛИЗАЦИЯ TELEGRAM
-========================================================= */
+// ========================================
+// TELEGRAM
+// ========================================
 
 initTelegram();
 
 
-/* =========================================================
-   ГЛОБАЛЬНЫЕ ФУНКЦИИ
-========================================================= */
+// ========================================
+// ДЕЛАЕМ ФУНКЦИИ ДОСТУПНЫМИ HTML
+// ========================================
 
-/*
-  Пока в HTML используются onclick="...",
-  функции должны быть доступны через window.
+window.showScreen = showScreen;
 
-  Позже мы можем полностью убрать inline onclick,
-  но сейчас оставляем этот мост, чтобы ничего не сломать.
-*/
+window.openMapScreen = openMapScreen;
+window.initializeMap = initializeMap;
+window.useCurrentLocation = useCurrentLocation;
 
-window.showScreen =
-  showScreen;
+window.continueFromLocation = continueFromLocation;
 
-window.openMapScreen =
-  openMapScreen;
+window.selectService = selectService;
+window.createOrder = createOrder;
 
-window.initializeMap =
-  initializeMap;
+window.completeCurrentOrder = completeCurrentOrder;
 
-window.useCurrentLocation =
-  useCurrentLocation;
+window.loadOrdersScreen = loadOrdersScreen;
 
-window.continueFromLocation =
-  continueFromLocation;
+window.openPerformerScreen = openPerformerScreen;
+window.loadAvailableOrders = loadAvailableOrders;
+window.acceptPerformerOrder = acceptPerformerOrder;
+window.completePerformerOrder = completePerformerOrder;
 
-window.selectService =
-  selectService;
-
-window.createOrder =
-  createOrder;
-
-window.completeCurrentOrder =
-  completeCurrentOrder;
-
-window.loadOrdersScreen =
-  loadOrdersScreen;
-
-window.openPerformerScreen =
-  openPerformerScreen;
-
-window.loadAvailableOrders =
-  loadAvailableOrders;
-
-window.acceptPerformerOrder =
-  acceptPerformerOrder;
-
-window.completePerformerOrder =
-  completePerformerOrder;
-
-window.backToProfile =
-  backToProfile;
+window.backToProfile = backToProfile;
 
 
-/* =========================================================
-   РЕДАКТИРОВАНИЕ АДРЕСА
-========================================================= */
+// ========================================
+// АДРЕС
+// ========================================
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const addressInput =
-      document.getElementById(
-        "address-input"
-      );
+  const addressInput =
+    document.getElementById("address-input");
 
-    if (addressInput) {
+  if (addressInput) {
 
-      addressInput.addEventListener(
-        "input",
-        () => {
+    addressInput.addEventListener(
+      "input",
+      () => {
 
-          selectedLocation.address =
-            addressInput.value.trim();
+        selectedLocation.address =
+          addressInput.value.trim();
 
-        }
-      );
-    }
-
-    renderProfile();
+      }
+    );
 
   }
-);
+
+});
 
 
-/* =========================================================
-   TELEGRAM BACK BUTTON
-========================================================= */
+// ========================================
+// TELEGRAM BACK BUTTON
+// ========================================
 
 const telegramWebApp =
   window.Telegram?.WebApp || null;
 
+
 if (telegramWebApp) {
 
-  telegramWebApp.BackButton.onClick(
-    () => {
+  telegramWebApp.BackButton.onClick(() => {
 
-      showScreen(
-        "home"
-      );
+    showScreen("home");
 
-      telegramWebApp.BackButton.hide();
+    telegramWebApp.BackButton.hide();
 
-    }
-  );
+  });
 
 }
 
 
-/* =========================================================
-   ПОКАЗ / СКРЫТИЕ TELEGRAM BACK BUTTON
-========================================================= */
+// ========================================
+// УПРАВЛЕНИЕ TELEGRAM BACK BUTTON
+// ========================================
 
 const originalShowScreen =
-  showScreen;
-
-window.showScreen =
-  function(screenName) {
-
-    originalShowScreen(
-      screenName
-    );
-
-    if (!telegramWebApp) {
-      return;
-    }
-
-    if (
-      screenName === "home"
-    ) {
-
-      telegramWebApp.BackButton.hide();
-
-    } else {
-
-      telegramWebApp.BackButton.show();
-
-    }
-  };
+  window.showScreen;
 
 
-/* =========================================================
-   НАЧАЛЬНЫЙ ЭКРАН
-========================================================= */
+window.showScreen = function(screenName) {
+
+  originalShowScreen(screenName);
+
+  if (!telegramWebApp) {
+    return;
+  }
+
+  if (screenName === "home") {
+
+    telegramWebApp.BackButton.hide();
+
+  } else {
+
+    telegramWebApp.BackButton.show();
+
+  }
+
+};
+
+
+// ========================================
+// СТАРТОВЫЙ ЭКРАН
+// ========================================
 
 document.addEventListener(
   "DOMContentLoaded",
   () => {
 
-    showScreen(
-      "home"
-    );
+    renderProfile();
+
+    showScreen("home");
 
   }
 );
