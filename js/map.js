@@ -29,6 +29,9 @@ export function openMapScreen() {
 
 export function initializeMap() {
 
+  // Если карта уже создана —
+  // обновляем её размеры
+
   if (mapInitialized && map) {
 
     if (
@@ -42,6 +45,8 @@ export function initializeMap() {
   }
 
 
+  // Проверяем загрузку Yandex Maps API
+
   if (typeof ymaps === "undefined") {
 
     alert(
@@ -54,29 +59,41 @@ export function initializeMap() {
 
   ymaps.ready(() => {
 
+    // Защита от повторной инициализации
+
     if (mapInitialized) {
       return;
     }
 
 
-    // Екатеринбург — стартовая точка
+    // ========================================
+    // СТАРТОВАЯ ТОЧКА — ЕКАТЕРИНБУРГ
+    // ========================================
+
     const defaultCenter = [
       56.8389,
       60.6057
     ];
 
 
-    const newMap = new ymaps.Map(
-      "map",
-      {
-        center: defaultCenter,
-        zoom: 13,
-        controls: [
-          "zoomControl"
-        ]
-      }
-    );
+    // ========================================
+    // СОЗДАЁМ КАРТУ
+    // ========================================
 
+    const newMap =
+      new ymaps.Map(
+        "map",
+        {
+          center: defaultCenter,
+          zoom: 13,
+          controls: [
+            "zoomControl"
+          ]
+        }
+      );
+
+
+    // Сохраняем карту в глобальное состояние
 
     setMap(newMap);
     setMapInitialized(true);
@@ -112,6 +129,8 @@ export function initializeMap() {
           longitude;
 
 
+        // Определяем адрес новой точки
+
         reverseGeocode(
           latitude,
           longitude
@@ -145,7 +164,7 @@ export function initializeMap() {
 
 
     // ========================================
-    // СТАРТОВАЯ ТОЧКА
+    // УСТАНАВЛИВАЕМ СТАРТОВУЮ ТОЧКУ
     // ========================================
 
     setMapLocation(
@@ -166,6 +185,8 @@ export function setMapLocation(
   longitude
 ) {
 
+  // Сохраняем координаты
+
   selectedLocation.latitude =
     latitude;
 
@@ -173,8 +194,12 @@ export function setMapLocation(
     longitude;
 
 
-  const currentMap = map;
+  const currentMap =
+    map;
 
+
+  // Если карта существует —
+  // перемещаем её
 
   if (currentMap) {
 
@@ -191,6 +216,8 @@ export function setMapLocation(
   }
 
 
+  // Определяем адрес
+
   reverseGeocode(
     latitude,
     longitude
@@ -199,7 +226,8 @@ export function setMapLocation(
 
 
 // ============================================
-// ОПРЕДЕЛЕНИЕ АДРЕСА
+// ОБРАТНОЕ ГЕОКОДИРОВАНИЕ
+// КООРДИНАТЫ → АДРЕС
 // ============================================
 
 export async function reverseGeocode(
@@ -218,45 +246,90 @@ export async function reverseGeocode(
   }
 
 
-  // Показываем пользователю,
-  // что адрес сейчас определяется
+  // Показываем пользователю процесс определения
 
   addressInput.value =
     "Определяем адрес...";
 
 
-  selectedLocation.address = "";
+  selectedLocation.address =
+    "";
 
 
   try {
 
     // ========================================
-    // ВАЖНО:
+    // YANDEX GEOCODER HTTP API
     //
-    // Yandex Maps Map использует:
-    // [latitude, longitude]
-    //
-    // Геокодер Yandex принимает:
-    // [longitude, latitude]
+    // Формат координат:
+    // longitude,latitude
     // ========================================
 
-    const result =
-      await ymaps.geocode(
-        [
-          longitude,
-          latitude
-        ],
-        {
-          results: 1
-        }
+    const url =
+      "https://geocode-maps.yandex.ru/v1/" +
+      "?apikey=c355cb46-e31f-4942-a74d-336abc2cb19a" +
+      "&geocode=" +
+      encodeURIComponent(
+        longitude + "," + latitude
+      ) +
+      "&lang=ru_RU" +
+      "&format=json" +
+      "&results=1";
+
+
+    console.log(
+      "Запрос геокодера:",
+      url
+    );
+
+
+    // ========================================
+    // ОТПРАВЛЯЕМ ЗАПРОС
+    // ========================================
+
+    const response =
+      await fetch(url);
+
+
+    // Проверяем HTTP-статус
+
+    if (!response.ok) {
+
+      throw new Error(
+        "HTTP " + response.status
       );
+    }
 
 
-    const firstGeoObject =
-      result.geoObjects.get(0);
+    // ========================================
+    // ПОЛУЧАЕМ JSON
+    // ========================================
+
+    const data =
+      await response.json();
 
 
-    if (!firstGeoObject) {
+    console.log(
+      "Ответ геокодера:",
+      data
+    );
+
+
+    // ========================================
+    // ПОЛУЧАЕМ СПИСОК ОБЪЕКТОВ
+    // ========================================
+
+    const members =
+      data
+        ?.response
+        ?.GeoObjectCollection
+        ?.featureMember;
+
+
+    if (
+      !members ||
+      members.length === 0
+    ) {
 
       addressInput.value =
         "Адрес не найден";
@@ -268,8 +341,23 @@ export async function reverseGeocode(
     }
 
 
+    // ========================================
+    // ПЕРВЫЙ НАЙДЕННЫЙ ОБЪЕКТ
+    // ========================================
+
+    const geoObject =
+      members[0]?.GeoObject;
+
+
+    // ========================================
+    // ПОЛУЧАЕМ АДРЕС
+    // ========================================
+
     const address =
-      firstGeoObject.getAddressLine();
+      geoObject
+        ?.metaDataProperty
+        ?.GeocoderMetaData
+        ?.text;
 
 
     if (!address) {
@@ -303,21 +391,14 @@ export async function reverseGeocode(
 
   } catch (error) {
 
+    // ========================================
+    // ОШИБКА ГЕОКОДИРОВАНИЯ
+    // ========================================
+
     console.error(
-  "Ошибка геокодирования:",
-  error
-);
-
-console.error(
-  "Ошибка геокодирования JSON:",
-  JSON.stringify(error, null, 2)
-);
-
-console.error(
-  "Координаты:",
-  latitude,
-  longitude
-);
+      "Ошибка HTTP геокодирования:",
+      error
+    );
 
 
     selectedLocation.address =
@@ -335,6 +416,8 @@ console.error(
 
 export function useCurrentLocation() {
 
+  // Проверяем поддержку геолокации
+
   if (!navigator.geolocation) {
 
     alert(
@@ -344,6 +427,10 @@ export function useCurrentLocation() {
     return;
   }
 
+
+  // ========================================
+  // ПОЛУЧАЕМ ГЕОЛОКАЦИЮ
+  // ========================================
 
   navigator.geolocation.getCurrentPosition(
 
@@ -355,6 +442,15 @@ export function useCurrentLocation() {
       const longitude =
         position.coords.longitude;
 
+
+      console.log(
+        "Текущее местоположение:",
+        latitude,
+        longitude
+      );
+
+
+      // Устанавливаем найденную точку
 
       setMapLocation(
         latitude,
