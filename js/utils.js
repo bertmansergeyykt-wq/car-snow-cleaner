@@ -1,14 +1,5 @@
-// ============================================================
-// УТИЛИТЫ
-// ============================================================
-
-
-// ============================================================
-// ФОРМАТИРОВАНИЕ ДАТЫ
-// ============================================================
-
+// Форматирование даты и времени
 export function formatDate(dateString) {
-
   if (!dateString) {
     return "";
   }
@@ -19,26 +10,22 @@ export function formatDate(dateString) {
     return "";
   }
 
-  return date.toLocaleString(
-    "ru-RU",
-    {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    }
-  );
+  return date.toLocaleString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
 }
 
 
-// ============================================================
-// ЗАЩИТА HTML
-// ============================================================
-
+// Безопасный вывод текста в HTML
 export function escapeHtml(value) {
-
-  if (value === null || value === undefined) {
+  if (
+    value === null ||
+    value === undefined
+  ) {
     return "";
   }
 
