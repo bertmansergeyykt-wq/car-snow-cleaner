@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+'<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -204,9 +204,7 @@
 
 <div id="app">
 
-  <!-- ========================================================= -->
   <!-- HOME -->
-  <!-- ========================================================= -->
 
   <section
     id="screen-home"
@@ -287,7 +285,6 @@
 
             </div>
 
-
             <div class="flex gap-4">
 
               <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
@@ -307,7 +304,6 @@
               </div>
 
             </div>
-
 
             <div class="flex gap-4">
 
@@ -337,7 +333,6 @@
 
     </div>
 
-
     <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
 
       <div class="grid grid-cols-3 h-16">
@@ -354,7 +349,6 @@
           </span>
         </button>
 
-
         <button
           type="button"
           onclick="loadOrdersScreen()"
@@ -366,7 +360,6 @@
             Заказы
           </span>
         </button>
-
 
         <button
           type="button"
@@ -387,9 +380,7 @@
   </section>
 
 
-  <!-- ========================================================= -->
   <!-- MAP -->
-  <!-- ========================================================= -->
 
   <section
     id="screen-map"
@@ -400,7 +391,6 @@
 
       <div id="map"></div>
 
-
       <div class="map-marker">
 
         <div class="marker-pin">
@@ -410,7 +400,6 @@
         </div>
 
       </div>
-
 
       <div class="map-overlay">
 
@@ -423,7 +412,6 @@
         </button>
 
       </div>
-
 
       <div class="map-bottom-panel">
 
@@ -440,7 +428,6 @@
 
         </div>
 
-
         <div class="relative">
 
           <input
@@ -449,7 +436,6 @@
             placeholder="Определяем адрес..."
             class="w-full h-14 rounded-2xl bg-gray-100 px-4 pr-12 outline-none text-gray-900 focus:ring-2 focus:ring-[#ff4f87]"
           >
-
 
           <button
             type="button"
@@ -461,7 +447,6 @@
           </button>
 
         </div>
-
 
         <button
           id="location-next-button"
@@ -479,9 +464,7 @@
   </section>
 
 
-  <!-- ========================================================= -->
   <!-- SERVICES -->
-  <!-- ========================================================= -->
 
   <section
     id="screen-services"
@@ -500,16 +483,13 @@
           ←
         </button>
 
-
         <div class="text-sm font-semibold text-[#ff4f87]">
           ШАГ 2
         </div>
 
-
         <h2 class="text-3xl font-black text-gray-900 mt-1">
           Какая помощь нужна?
         </h2>
-
 
         <div
           id="selected-address-preview"
@@ -529,9 +509,7 @@
 
         </div>
 
-
         <div class="mt-5 space-y-3">
-
 
           <button
             type="button"
@@ -643,7 +621,6 @@
 
     </div>
 
-
     <div class="p-5 bg-white border-t border-gray-100 safe-bottom">
 
       <button
@@ -661,9 +638,7 @@
   </section>
 
 
-  <!-- ========================================================= -->
   <!-- SEARCHING -->
-  <!-- ========================================================= -->
 
   <section
     id="screen-searching"
@@ -678,23 +653,19 @@
 
       </div>
 
-
       <div class="text-sm font-semibold text-[#ff4f87] uppercase">
         Заказ создан
       </div>
 
-
       <h2 class="text-3xl font-black text-gray-900 mt-2">
         Ищем исполнителя
       </h2>
-
 
       <p class="text-gray-500 mt-3 leading-relaxed">
         Ищем ближайшего свободного исполнителя.
         Как только кто-то примет заказ,
         статус изменится.
       </p>
-
 
       <div class="mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm">
 
@@ -713,7 +684,6 @@
 
     </div>
 
-
     <div class="p-5 safe-bottom">
 
       <button
@@ -729,9 +699,7 @@
   </section>
 
 
-  <!-- ========================================================= -->
   <!-- ORDERS -->
-  <!-- ========================================================= -->
 
   <section
     id="screen-orders"
@@ -756,7 +724,6 @@
 
           </div>
 
-
           <button
             type="button"
             onclick="loadOrdersScreen()"
@@ -766,7 +733,6 @@
           </button>
 
         </div>
-
 
         <div
           id="orders-container"
@@ -791,7 +757,6 @@
 
     </div>
 
-
     <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
 
       <div class="grid grid-cols-3 h-16">
@@ -808,7 +773,6 @@
           </span>
         </button>
 
-
         <button
           type="button"
           onclick="loadOrdersScreen()"
@@ -820,7 +784,6 @@
             Заказы
           </span>
         </button>
-
 
         <button
           type="button"
@@ -841,9 +804,7 @@
   </section>
 
 
-  <!-- ========================================================= -->
   <!-- PROFILE -->
-  <!-- ========================================================= -->
 
   <section
     id="screen-profile"
@@ -860,13 +821,11 @@
         Профиль
       </h2>
 
-
       <div class="mt-6 bg-white rounded-3xl p-6 shadow-sm">
 
         <div class="w-16 h-16 rounded-full bg-[#fff0f5] flex items-center justify-center text-3xl">
           👤
         </div>
-
 
         <div
           id="profile-user-id"
@@ -875,7 +834,6 @@
           Пользователь
         </div>
 
-
         <div class="text-sm text-gray-500 mt-1">
           Telegram
         </div>
@@ -883,7 +841,6 @@
       </div>
 
     </div>
-
 
     <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
 
@@ -901,7 +858,6 @@
           </span>
         </button>
 
-
         <button
           type="button"
           onclick="loadOrdersScreen()"
@@ -913,7 +869,6 @@
             Заказы
           </span>
         </button>
-
 
         <button
           type="button"
@@ -970,9 +925,6 @@
 
     }
 
-
-    // Тестовый ID при открытии
-    // приложения напрямую в браузере.
 
     return 123456789;
 
@@ -1644,8 +1596,6 @@
 
       // ======================================================
       // 1. СОЗДАЁМ ЗАКАЗ
-      // ВАЖНО:
-      // колонка называется telegram_user_id
       // ======================================================
 
       const {
@@ -1714,7 +1664,6 @@
 
       // ======================================================
       // 2. ИЩЕМ ИСПОЛНИТЕЛЯ
-      // ЧЕРЕЗ УЖЕ СОЗДАННУЮ quick-processor
       // ======================================================
 
       console.log(
@@ -1724,6 +1673,15 @@
 
 
       try {
+
+        console.log(
+          "Вызов quick-processor:find_performer",
+          {
+            latitude: Number(data.latitude),
+            longitude: Number(data.longitude)
+          }
+        );
+
 
         const {
           data: executorResult,
@@ -1754,19 +1712,26 @@
           );
 
 
+        console.log(
+          "quick-processor ответ:",
+          executorResult
+        );
+
+
         if (executorError) {
 
-  console.error(
-    "Ошибка поиска исполнителя:",
-    executorError
-  );
+          console.error(
+            "Ошибка поиска исполнителя:",
+            executorError
+          );
 
-  alert(
-    "Ошибка поиска исполнителя:\n\n" +
-    executorError.message
-  );
 
-} else {
+          alert(
+            "Ошибка поиска исполнителя:\n\n" +
+            executorError.message
+          );
+
+        } else {
 
           console.log(
             "Результат поиска исполнителя:",
@@ -1774,11 +1739,16 @@
           );
 
 
-          // Если исполнитель найден,
-          // можно показать это в консоли.
-          //
-          // Пока статус заказа не меняем,
-          // потому что исполнитель ещё не принял заказ.
+          if (
+            executorResult?.error
+          ) {
+
+            alert(
+              "Ошибка quick-processor:\n\n" +
+              executorResult.error
+            );
+
+          }
 
         }
 
@@ -1787,6 +1757,15 @@
         console.error(
           "Ошибка вызова quick-processor:",
           executorError
+        );
+
+
+        alert(
+          "Не удалось вызвать quick-processor:\n\n" +
+          (
+            executorError?.message ||
+            String(executorError)
+          )
         );
 
       }
@@ -1896,10 +1875,6 @@
 
 
     try {
-
-      // ======================================================
-      // ИСТОРИЮ ЗАГРУЖАЕМ ЧЕРЕЗ quick-processor
-      // ======================================================
 
       const {
         data,
