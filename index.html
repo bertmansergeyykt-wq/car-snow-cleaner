@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -191,8 +192,14 @@
     }
 
 
+    /* =========================
+       ГЛАВНАЯ КНОПКА
+    ========================= */
+
     .main-order-button {
-      width: 100%;
+      width: calc(100% + 20px);
+
+      margin-left: -10px;
 
       border: none;
 
@@ -312,10 +319,12 @@
     }
 
 
+    /* HEADER СТАЛ НИЖЕ */
+
     .top-header {
       width: 100%;
 
-      height: 64px;
+      height: 52px;
 
       display: flex;
 
@@ -370,7 +379,7 @@
 
       width: 100%;
 
-      height: calc(100% - 64px);
+      height: calc(100% - 52px);
 
       overflow: hidden;
     }
@@ -396,7 +405,14 @@
       position: absolute;
 
       left: 50%;
-      top: 50%;
+
+      /*
+        Метка находится примерно
+        по центру свободной области
+        между header и карточкой.
+      */
+
+      top: 40%;
 
       transform:
         translate(-50%, -100%);
@@ -1909,3 +1925,4 @@
 
 </body>
 </html>
+```
