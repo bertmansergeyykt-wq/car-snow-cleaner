@@ -1756,12 +1756,17 @@
 
         if (executorError) {
 
-          console.error(
-            "Ошибка поиска исполнителя:",
-            executorError
-          );
+  console.error(
+    "Ошибка поиска исполнителя:",
+    executorError
+  );
 
-        } else {
+  alert(
+    "Ошибка поиска исполнителя:\n\n" +
+    executorError.message
+  );
+
+} else {
 
           console.log(
             "Результат поиска исполнителя:",
