@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -201,7 +200,9 @@
 
 <div id="app">
 
+  <!-- ======================================================== -->
   <!-- HOME -->
+  <!-- ======================================================== -->
 
   <section
     id="screen-home"
@@ -340,9 +341,11 @@
           class="flex flex-col items-center justify-center text-[#ff4f87]"
         >
           <span class="text-xl">🏠</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Главная
           </span>
+
         </button>
 
         <button
@@ -351,9 +354,11 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">📋</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Заказы
           </span>
+
         </button>
 
         <button
@@ -362,9 +367,11 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">👤</span>
+
           <span class="text-[11px] font-semibold mt-1">
             Профиль
           </span>
+
         </button>
 
       </div>
@@ -374,7 +381,9 @@
   </section>
 
 
+  <!-- ======================================================== -->
   <!-- MAP -->
+  <!-- ======================================================== -->
 
   <section
     id="screen-map"
@@ -458,7 +467,9 @@
   </section>
 
 
+  <!-- ======================================================== -->
   <!-- SERVICES -->
+  <!-- ======================================================== -->
 
   <section
     id="screen-services"
@@ -630,7 +641,9 @@
   </section>
 
 
+  <!-- ======================================================== -->
   <!-- SEARCHING -->
+  <!-- ======================================================== -->
 
   <section
     id="screen-searching"
@@ -708,8 +721,6 @@
 
         </div>
 
-        <!-- КНОПКА ЗАВЕРШЕНИЯ -->
-
         <button
           id="complete-order-button"
           type="button"
@@ -757,7 +768,9 @@
   </section>
 
 
+  <!-- ======================================================== -->
   <!-- ORDERS -->
+  <!-- ======================================================== -->
 
   <section
     id="screen-orders"
@@ -829,6 +842,7 @@
           <span class="text-[11px] font-semibold mt-1">
             Главная
           </span>
+
         </button>
 
         <button
@@ -841,6 +855,7 @@
           <span class="text-[11px] font-semibold mt-1">
             Заказы
           </span>
+
         </button>
 
         <button
@@ -853,6 +868,7 @@
           <span class="text-[11px] font-semibold mt-1">
             Профиль
           </span>
+
         </button>
 
       </div>
@@ -862,14 +878,16 @@
   </section>
 
 
+  <!-- ======================================================== -->
   <!-- PROFILE -->
+  <!-- ======================================================== -->
 
   <section
     id="screen-profile"
     class="screen flex-col bg-[#fff0f5]"
   >
 
-    <div class="flex-1 overflow-y-auto px-5 pt-8">
+    <div class="flex-1 overflow-y-auto px-5 pt-8 pb-8">
 
       <div class="text-sm font-semibold text-[#ff4f87]">
         SNOW PATROL
@@ -897,6 +915,41 @@
         </div>
 
       </div>
+
+
+      <!-- РЕЖИМ ИСПОЛНИТЕЛЯ -->
+
+      <button
+        type="button"
+        onclick="openPerformerScreen()"
+        class="mt-4 w-full bg-gray-900 text-white rounded-3xl p-5 text-left shadow-sm active:scale-[0.98] transition"
+      >
+
+        <div class="flex items-center gap-4">
+
+          <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center text-3xl">
+            🚙
+          </div>
+
+          <div class="flex-1">
+
+            <div class="font-black text-lg">
+              Я исполнитель
+            </div>
+
+            <div class="text-sm text-gray-300 mt-1">
+              Принимать заказы на уборку снега
+            </div>
+
+          </div>
+
+          <div class="text-2xl">
+            →
+          </div>
+
+        </div>
+
+      </button>
 
     </div>
 
@@ -949,6 +1002,248 @@
 
   </section>
 
+
+  <!-- ======================================================== -->
+  <!-- PERFORMER -->
+  <!-- ======================================================== -->
+
+  <section
+    id="screen-performer"
+    class="screen flex-col bg-[#f5f5f5]"
+  >
+
+    <div class="flex-1 overflow-y-auto">
+
+      <div class="px-5 pt-7 pb-8">
+
+        <div class="flex items-center gap-3">
+
+          <button
+            type="button"
+            onclick="showScreen('profile')"
+            class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-xl"
+          >
+            ←
+          </button>
+
+          <div>
+
+            <div class="text-sm font-semibold text-[#ff4f87]">
+              SNOW PATROL
+            </div>
+
+            <h2 class="text-3xl font-black text-gray-900">
+              Исполнитель
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <!-- СТАТУС -->
+
+        <div class="mt-6 bg-white rounded-3xl p-5 shadow-sm">
+
+          <div class="flex items-center justify-between">
+
+            <div>
+
+              <div class="text-xs uppercase font-semibold text-gray-400">
+                Ваш статус
+              </div>
+
+              <div
+                id="performer-status-text"
+                class="text-2xl font-black text-gray-900 mt-1"
+              >
+                Проверяем...
+              </div>
+
+            </div>
+
+            <div
+              id="performer-status-icon"
+              class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-3xl"
+            >
+              ⏳
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- АКТИВНЫЙ ЗАКАЗ -->
+
+        <div
+          id="performer-active-order"
+          class="hidden mt-4"
+        >
+
+          <div class="bg-gray-900 text-white rounded-3xl p-6 shadow-lg">
+
+            <div class="text-sm text-gray-300">
+              АКТИВНЫЙ ЗАКАЗ
+            </div>
+
+            <div
+              id="performer-active-order-number"
+              class="text-3xl font-black mt-1"
+            >
+              #—
+            </div>
+
+            <div class="mt-5">
+
+              <div class="text-xs text-gray-400">
+                Услуга
+              </div>
+
+              <div
+                id="performer-active-service"
+                class="font-bold text-lg mt-1"
+              >
+                —
+              </div>
+
+            </div>
+
+            <div class="mt-4">
+
+              <div class="text-xs text-gray-400">
+                Адрес
+              </div>
+
+              <div
+                id="performer-active-address"
+                class="font-bold mt-1"
+              >
+                —
+              </div>
+
+            </div>
+
+            <div class="flex items-end justify-between mt-5">
+
+              <div>
+
+                <div class="text-xs text-gray-400">
+                  Стоимость
+                </div>
+
+                <div
+                  id="performer-active-price"
+                  class="text-2xl font-black mt-1"
+                >
+                  0 ₽
+                </div>
+
+              </div>
+
+              <div
+                id="performer-active-distance"
+                class="text-sm text-gray-300"
+              >
+                —
+              </div>
+
+            </div>
+
+            <button
+              id="performer-complete-button"
+              type="button"
+              onclick="completePerformerOrder()"
+              class="mt-6 w-full h-14 rounded-2xl bg-[#ff4f87] text-white font-black text-lg active:scale-[0.98] transition"
+            >
+              ✅ Завершить заказ
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- СПИСОК ЗАКАЗОВ -->
+
+        <div
+          id="performer-orders-section"
+          class="mt-5"
+        >
+
+          <div class="flex items-center justify-between">
+
+            <div>
+
+              <div class="text-xs uppercase font-semibold text-gray-400">
+                Доступные заказы
+              </div>
+
+              <div class="text-xl font-black text-gray-900 mt-1">
+                Заказы рядом
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              onclick="loadAvailableOrders()"
+              class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-lg"
+            >
+              ↻
+            </button>
+
+          </div>
+
+          <div
+            id="performer-orders-container"
+            class="mt-4"
+          >
+
+            <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+
+              <div class="spinner mx-auto"></div>
+
+              <div class="font-bold text-gray-900 mt-4">
+                Загружаем заказы
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ОБНОВИТЬ -->
+
+        <button
+          type="button"
+          onclick="loadAvailableOrders()"
+          class="mt-5 w-full h-14 rounded-2xl bg-white border border-gray-200 text-gray-900 font-bold"
+        >
+          🔄 Обновить заказы
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="p-5 bg-white border-t border-gray-100 safe-bottom">
+
+      <button
+        type="button"
+        onclick="showScreen('profile')"
+        class="w-full h-14 rounded-2xl bg-gray-100 text-gray-900 font-bold"
+      >
+        ← Вернуться в профиль
+      </button>
+
+    </div>
+
+  </section>
+
 </div>
 
 
@@ -985,6 +1280,7 @@
       return telegramId;
 
     }
+
 
     return 123456789;
 
@@ -1047,13 +1343,36 @@
 
   let isCreatingOrder = false;
 
-  // Текущий активный заказ
+
+  // Текущий активный заказ клиента
 
   let currentActiveOrderId = null;
 
   let currentActivePerformerId = null;
 
   let isCompletingOrder = false;
+
+
+  // ============================================================
+  // ИСПОЛНИТЕЛЬ
+  // ============================================================
+
+  // ВРЕМЕННО для теста используем нашего исполнителя ID = 1
+
+  const TEST_PERFORMER_ID = 1;
+
+
+  let performerData = null;
+
+  let performerLatitude = 56.8389;
+
+  let performerLongitude = 60.6057;
+
+  let performerActiveOrder = null;
+
+  let isAcceptingPerformerOrder = false;
+
+  let isCompletingPerformerOrder = false;
 
 
   // ============================================================
@@ -1796,21 +2115,13 @@
 
 
   // ============================================================
-  // ACCEPT ORDER
+  // ACCEPT ORDER — КЛИЕНТ
   // ============================================================
 
   async function acceptOrder(
     orderId,
     performerId
   ) {
-
-    console.log(
-      "Подтверждаем исполнителя для заказа:",
-      orderId,
-      "Исполнитель:",
-      performerId
-    );
-
 
     const {
       data,
@@ -1839,12 +2150,6 @@
 
     if (error) {
 
-      console.error(
-        "Ошибка подтверждения заказа:",
-        error
-      );
-
-
       throw new Error(
         error.message
       );
@@ -1856,23 +2161,11 @@
       data?.error
     ) {
 
-      console.error(
-        "Ошибка accept_order:",
-        data.error
-      );
-
-
       throw new Error(
         data.error
       );
 
     }
-
-
-    console.log(
-      "Заказ подтверждён:",
-      data
-    );
 
 
     return data?.order || null;
@@ -1888,14 +2181,6 @@
     orderId,
     performerId
   ) {
-
-    console.log(
-      "Завершаем заказ:",
-      orderId,
-      "Исполнитель:",
-      performerId
-    );
-
 
     const {
       data,
@@ -1924,12 +2209,6 @@
 
     if (error) {
 
-      console.error(
-        "Ошибка завершения заказа:",
-        error
-      );
-
-
       throw new Error(
         error.message
       );
@@ -1941,23 +2220,11 @@
       data?.error
     ) {
 
-      console.error(
-        "Ошибка complete_order:",
-        data.error
-      );
-
-
       throw new Error(
         data.error
       );
 
     }
-
-
-    console.log(
-      "Заказ завершён:",
-      data
-    );
 
 
     return data;
@@ -1966,7 +2233,7 @@
 
 
   // ============================================================
-  // COMPLETE CURRENT ORDER
+  // COMPLETE CURRENT ORDER — КЛИЕНТ
   // ============================================================
 
   async function completeCurrentOrder() {
@@ -2038,8 +2305,6 @@
       }
 
 
-      // Обновляем локальный заказ
-
       const localOrder =
         currentOrders.find(
           (order) =>
@@ -2056,14 +2321,10 @@
       }
 
 
-      // Прячем кнопку
-
       button.classList.add(
         "hidden"
       );
 
-
-      // Показываем сообщение
 
       document.getElementById(
         "completed-message"
@@ -2071,8 +2332,6 @@
         "hidden"
       );
 
-
-      // Меняем основной экран
 
       document.getElementById(
         "searching-icon"
@@ -2100,13 +2359,6 @@
       ).textContent =
         "Исполнитель освобождён и снова доступен для новых заказов.";
 
-
-      console.log(
-        "Исполнитель автоматически освобождён."
-      );
-
-
-      // Активный заказ больше не существует
 
       currentActiveOrderId =
         null;
@@ -2208,51 +2460,41 @@
 
     try {
 
-      // ======================================================
-      // 1. СОЗДАЁМ ЗАКАЗ
-      // ======================================================
-
       const {
         data,
         error
       } =
-        await supabaseClient
-          .from("orders")
-          .insert({
+      await supabaseClient
+        .from("orders")
+        .insert({
 
-            telegram_user_id:
-              telegramId,
+          telegram_user_id:
+            telegramId,
 
-            latitude:
-              selectedLocation.latitude,
+          latitude:
+            selectedLocation.latitude,
 
-            longitude:
-              selectedLocation.longitude,
+          longitude:
+            selectedLocation.longitude,
 
-            address:
-              selectedLocation.address,
+          address:
+            selectedLocation.address,
 
-            service:
-              selectedService.name,
+          service:
+            selectedService.name,
 
-            price:
-              selectedService.price,
+          price:
+            selectedService.price,
 
-            status:
-              "searching"
+          status:
+            "searching"
 
-          })
-          .select()
-          .single();
+        })
+        .select()
+        .single();
 
 
       if (error) {
-
-        console.error(
-          "Ошибка создания заказа:",
-          error
-        );
-
 
         throw new Error(
           error.message
@@ -2270,16 +2512,6 @@
       }
 
 
-      console.log(
-        "Заказ создан:",
-        data
-      );
-
-
-      // ======================================================
-      // Сохраняем активный заказ
-      // ======================================================
-
       currentActiveOrderId =
         data.id;
 
@@ -2287,17 +2519,8 @@
         null;
 
 
-      // ======================================================
-      // 2. ИЩЕМ ИСПОЛНИТЕЛЯ
-      // ======================================================
-
-      console.log(
-        "Ищем исполнителя для заказа:",
-        data.id
-      );
-
-
-      let foundPerformer = null;
+      let foundPerformer =
+        null;
 
 
       try {
@@ -2331,32 +2554,11 @@
           );
 
 
-        console.log(
-          "Результат поиска исполнителя:",
-          executorResult
-        );
-
-
         if (executorError) {
 
           console.error(
             "Ошибка поиска исполнителя:",
             executorError
-          );
-
-
-          alert(
-            "Ошибка поиска исполнителя:\n\n" +
-            executorError.message
-          );
-
-        } else if (
-          executorResult?.error
-        ) {
-
-          alert(
-            "Ошибка поиска исполнителя:\n\n" +
-            executorResult.error
           );
 
         } else if (
@@ -2365,18 +2567,6 @@
 
           foundPerformer =
             executorResult.performer;
-
-
-          console.log(
-            "Исполнитель найден:",
-            foundPerformer
-          );
-
-        } else {
-
-          console.log(
-            "Свободный исполнитель не найден."
-          );
 
         }
 
@@ -2387,18 +2577,8 @@
           executorError
         );
 
-
-        alert(
-          "Не удалось найти исполнителя:\n\n" +
-          executorError.message
-        );
-
       }
 
-
-      // ======================================================
-      // 3. ПОДТВЕРЖДАЕМ ИСПОЛНИТЕЛЯ
-      // ======================================================
 
       if (foundPerformer) {
 
@@ -2424,28 +2604,14 @@
           }
 
 
-          // Запоминаем исполнителя
-
           currentActivePerformerId =
             foundPerformer.id;
-
-
-          console.log(
-            "Активный исполнитель:",
-            currentActivePerformerId
-          );
-
-
-          console.log(
-            "Статус заказа после accept_order:",
-            data.status
-          );
 
 
         } catch (acceptError) {
 
           console.error(
-            "Не удалось изменить статус заказа:",
+            "Не удалось принять заказ:",
             acceptError
           );
 
@@ -2453,30 +2619,16 @@
           currentActivePerformerId =
             null;
 
-
-          alert(
-            "Исполнитель найден, но не удалось обновить статус заказа.\n\n" +
-            acceptError.message
-          );
-
         }
 
       }
 
-
-      // ======================================================
-      // 4. СОХРАНЯЕМ ЗАКАЗ В ЛОКАЛЬНЫЙ СПИСОК
-      // ======================================================
 
       currentOrders = [
         data,
         ...currentOrders
       ];
 
-
-      // ======================================================
-      // 5. ПОКАЗЫВАЕМ РЕЗУЛЬТАТ
-      // ======================================================
 
       if (
         foundPerformer &&
@@ -2590,22 +2742,22 @@
         data,
         error
       } =
-        await supabaseClient.functions.invoke(
-          "quick-processor",
-          {
+      await supabaseClient.functions.invoke(
+        "quick-processor",
+        {
 
-            body: {
+          body: {
 
-              action:
-                "get_orders",
+            action:
+              "get_orders",
 
-              telegram_user_id:
-                telegramId
-
-            }
+            telegram_user_id:
+              telegramId
 
           }
-        );
+
+        }
+      );
 
 
       if (error) {
@@ -2962,6 +3114,1062 @@
 
 
   // ============================================================
+  // ============================================================
+  // РЕЖИМ ИСПОЛНИТЕЛЯ
+  // ============================================================
+  // ============================================================
+
+
+  // ============================================================
+  // ОТКРЫТЬ ЭКРАН ИСПОЛНИТЕЛЯ
+  // ============================================================
+
+  async function openPerformerScreen() {
+
+    showScreen("performer");
+
+
+    const statusText =
+      document.getElementById(
+        "performer-status-text"
+      );
+
+
+    const statusIcon =
+      document.getElementById(
+        "performer-status-icon"
+      );
+
+
+    statusText.textContent =
+      "Проверяем...";
+
+
+    statusIcon.textContent =
+      "⏳";
+
+
+    try {
+
+      // Получаем исполнителя
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("performers")
+          .select("*")
+          .eq(
+            "id",
+            TEST_PERFORMER_ID
+          )
+          .maybeSingle();
+
+
+      if (error) {
+
+        throw new Error(
+          error.message
+        );
+
+      }
+
+
+      if (!data) {
+
+        throw new Error(
+          "Исполнитель с ID 1 не найден."
+        );
+
+      }
+
+
+      performerData =
+        data;
+
+
+      performerLatitude =
+        Number(
+          data.latitude ||
+          56.8389
+        );
+
+
+      performerLongitude =
+        Number(
+          data.longitude ||
+          60.6057
+        );
+
+
+      updatePerformerStatus();
+
+
+      await loadAvailableOrders();
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка загрузки исполнителя:",
+        error
+      );
+
+
+      statusText.textContent =
+        "Ошибка";
+
+
+      statusIcon.textContent =
+        "⚠️";
+
+
+      document.getElementById(
+        "performer-orders-container"
+      ).innerHTML = `
+
+        <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+
+          <div class="text-4xl">
+            ⚠️
+          </div>
+
+          <div class="font-bold text-gray-900 mt-3">
+            Не удалось загрузить режим исполнителя
+          </div>
+
+          <div class="text-sm text-gray-500 mt-2">
+            ${escapeHtml(error.message)}
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  // ============================================================
+  // СТАТУС ИСПОЛНИТЕЛЯ
+  // ============================================================
+
+  function updatePerformerStatus() {
+
+    if (!performerData) {
+
+      return;
+
+    }
+
+
+    const statusText =
+      document.getElementById(
+        "performer-status-text"
+      );
+
+
+    const statusIcon =
+      document.getElementById(
+        "performer-status-icon"
+      );
+
+
+    if (
+      performerData.status ===
+      "available"
+    ) {
+
+      statusText.textContent =
+        "Свободен";
+
+
+      statusText.className =
+        "text-2xl font-black text-green-600 mt-1";
+
+
+      statusIcon.textContent =
+        "🟢";
+
+
+      statusIcon.className =
+        "w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center text-3xl";
+
+    } else {
+
+      statusText.textContent =
+        "Занят";
+
+
+      statusText.className =
+        "text-2xl font-black text-orange-600 mt-1";
+
+
+      statusIcon.textContent =
+        "🚗";
+
+
+      statusIcon.className =
+        "w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl";
+
+    }
+
+  }
+
+
+  // ============================================================
+  // ЗАГРУЗКА ДОСТУПНЫХ ЗАКАЗОВ
+  // ============================================================
+
+  async function loadAvailableOrders() {
+
+    const container =
+      document.getElementById(
+        "performer-orders-container"
+      );
+
+
+    if (!container) {
+
+      return;
+
+    }
+
+
+    container.innerHTML = `
+
+      <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+
+        <div class="spinner mx-auto"></div>
+
+        <div class="font-bold text-gray-900 mt-4">
+          Ищем заказы рядом...
+        </div>
+
+      </div>
+
+    `;
+
+
+    try {
+
+      // Если данные исполнителя ещё не загружены
+
+      if (!performerData) {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .from("performers")
+            .select("*")
+            .eq(
+              "id",
+              TEST_PERFORMER_ID
+            )
+            .maybeSingle();
+
+
+        if (error) {
+
+          throw new Error(
+            error.message
+          );
+
+        }
+
+
+        if (!data) {
+
+          throw new Error(
+            "Исполнитель не найден."
+          );
+
+        }
+
+
+        performerData =
+          data;
+
+
+        performerLatitude =
+          Number(
+            data.latitude ||
+            56.8389
+          );
+
+
+        performerLongitude =
+          Number(
+            data.longitude ||
+            60.6057
+          );
+
+
+        updatePerformerStatus();
+
+      }
+
+
+      // Если исполнитель занят,
+      // новые заказы ему не показываем
+
+      if (
+        performerData.status ===
+        "busy"
+      ) {
+
+        renderPerformerBusy();
+
+        return;
+
+      }
+
+
+      const {
+        data: result,
+        error
+      } =
+        await supabaseClient.functions.invoke(
+          "quick-processor",
+          {
+
+            body: {
+
+              action:
+                "get_available_orders",
+
+              latitude:
+                performerLatitude,
+
+              longitude:
+                performerLongitude,
+
+              performer_id:
+                TEST_PERFORMER_ID
+
+            }
+
+          }
+        );
+
+
+      if (error) {
+
+        throw new Error(
+          error.message
+        );
+
+      }
+
+
+      if (
+        result?.error
+      ) {
+
+        throw new Error(
+          result.error
+        );
+
+      }
+
+
+      const orders =
+        result?.orders || [];
+
+
+      renderAvailableOrders(
+        orders
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка получения заказов:",
+        error
+      );
+
+
+      container.innerHTML = `
+
+        <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+
+          <div class="text-4xl">
+            ⚠️
+          </div>
+
+          <div class="font-bold text-gray-900 mt-3">
+            Не удалось получить заказы
+          </div>
+
+          <div class="text-sm text-gray-500 mt-2">
+            ${escapeHtml(error.message)}
+          </div>
+
+          <button
+            type="button"
+            onclick="loadAvailableOrders()"
+            class="mt-5 px-5 h-11 rounded-xl bg-[#ff4f87] text-white font-bold"
+          >
+            Повторить
+          </button>
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  // ============================================================
+  // ПОКАЗ ЗАНЯТОГО ИСПОЛНИТЕЛЯ
+  // ============================================================
+
+  function renderPerformerBusy() {
+
+    const container =
+      document.getElementById(
+        "performer-orders-container"
+      );
+
+
+    container.innerHTML = `
+
+      <div class="bg-white rounded-3xl p-7 text-center shadow-sm">
+
+        <div class="text-5xl">
+          🚗
+        </div>
+
+        <div class="font-black text-gray-900 text-lg mt-4">
+          Вы сейчас заняты
+        </div>
+
+        <div class="text-sm text-gray-500 mt-2">
+          Завершите текущий заказ,
+          чтобы получать новые.
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  // ============================================================
+  // СПИСОК ДОСТУПНЫХ ЗАКАЗОВ
+  // ============================================================
+
+  function renderAvailableOrders(
+    orders
+  ) {
+
+    const container =
+      document.getElementById(
+        "performer-orders-container"
+      );
+
+
+    if (
+      !orders ||
+      orders.length === 0
+    ) {
+
+      container.innerHTML = `
+
+        <div class="bg-white rounded-3xl p-7 text-center shadow-sm">
+
+          <div class="text-5xl">
+            ❄️
+          </div>
+
+          <div class="font-black text-gray-900 text-lg mt-4">
+            Пока нет заказов
+          </div>
+
+          <div class="text-sm text-gray-500 mt-2">
+            Новые заявки появятся здесь автоматически.
+          </div>
+
+        </div>
+
+      `;
+
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      orders
+        .map(
+          (order) =>
+            createPerformerOrderCard(
+              order
+            )
+        )
+        .join("");
+
+  }
+
+
+  // ============================================================
+  // КАРТОЧКА ЗАКАЗА ИСПОЛНИТЕЛЯ
+  // ============================================================
+
+  function createPerformerOrderCard(
+    order
+  ) {
+
+    const distance =
+      Number(
+        order.distance_km || 0
+      );
+
+
+    const price =
+      Number(
+        order.price || 0
+      );
+
+
+    return `
+
+      <div class="bg-white rounded-3xl p-5 shadow-sm mb-3">
+
+        <div class="flex items-start justify-between gap-3">
+
+          <div>
+
+            <div class="text-xs text-gray-400 font-semibold">
+              ЗАКАЗ
+            </div>
+
+            <div class="font-black text-gray-900 text-2xl mt-1">
+              #${escapeHtml(String(order.id))}
+            </div>
+
+          </div>
+
+          <div class="text-right">
+
+            <div class="text-xs text-gray-400">
+              Расстояние
+            </div>
+
+            <div class="font-black text-[#ff4f87] mt-1">
+              ${distance.toFixed(2)} км
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="mt-5">
+
+          <div class="text-xs text-gray-400">
+            Услуга
+          </div>
+
+          <div class="font-black text-gray-900 text-lg mt-1">
+            ${escapeHtml(order.service || "—")}
+          </div>
+
+        </div>
+
+
+        <div class="mt-4">
+
+          <div class="text-xs text-gray-400">
+            Адрес
+          </div>
+
+          <div class="font-semibold text-gray-900 mt-1 leading-relaxed">
+            ${escapeHtml(order.address || "—")}
+          </div>
+
+        </div>
+
+
+        <div class="flex items-end justify-between mt-5">
+
+          <div>
+
+            <div class="text-xs text-gray-400">
+              Оплата
+            </div>
+
+            <div class="text-2xl font-black text-gray-900 mt-1">
+              ${price.toLocaleString("ru-RU")} ₽
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          onclick="acceptPerformerOrder(${Number(order.id)})"
+          class="mt-5 w-full h-14 rounded-2xl bg-[#ff4f87] text-white font-black text-lg active:scale-[0.98] transition"
+        >
+          🚗 Принять заказ
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+
+  // ============================================================
+  // ПРИНЯТЬ ЗАКАЗ ИСПОЛНИТЕЛЕМ
+  // ============================================================
+
+  async function acceptPerformerOrder(
+    orderId
+  ) {
+
+    if (isAcceptingPerformerOrder) {
+
+      return;
+
+    }
+
+
+    isAcceptingPerformerOrder =
+      true;
+
+
+    try {
+
+      if (!performerData) {
+
+        throw new Error(
+          "Данные исполнителя не загружены."
+        );
+
+      }
+
+
+      if (
+        performerData.status !==
+        "available"
+      ) {
+
+        alert(
+          "Вы уже заняты другим заказом."
+        );
+
+        return;
+
+      }
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.functions.invoke(
+          "quick-processor",
+          {
+
+            body: {
+
+              action:
+                "accept_order",
+
+              order_id:
+                orderId,
+
+              performer_id:
+                TEST_PERFORMER_ID
+
+            }
+
+          }
+        );
+
+
+      if (error) {
+
+        throw new Error(
+          error.message
+        );
+
+      }
+
+
+      if (
+        data?.error
+      ) {
+
+        throw new Error(
+          data.error
+        );
+
+      }
+
+
+      if (!data?.success) {
+
+        throw new Error(
+          "Заказ не был принят."
+        );
+
+      }
+
+
+      performerActiveOrder =
+        data.order;
+
+
+      // Исполнитель становится занят
+
+      performerData.status =
+        "busy";
+
+
+      updatePerformerStatus();
+
+
+      renderPerformerActiveOrder();
+
+
+      // Обновляем список
+
+      await loadAvailableOrders();
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка принятия заказа:",
+        error
+      );
+
+
+      alert(
+        "Не удалось принять заказ.\n\n" +
+        error.message
+      );
+
+    } finally {
+
+      isAcceptingPerformerOrder =
+        false;
+
+    }
+
+  }
+
+
+  // ============================================================
+  // ПОКАЗ АКТИВНОГО ЗАКАЗА
+  // ============================================================
+
+  function renderPerformerActiveOrder() {
+
+    const wrapper =
+      document.getElementById(
+        "performer-active-order"
+      );
+
+
+    const number =
+      document.getElementById(
+        "performer-active-order-number"
+      );
+
+
+    const service =
+      document.getElementById(
+        "performer-active-service"
+      );
+
+
+    const address =
+      document.getElementById(
+        "performer-active-address"
+      );
+
+
+    const price =
+      document.getElementById(
+        "performer-active-price"
+      );
+
+
+    const distance =
+      document.getElementById(
+        "performer-active-distance"
+      );
+
+
+    if (!performerActiveOrder) {
+
+      wrapper.classList.add(
+        "hidden"
+      );
+
+      return;
+
+    }
+
+
+    wrapper.classList.remove(
+      "hidden"
+    );
+
+
+    number.textContent =
+      "#" +
+      performerActiveOrder.id;
+
+
+    service.textContent =
+      performerActiveOrder.service ||
+      "—";
+
+
+    address.textContent =
+      performerActiveOrder.address ||
+      "—";
+
+
+    price.textContent =
+      Number(
+        performerActiveOrder.price ||
+        0
+      ).toLocaleString(
+        "ru-RU"
+      ) +
+      " ₽";
+
+
+    if (
+      performerActiveOrder.distance_km
+    ) {
+
+      distance.textContent =
+        Number(
+          performerActiveOrder.distance_km
+        ).toFixed(2) +
+        " км";
+
+    } else {
+
+      distance.textContent =
+        "Заказ принят";
+
+    }
+
+  }
+
+
+  // ============================================================
+  // ЗАВЕРШИТЬ ЗАКАЗ ИСПОЛНИТЕЛЕМ
+  // ============================================================
+
+  async function completePerformerOrder() {
+
+    if (
+      isCompletingPerformerOrder
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      !performerActiveOrder
+    ) {
+
+      alert(
+        "Активный заказ не найден."
+      );
+
+      return;
+
+    }
+
+
+    isCompletingPerformerOrder =
+      true;
+
+
+    const button =
+      document.getElementById(
+        "performer-complete-button"
+      );
+
+
+    button.disabled =
+      true;
+
+
+    button.textContent =
+      "Завершаем заказ...";
+
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.functions.invoke(
+          "quick-processor",
+          {
+
+            body: {
+
+              action:
+                "complete_order",
+
+              order_id:
+                performerActiveOrder.id,
+
+              performer_id:
+                TEST_PERFORMER_ID
+
+            }
+
+          }
+        );
+
+
+      if (error) {
+
+        throw new Error(
+          error.message
+        );
+
+      }
+
+
+      if (
+        data?.error
+      ) {
+
+        throw new Error(
+          data.error
+        );
+
+      }
+
+
+      if (!data?.success) {
+
+        throw new Error(
+          "Не удалось завершить заказ."
+        );
+
+      }
+
+
+      // Очищаем активный заказ
+
+      performerActiveOrder =
+        null;
+
+
+      // Освобождаем исполнителя локально
+
+      performerData.status =
+        "available";
+
+
+      updatePerformerStatus();
+
+
+      renderPerformerActiveOrder();
+
+
+      // Показываем сообщение
+
+      const container =
+        document.getElementById(
+          "performer-orders-container"
+        );
+
+
+      container.innerHTML = `
+
+        <div class="bg-white rounded-3xl p-7 text-center shadow-sm">
+
+          <div class="text-5xl">
+            🎉
+          </div>
+
+          <div class="font-black text-gray-900 text-lg mt-4">
+            Заказ завершён
+          </div>
+
+          <div class="text-sm text-gray-500 mt-2">
+            Вы снова доступны для новых заказов.
+          </div>
+
+        </div>
+
+      `;
+
+
+      // Через небольшую паузу загружаем новые заказы
+
+      setTimeout(
+        () => {
+
+          loadAvailableOrders();
+
+        },
+        1200
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка завершения заказа:",
+        error
+      );
+
+
+      alert(
+        "Не удалось завершить заказ.\n\n" +
+        error.message
+      );
+
+
+      button.disabled =
+        false;
+
+
+      button.textContent =
+        "✅ Завершить заказ";
+
+    } finally {
+
+      isCompletingPerformerOrder =
+        false;
+
+    }
+
+  }
+
+
+  // ============================================================
   // UTILITIES
   // ============================================================
 
@@ -3096,4 +4304,3 @@
 
 </body>
 </html>
-```
