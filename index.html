@@ -18,279 +18,733 @@
 
   <style>
 
-    * {
-      box-sizing: border-box;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      overflow: hidden;
-      overscroll-behavior: none;
-    }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
 
-    body {
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Arial,
-        sans-serif;
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
 
-      background: #f4f7fb;
-      color: #172033;
-    }
+  background: #fff0f5;
+  color: #172033;
+}
 
-    .app {
-      width: 100%;
-      max-width: 520px;
-      height: 100vh;
-      min-height: 100vh;
-      margin: 0 auto;
-      padding: 24px 18px 40px;
-      overflow: hidden;
-    }
+button,
+input {
+  font-family: inherit;
+}
 
-    .screen {
-      display: none;
-      height: 100%;
-    }
+button {
+  -webkit-tap-highlight-color: transparent;
+}
 
-    .screen.active {
-      display: block;
-    }
 
-    .hero {
-      padding-top: 45px;
-    }
+/* =========================
+   ОСНОВНОЕ ПРИЛОЖЕНИЕ
+========================= */
 
-    .snow {
-      font-size: 64px;
-      margin-bottom: 20px;
-    }
+.app {
+  position: relative;
 
-    h1 {
-      font-size: 32px;
-      line-height: 1.15;
-      margin: 0 0 14px;
-    }
+  width: 100%;
+  max-width: 520px;
 
-    h2 {
-      font-size: 27px;
-      margin: 20px 0 10px;
-    }
+  height: 100vh;
+  min-height: 100vh;
 
-    p {
-      font-size: 17px;
-      line-height: 1.5;
-      color: #667085;
-      margin: 0 0 20px;
-    }
+  margin: 0 auto;
 
-    .button {
-      width: 100%;
-      border: 0;
-      border-radius: 16px;
-      padding: 17px 20px;
-      margin-top: 14px;
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-      background: #2481cc;
-      color: white;
-    }
+  background: #fff0f5;
 
-    .button:active {
-      transform: scale(0.98);
-    }
+  overflow: hidden;
+}
 
-    .button.secondary {
-      background: #e7eef5;
-      color: #172033;
-    }
 
-    /* КАРТА */
+/* =========================
+   ЭКРАНЫ
+========================= */
 
-    .map-wrapper {
-      margin-top: 20px;
-      background: white;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-    }
+.screen {
+  display: none;
 
-    #map {
-      width: 100%;
-      height: 360px;
-      touch-action: none;
-    }
+  width: 100%;
+  height: 100%;
 
-    .map-hint {
-      padding: 12px 15px;
-      text-align: center;
-      font-size: 14px;
-      color: #667085;
-      background: white;
-    }
+  overflow: hidden;
+}
 
-    /* Фиксированная метка */
+.screen.active {
+  display: block;
+}
 
-    .map-marker {
-      position: absolute;
 
-      left: 50%;
-      top: 50%;
+/* =========================
+   ГЛАВНЫЙ ЭКРАН
+========================= */
 
-      transform:
-        translate(-50%, -100%);
+.home-screen {
+  position: relative;
 
-      z-index: 1000;
+  width: 100%;
+  height: 100%;
 
-      font-size: 42px;
+  padding: 24px 20px 30px;
 
-      pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
 
-      filter:
-        drop-shadow(0 3px 3px rgba(0,0,0,0.25));
-    }
+.home-top {
+  width: 100%;
+}
 
-    .location-box {
-      margin-top: 18px;
-      padding: 18px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-    }
+.logo {
+  font-size: 18px;
+  font-weight: 800;
+  color: #172033;
+}
 
-    .location-label {
-      display: block;
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
+.logo span {
+  color: #ed3972;
+}
 
-    .address-input {
-      width: 100%;
-      border: 1px solid #d9dee7;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 16px;
-      outline: none;
-      background: #fff;
-      color: #172033;
-    }
+.home-content {
+  flex: 1;
 
-    .address-input:focus {
-      border-color: #2481cc;
-    }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-    .coordinates {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #98a2b3;
-    }
+  padding-bottom: 40px;
+}
 
-    .service {
-      background: white;
-      border: 2px solid transparent;
-      border-radius: 18px;
-      padding: 18px;
-      margin-top: 14px;
-      cursor: pointer;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-    }
+.snow-icon {
+  font-size: 70px;
+  margin-bottom: 20px;
+}
 
-    .service.selected {
-      border-color: #2481cc;
-      background: #eef7ff;
-    }
+.home-title {
+  margin: 0 0 16px;
 
-    .service-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
+  font-size: 36px;
+  line-height: 1.08;
+  font-weight: 800;
 
-    .service-description {
-      color: #667085;
-      font-size: 14px;
-      line-height: 1.4;
-    }
+  letter-spacing: -1px;
+}
 
-    .service-price {
-      margin-top: 12px;
-      font-size: 18px;
-      font-weight: 700;
-    }
+.home-description {
+  margin: 0;
 
-    .summary {
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      margin-top: 22px;
-    }
+  max-width: 400px;
 
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 10px 0;
-      border-bottom: 1px solid #edf0f4;
-    }
+  font-size: 17px;
+  line-height: 1.5;
 
-    .summary-row:last-child {
-      border-bottom: none;
-    }
+  color: #667085;
+}
 
-    .summary-label {
-      color: #667085;
-    }
+.main-order-button {
+  width: 100%;
 
-    .summary-value {
-      text-align: right;
-      font-weight: 600;
-    }
+  border: none;
+  border-radius: 18px;
 
-    .total {
-      font-size: 23px;
-      font-weight: 800;
-      margin-top: 15px;
-    }
+  padding: 18px 20px;
 
-    .back {
-      display: inline-block;
-      margin-bottom: 15px;
-      color: #2481cc;
-      font-size: 16px;
-      cursor: pointer;
-    }
+  background: #ff4f87;
+  color: white;
 
-    .success {
-      text-align: center;
-      padding-top: 70px;
-    }
+  font-size: 18px;
+  font-weight: 800;
 
-    .success-icon {
-      font-size: 75px;
-      margin-bottom: 20px;
-    }
+  cursor: pointer;
 
-    .order-number {
-      font-size: 16px;
-      color: #667085;
-      margin-top: 15px;
-    }
+  box-shadow:
+    0 8px 20px rgba(255, 79, 135, 0.25);
+}
 
-    .error {
-      color: #d92d20;
-      font-size: 14px;
-      margin-top: 10px;
-    }
+.main-order-button:active {
+  transform: scale(0.98);
+}
 
-  </style>
+
+/* =========================
+   ОБЩИЕ ЭЛЕМЕНТЫ
+========================= */
+
+.content-screen {
+  width: 100%;
+  height: 100%;
+
+  padding: 24px 18px 110px;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.section-title {
+  margin: 15px 0 8px;
+
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.section-description {
+  margin: 0 0 20px;
+
+  color: #667085;
+
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.button {
+  width: 100%;
+
+  border: 0;
+  border-radius: 16px;
+
+  padding: 17px 20px;
+
+  margin-top: 14px;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  background: #ff4f87;
+  color: white;
+
+  box-shadow:
+    0 6px 16px rgba(255, 79, 135, 0.18);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button.secondary {
+  background: #f2dce5;
+  color: #172033;
+  box-shadow: none;
+}
+
+
+/* =========================
+   ЭКРАН КАРТЫ
+========================= */
+
+.map-screen {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  background: #f4f7fb;
+}
+
+.top-header {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  height: 64px;
+
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 18px;
+
+  background: #ff4f87;
+
+  color: white;
+}
+
+.header-back {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background: transparent;
+
+  color: white;
+
+  font-size: 28px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.header-title {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+
+/* =========================
+   КОНТЕЙНЕР КАРТЫ
+========================= */
+
+.map-container {
+  position: absolute;
+
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  overflow: hidden;
+}
+
+#map {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  touch-action: none;
+}
+
+
+/* =========================
+   ФИКСИРОВАННАЯ МЕТКА
+========================= */
+
+.map-marker {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -100%);
+
+  z-index: 1000;
+
+  font-size: 42px;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(
+      0 3px 3px rgba(0, 0, 0, 0.25)
+    );
+}
+
+
+/* =========================
+   КАРТОЧКА НА КАРТЕ
+========================= */
+
+.map-card {
+  position: absolute;
+
+  left: 14px;
+  right: 14px;
+  bottom: 20px;
+
+  z-index: 1500;
+
+  padding: 18px;
+
+  background: white;
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.map-card-title {
+  font-size: 19px;
+  font-weight: 800;
+
+  margin-bottom: 6px;
+}
+
+.map-card-description {
+  font-size: 14px;
+  line-height: 1.4;
+
+  color: #667085;
+
+  margin-bottom: 14px;
+}
+
+.select-location-button {
+  width: 100%;
+
+  border: none;
+  border-radius: 14px;
+
+  padding: 15px;
+
+  background: #ff4f87;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.select-location-button:active {
+  transform: scale(0.98);
+}
+
+
+/* =========================
+   АДРЕС
+========================= */
+
+.address-input {
+  width: 100%;
+
+  margin-top: 12px;
+
+  border: 1px solid #d9dee7;
+  border-radius: 12px;
+
+  padding: 14px;
+
+  font-size: 16px;
+
+  outline: none;
+
+  background: #fff;
+  color: #172033;
+}
+
+.address-input:focus {
+  border-color: #ff4f87;
+}
+
+.coordinates {
+  margin-top: 8px;
+
+  font-size: 12px;
+
+  color: #98a2b3;
+}
+
+
+/* =========================
+   ОШИБКИ
+========================= */
+
+.error {
+  color: #d92d20;
+
+  font-size: 14px;
+
+  margin-top: 8px;
+}
+
+
+/* =========================
+   УСЛУГИ
+========================= */
+
+.service {
+  background: white;
+
+  border: 2px solid transparent;
+
+  border-radius: 18px;
+
+  padding: 18px;
+
+  margin-top: 14px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 15px rgba(0, 0, 0, 0.05);
+}
+
+.service.selected {
+  border-color: #ff4f87;
+  background: #fff0f5;
+}
+
+.service-title {
+  font-size: 18px;
+  font-weight: 700;
+
+  margin-bottom: 6px;
+}
+
+.service-description {
+  color: #667085;
+
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.service-price {
+  margin-top: 12px;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #ed3972;
+}
+
+
+/* =========================
+   КАРТОЧКИ
+========================= */
+
+.profile-card {
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 20px;
+
+  margin-top: 20px;
+
+  box-shadow:
+    0 3px 15px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-state {
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 40px 20px;
+
+  margin-top: 20px;
+
+  text-align: center;
+
+  box-shadow:
+    0 3px 15px rgba(0, 0, 0, 0.05);
+}
+
+.empty-icon {
+  font-size: 52px;
+
+  margin-bottom: 15px;
+}
+
+.empty-title {
+  font-size: 20px;
+
+  font-weight: 800;
+
+  margin-bottom: 8px;
+}
+
+.empty-description {
+  color: #667085;
+
+  font-size: 15px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   ПРОФИЛЬ
+========================= */
+
+.profile-avatar {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 12px;
+
+  border-radius: 50%;
+
+  background: #fff0f5;
+
+  font-size: 30px;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+
+/* =========================
+   НИЖНЯЯ НАВИГАЦИЯ
+========================= */
+
+.bottom-nav {
+  position: fixed;
+
+  left: 50%;
+  bottom: 0;
+
+  transform: translateX(-50%);
+
+  width: 100%;
+  max-width: 520px;
+
+  height: 72px;
+
+  z-index: 3000;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  padding:
+    7px 8px
+    calc(7px + env(safe-area-inset-bottom));
+
+  background: rgba(255, 255, 255, 0.97);
+
+  border-top:
+    1px solid #eeeeee;
+}
+
+.nav-item {
+  position: relative;
+
+  flex: 1;
+
+  height: 58px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #98a2b3;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.nav-icon {
+  font-size: 21px;
+
+  margin-bottom: 2px;
+}
+
+.nav-item.active {
+  color: #ed3972;
+}
+
+.badge {
+  position: absolute;
+
+  top: 1px;
+  right: 22%;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background: #ed3972;
+  color: white;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+
+/* =========================
+   УСПЕШНЫЙ ЗАКАЗ
+========================= */
+
+.success {
+  text-align: center;
+
+  padding-top: 70px;
+}
+
+.success-icon {
+  font-size: 75px;
+
+  margin-bottom: 20px;
+}
+
+.order-number {
+  font-size: 16px;
+
+  color: #667085;
+
+  margin-top: 15px;
+}
+
+
+/* =========================
+   МОБИЛЬНЫЕ УСТРОЙСТВА
+========================= */
+
+@media (max-width: 380px) {
+
+  .home-title {
+    font-size: 31px;
+  }
+
+  .home-description {
+    font-size: 15px;
+  }
+
+  .map-card {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+
+    padding: 15px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
