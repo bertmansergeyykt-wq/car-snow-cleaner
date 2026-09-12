@@ -304,9 +304,20 @@ export async function reverseGeocode(
   } catch (error) {
 
     console.error(
-      "Ошибка геокодирования:",
-      error
-    );
+  "Ошибка геокодирования:",
+  error
+);
+
+console.error(
+  "Ошибка геокодирования JSON:",
+  JSON.stringify(error, null, 2)
+);
+
+console.error(
+  "Координаты:",
+  latitude,
+  longitude
+);
 
 
     selectedLocation.address =
