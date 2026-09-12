@@ -16,8 +16,7 @@ import {
 } from "./state.js";
 
 import {
-  supabaseClient,
-  QUICK_PROCESSOR_URL
+  supabaseClient
 } from "./supabase.js";
 
 import {
@@ -25,22 +24,26 @@ import {
   escapeHtml
 } from "./utils.js";
 
-import { showScreen } from "./screens.js";
+import {
+  showScreen
+} from "./screens.js";
 
 
-/* =========================================================
-   ОТКРЫТИЕ ЭКРАНА ИСПОЛНИТЕЛЯ
-========================================================= */
+// ========================================
+// ОТКРЫТИЕ ЭКРАНА ИСПОЛНИТЕЛЯ
+// ========================================
 
 export async function openPerformerScreen() {
 
   showScreen("performer");
 
-  const statusElement =
-    document.getElementById("performer-status");
+  const statusText =
+    document.getElementById(
+      "performer-status-text"
+    );
 
-  if (statusElement) {
-    statusElement.textContent =
+  if (statusText) {
+    statusText.textContent =
       "Проверяем статус...";
   }
 
@@ -48,27 +51,96 @@ export async function openPerformerScreen() {
 }
 
 
-/* =========================================================
-   ЗАГРУЗКА ЗАКАЗОВ И ДАННЫХ ИСПОЛНИТЕЛЯ
-========================================================= */
+// ========================================
+// СТАТУС ИСПОЛНИТЕЛЯ
+// ========================================
+
+export function updatePerformerStatus(
+  status
+) {
+
+  const statusText =
+    document.getElementById(
+      "performer-status-text"
+    );
+
+  const statusIcon =
+    document.getElementById(
+      "performer-status-icon"
+    );
+
+  if (!statusText || !statusIcon) {
+    return;
+  }
+
+
+  if (status === "busy") {
+
+    statusText.textContent =
+      "Вы выполняете заказ";
+
+    statusIcon.textContent = "🚗";
+
+    statusIcon.classList.remove(
+      "bg-green-100",
+      "text-green-600"
+    );
+
+    statusIcon.classList.add(
+      "bg-orange-100",
+      "text-orange-600"
+    );
+
+    return;
+  }
+
+
+  statusText.textContent =
+    "Вы свободны";
+
+  statusIcon.textContent = "🟢";
+
+  statusIcon.classList.remove(
+    "bg-orange-100",
+    "text-orange-600"
+  );
+
+  statusIcon.classList.add(
+    "bg-green-100",
+    "text-green-600"
+  );
+}
+
+
+// ========================================
+// ЗАГРУЗКА ДОСТУПНЫХ ЗАКАЗОВ
+// ========================================
 
 export async function loadAvailableOrders() {
 
-  const ordersContainer =
+  const container =
     document.getElementById(
-      "performer-orders"
+      "performer-orders-container"
     );
 
-  if (!ordersContainer) return;
+  if (!container) {
+    return;
+  }
 
-  ordersContainer.innerHTML =
-    `<div class="loading">
+
+  container.innerHTML = `
+    <div class="text-center py-8 text-gray-500">
       Загрузка заказов...
-    </div>`;
+    </div>
+  `;
+
 
   try {
 
-    const { data, error } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient.functions.invoke(
         "quick-processor",
         {
@@ -87,15 +159,24 @@ export async function loadAvailableOrders() {
         }
       );
 
+
     if (error) {
       throw error;
     }
 
-    const result = data || {};
 
-    /* -----------------------------------------
-       Получаем исполнителя из Edge Function
-    ----------------------------------------- */
+    if (data?.error) {
+      throw new Error(data.error);
+    }
+
+
+    const result =
+      data || {};
+
+
+    // ====================================
+    // Данные исполнителя
+    // ====================================
 
     if (result.performer) {
 
@@ -103,42 +184,54 @@ export async function loadAvailableOrders() {
         result.performer
       );
 
+
       if (
         typeof result.performer.latitude ===
         "number"
       ) {
+
         setPerformerLatitude(
           result.performer.latitude
         );
       }
 
+
       if (
         typeof result.performer.longitude ===
         "number"
       ) {
+
         setPerformerLongitude(
           result.performer.longitude
         );
       }
     }
 
-    /* -----------------------------------------
-       Исполнитель занят
-    ----------------------------------------- */
+
+    // ====================================
+    // Исполнитель занят
+    // ====================================
 
     if (
       performerData &&
       performerData.status === "busy"
     ) {
 
+      updatePerformerStatus("busy");
+
       renderPerformerBusy();
 
       return;
     }
 
-    /* -----------------------------------------
-       Исполнитель свободен
-    ----------------------------------------- */
+
+    // ====================================
+    // Исполнитель свободен
+    // ====================================
+
+    updatePerformerStatus(
+      "available"
+    );
 
     renderAvailableOrders(
       result.orders || []
@@ -151,26 +244,32 @@ export async function loadAvailableOrders() {
       error
     );
 
-    ordersContainer.innerHTML = `
-      <div class="empty-state">
 
-        <div class="empty-state-icon">
+    updatePerformerStatus(
+      "available"
+    );
+
+
+    container.innerHTML = `
+      <div class="bg-white rounded-2xl p-6 text-center">
+
+        <div class="text-4xl mb-3">
           ⚠️
         </div>
 
-        <div class="empty-state-title">
+        <div class="font-semibold text-gray-800 mb-2">
           Не удалось загрузить заказы
         </div>
 
-        <div class="empty-state-text">
+        <div class="text-sm text-gray-500 mb-4">
           Попробуйте обновить страницу
         </div>
 
         <button
-          class="secondary-button"
+          class="w-full py-3 rounded-xl bg-gray-100 text-gray-700 font-medium"
           onclick="loadAvailableOrders()"
         >
-          Обновить
+          🔄 Обновить
         </button>
 
       </div>
@@ -179,31 +278,34 @@ export async function loadAvailableOrders() {
 }
 
 
-/* =========================================================
-   ОТОБРАЖЕНИЕ ЗАНЯТОГО ИСПОЛНИТЕЛЯ
-========================================================= */
+// ========================================
+// ИСПОЛНИТЕЛЬ ЗАНЯТ
+// ========================================
 
 export function renderPerformerBusy() {
 
   const container =
     document.getElementById(
-      "performer-orders"
+      "performer-orders-container"
     );
 
-  if (!container) return;
+  if (!container) {
+    return;
+  }
+
 
   container.innerHTML = `
-    <div class="empty-state">
+    <div class="bg-white rounded-2xl p-6 text-center">
 
-      <div class="empty-state-icon">
+      <div class="text-4xl mb-3">
         🚗
       </div>
 
-      <div class="empty-state-title">
+      <div class="font-semibold text-gray-800 mb-2">
         Вы выполняете заказ
       </div>
 
-      <div class="empty-state-text">
+      <div class="text-sm text-gray-500">
         После завершения заказа
         здесь появятся новые заявки.
       </div>
@@ -211,13 +313,14 @@ export function renderPerformerBusy() {
     </div>
   `;
 
+
   renderPerformerActiveOrder();
 }
 
 
-/* =========================================================
-   СПИСОК ДОСТУПНЫХ ЗАКАЗОВ
-========================================================= */
+// ========================================
+// СПИСОК ДОСТУПНЫХ ЗАКАЗОВ
+// ========================================
 
 export function renderAvailableOrders(
   orders
@@ -225,31 +328,37 @@ export function renderAvailableOrders(
 
   const container =
     document.getElementById(
-      "performer-orders"
+      "performer-orders-container"
     );
 
-  if (!container) return;
+  if (!container) {
+    return;
+  }
 
-  if (!orders || orders.length === 0) {
+
+  if (
+    !orders ||
+    orders.length === 0
+  ) {
 
     container.innerHTML = `
-      <div class="empty-state">
+      <div class="bg-white rounded-2xl p-6 text-center">
 
-        <div class="empty-state-icon">
+        <div class="text-4xl mb-3">
           🔍
         </div>
 
-        <div class="empty-state-title">
+        <div class="font-semibold text-gray-800 mb-2">
           Свободных заказов пока нет
         </div>
 
-        <div class="empty-state-text">
+        <div class="text-sm text-gray-500 mb-4">
           Новые заказы появятся здесь
           автоматически.
         </div>
 
         <button
-          class="secondary-button"
+          class="w-full py-3 rounded-xl bg-gray-100 text-gray-700 font-medium"
           onclick="loadAvailableOrders()"
         >
           🔄 Обновить
@@ -261,17 +370,20 @@ export function renderAvailableOrders(
     return;
   }
 
-  container.innerHTML = orders
-    .map(order =>
-      createPerformerOrderCard(order)
-    )
-    .join("");
+
+  container.innerHTML =
+    orders
+      .map(
+        (order) =>
+          createPerformerOrderCard(order)
+      )
+      .join("");
 }
 
 
-/* =========================================================
-   КАРТОЧКА ЗАКАЗА
-========================================================= */
+// ========================================
+// КАРТОЧКА ЗАКАЗА
+// ========================================
 
 export function createPerformerOrderCard(
   order
@@ -280,47 +392,57 @@ export function createPerformerOrderCard(
   const distance =
     order.distance_km !== undefined
       ? `${order.distance_km} км`
-      : "";
+      : "Расстояние неизвестно";
+
 
   return `
-    <div class="order-card">
+    <div class="bg-white rounded-2xl p-5 mb-3 shadow-sm">
 
-      <div class="order-card-header">
+      <div class="flex items-center justify-between mb-3">
 
-        <div class="order-card-title">
+        <div class="font-semibold text-gray-900">
           ${escapeHtml(
-            order.service || "Помощь"
+            order.service ||
+            "Помощь"
           )}
         </div>
 
-        <div class="order-card-price">
-          ${Number(order.price || 0)} ₽
+        <div class="font-bold text-[#ff4f87]">
+          ${Number(
+            order.price || 0
+          )} ₽
         </div>
 
       </div>
 
-      <div class="order-card-address">
-        📍 ${escapeHtml(
-          order.address || "Адрес не указан"
+
+      <div class="text-sm text-gray-600 mb-3">
+        📍
+        ${escapeHtml(
+          order.address ||
+          "Адрес не указан"
         )}
       </div>
 
-      <div class="order-card-info">
+
+      <div class="flex justify-between text-xs text-gray-400 mb-4">
 
         <span>
           📏 ${distance}
         </span>
 
         <span>
-          🕐 ${formatDate(
+          🕐
+          ${formatDate(
             order.created_at
           )}
         </span>
 
       </div>
 
+
       <button
-        class="primary-button"
+        class="w-full py-3 rounded-xl bg-[#ff4f87] text-white font-semibold"
         onclick="acceptPerformerOrder(${order.id})"
       >
         Взять заказ
@@ -331,9 +453,9 @@ export function createPerformerOrderCard(
 }
 
 
-/* =========================================================
-   ПРИНЯТИЕ ЗАКАЗА ИСПОЛНИТЕЛЕМ
-========================================================= */
+// ========================================
+// ПРИНЯТИЕ ЗАКАЗА
+// ========================================
 
 export async function acceptPerformerOrder(
   orderId
@@ -343,18 +465,26 @@ export async function acceptPerformerOrder(
     return;
   }
 
-  setIsAcceptingPerformerOrder(true);
+
+  setIsAcceptingPerformerOrder(
+    true
+  );
+
 
   try {
 
-    const { data, error } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient.functions.invoke(
         "quick-processor",
         {
           body: {
             action: "accept_order",
 
-            order_id: orderId,
+            order_id:
+              orderId,
 
             performer_id:
               TEST_PERFORMER_ID
@@ -362,21 +492,22 @@ export async function acceptPerformerOrder(
         }
       );
 
+
     if (error) {
       throw error;
     }
 
-    if (
-      data?.error
-    ) {
+
+    if (data?.error) {
       throw new Error(
         data.error
       );
     }
 
-    /* -----------------------------------------
-       Заказ успешно принят
-    ----------------------------------------- */
+
+    // ==================================
+    // Заказ принят
+    // ==================================
 
     if (data?.order) {
 
@@ -385,18 +516,38 @@ export async function acceptPerformerOrder(
       );
     }
 
+
+    // ==================================
+    // Обновляем исполнителя
+    // ==================================
+
     if (data?.performer) {
 
       setPerformerData(
         data.performer
       );
+    } else if (performerData) {
+
+      setPerformerData({
+        ...performerData,
+        status: "busy"
+      });
     }
 
-    alert(
-      "Заказ принят!"
+
+    updatePerformerStatus(
+      "busy"
     );
 
+
     renderPerformerActiveOrder();
+
+
+    alert("Заказ принят!");
+
+
+    // Обновляем список заказов
+    await loadAvailableOrders();
 
   } catch (error) {
 
@@ -405,10 +556,12 @@ export async function acceptPerformerOrder(
       error
     );
 
+
     alert(
       error.message ||
       "Не удалось принять заказ."
     );
+
 
     await loadAvailableOrders();
 
@@ -421,94 +574,142 @@ export async function acceptPerformerOrder(
 }
 
 
-/* =========================================================
-   АКТИВНЫЙ ЗАКАЗ ИСПОЛНИТЕЛЯ
-========================================================= */
+// ========================================
+// АКТИВНЫЙ ЗАКАЗ
+// ========================================
 
 export function renderPerformerActiveOrder() {
 
-  const container =
+  const order =
+    performerActiveOrder;
+
+
+  const orderNumber =
+    document.getElementById(
+      "performer-active-order-number"
+    );
+
+  const service =
+    document.getElementById(
+      "performer-active-service"
+    );
+
+  const address =
+    document.getElementById(
+      "performer-active-address"
+    );
+
+  const price =
+    document.getElementById(
+      "performer-active-price"
+    );
+
+  const distance =
+    document.getElementById(
+      "performer-active-distance"
+    );
+
+  const activeOrder =
     document.getElementById(
       "performer-active-order"
     );
 
-  if (!container) return;
+  const completeButton =
+    document.getElementById(
+      "performer-complete-button"
+    );
 
-  if (!performerActiveOrder) {
 
-    container.innerHTML = "";
+  if (!activeOrder) {
+    return;
+  }
+
+
+  if (!order) {
+
+    activeOrder.classList.add(
+      "hidden"
+    );
+
+    if (completeButton) {
+      completeButton.classList.add(
+        "hidden"
+      );
+    }
 
     return;
   }
 
-  container.innerHTML = `
 
-    <div class="order-card active-order">
+  // ==================================
+  // Заполняем данные
+  // ==================================
 
-      <div class="order-card-header">
+  if (orderNumber) {
 
-        <div class="order-card-title">
-          Активный заказ
-        </div>
+    orderNumber.textContent =
+      `№${order.id}`;
+  }
 
-        <div class="order-card-price">
-          ${Number(
-            performerActiveOrder.price || 0
-          )} ₽
-        </div>
 
-      </div>
+  if (service) {
 
-      <div class="order-card-service">
+    service.textContent =
+      order.service ||
+      "Помощь";
+  }
 
-        🧹 ${escapeHtml(
-          performerActiveOrder.service ||
-          "Помощь"
-        )}
 
-      </div>
+  if (address) {
 
-      <div class="order-card-address">
+    address.textContent =
+      order.address ||
+      "Адрес не указан";
+  }
 
-        📍 ${escapeHtml(
-          performerActiveOrder.address ||
-          "Адрес не указан"
-        )}
 
-      </div>
+  if (price) {
 
-      <div class="order-card-info">
+    price.textContent =
+      `${Number(
+        order.price || 0
+      )} ₽`;
+  }
 
-        <span>
-          Заказ №
-          ${performerActiveOrder.id}
-        </span>
 
-      </div>
+  if (distance) {
 
-      <button
-        class="primary-button"
-        onclick="completePerformerOrder()"
-      >
-        Завершить заказ
-      </button>
+    distance.textContent =
+      order.distance_km !== undefined
+        ? `${order.distance_km} км`
+        : "—";
+  }
 
-    </div>
-  `;
+
+  activeOrder.classList.remove(
+    "hidden"
+  );
+
+
+  if (completeButton) {
+
+    completeButton.classList.remove(
+      "hidden"
+    );
+  }
 }
 
 
-/* =========================================================
-   ЗАВЕРШЕНИЕ ЗАКАЗА
-========================================================= */
+// ========================================
+// ЗАВЕРШЕНИЕ ЗАКАЗА
+// ========================================
 
 export async function completePerformerOrder() {
 
-  if (
-    isCompletingPerformerOrder
-  ) {
+  if (isCompletingPerformerOrder) {
     return;
   }
+
 
   if (!performerActiveOrder) {
 
@@ -519,61 +720,103 @@ export async function completePerformerOrder() {
     return;
   }
 
+
   setIsCompletingPerformerOrder(
     true
   );
 
+
+  const button =
+    document.getElementById(
+      "performer-complete-button"
+    );
+
+
+  if (button) {
+
+    button.disabled = true;
+
+    button.textContent =
+      "Завершаем...";
+  }
+
+
   try {
 
-    const { data, error } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient.functions.invoke(
         "quick-processor",
         {
           body: {
-
-            action:
-              "complete_order",
+            action: "complete_order",
 
             order_id:
               performerActiveOrder.id,
 
             performer_id:
               TEST_PERFORMER_ID
-
           }
         }
       );
+
 
     if (error) {
       throw error;
     }
 
-    if (
-      data?.error
-    ) {
+
+    if (data?.error) {
       throw new Error(
         data.error
       );
     }
 
-    /* -----------------------------------------
-       Заказ завершён
-    ----------------------------------------- */
+
+    // ==================================
+    // Очищаем активный заказ
+    // ==================================
 
     setPerformerActiveOrder(
       null
     );
+
+
+    // ==================================
+    // Обновляем исполнителя
+    // ==================================
 
     if (data?.performer) {
 
       setPerformerData(
         data.performer
       );
+
+    } else if (performerData) {
+
+      setPerformerData({
+        ...performerData,
+        status: "available"
+      });
     }
 
-    alert(
-      "Заказ завершён!"
+
+    updatePerformerStatus(
+      "available"
     );
+
+
+    renderPerformerActiveOrder();
+
+
+    alert("Заказ завершён!");
+
+
+    // ==================================
+    // Обновляем список
+    // ==================================
 
     await loadAvailableOrders();
 
@@ -583,6 +826,7 @@ export async function completePerformerOrder() {
       "Ошибка завершения заказа:",
       error
     );
+
 
     alert(
       error.message ||
@@ -594,17 +838,24 @@ export async function completePerformerOrder() {
     setIsCompletingPerformerOrder(
       false
     );
+
+
+    if (button) {
+
+      button.disabled = false;
+
+      button.textContent =
+        "Завершить заказ";
+    }
   }
 }
 
 
-/* =========================================================
-   ВОЗВРАТ В ПРОФИЛЬ
-========================================================= */
+// ========================================
+// НАЗАД В ПРОФИЛЬ
+// ========================================
 
 export function backToProfile() {
 
-  showScreen(
-    "profile"
-  );
+  showScreen("profile");
 }
