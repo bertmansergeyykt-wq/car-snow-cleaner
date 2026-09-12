@@ -21,7 +21,6 @@
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
   <style>
 
     * {
@@ -508,12 +507,9 @@
 
 </head>
 
-
 <body>
 
-
 <div class="app">
-
 
   <!-- ГЛАВНЫЙ ЭКРАН -->
 
@@ -531,7 +527,6 @@
         </div>
 
       </div>
-
 
       <div class="home-content">
 
@@ -552,7 +547,6 @@
 
       </div>
 
-
       <button
         class="main-order-button"
         onclick="openLocationScreen()"
@@ -563,7 +557,6 @@
     </div>
 
   </section>
-
 
   <!-- КАРТА -->
 
@@ -589,16 +582,13 @@
 
     </div>
 
-
     <div class="map-container">
 
       <div id="map"></div>
 
-
       <div class="map-marker">
         📍
       </div>
-
 
       <div class="map-card">
 
@@ -612,7 +602,6 @@
           возле автомобиля.
         </div>
 
-
         <button
           id="select-location-button"
           class="select-location-button"
@@ -620,7 +609,6 @@
         >
           📍 Выбрать это место
         </button>
-
 
         <input
           id="address"
@@ -630,7 +618,6 @@
           style="display:none;"
         >
 
-
         <div
           id="coordinates"
           class="coordinates"
@@ -638,12 +625,10 @@
           Координаты ещё не выбраны
         </div>
 
-
         <div
           id="location-error"
           class="error"
         ></div>
-
 
         <button
           id="location-next"
@@ -659,7 +644,6 @@
     </div>
 
   </section>
-
 
   <!-- УСЛУГИ -->
 
@@ -678,16 +662,13 @@
         ←
       </div>
 
-
       <h2 class="section-title">
         Что нужно сделать?
       </h2>
 
-
       <p class="section-description">
         Выберите подходящий вариант уборки.
       </p>
-
 
       <div
         class="service"
@@ -708,7 +689,6 @@
         </div>
 
       </div>
-
 
       <div
         class="service"
@@ -731,7 +711,6 @@
 
       </div>
 
-
       <div
         class="service"
         id="service-3"
@@ -753,7 +732,6 @@
 
       </div>
 
-
       <button
         id="service-next"
         class="button"
@@ -767,7 +745,6 @@
 
   </section>
 
-
   <!-- ЗАКАЗЫ -->
 
   <section
@@ -780,7 +757,6 @@
       <h2 class="section-title">
         Мои заказы
       </h2>
-
 
       <div class="empty-state">
 
@@ -802,7 +778,6 @@
 
   </section>
 
-
   <!-- СООБЩЕНИЯ -->
 
   <section
@@ -815,7 +790,6 @@
       <h2 class="section-title">
         Сообщения
       </h2>
-
 
       <div class="empty-state">
 
@@ -838,7 +812,6 @@
 
   </section>
 
-
   <!-- ПРОФИЛЬ -->
 
   <section
@@ -851,7 +824,6 @@
       <h2 class="section-title">
         Профиль
       </h2>
-
 
       <div class="profile-card">
 
@@ -868,7 +840,6 @@
     </div>
 
   </section>
-
 
   <!-- ПОДТВЕРЖДЕНИЕ -->
 
@@ -887,11 +858,9 @@
         ←
       </div>
 
-
       <h2 class="section-title">
         Проверьте заказ
       </h2>
-
 
       <div class="profile-card">
 
@@ -903,7 +872,6 @@
           —
         </p>
 
-
         <p>
           <strong>Услуга</strong>
         </p>
@@ -911,7 +879,6 @@
         <p id="summary-service">
           —
         </p>
-
 
         <p>
           <strong>Стоимость</strong>
@@ -921,13 +888,11 @@
           —
         </p>
 
-
         <h2 id="summary-total">
           Итого: —
         </h2>
 
       </div>
-
 
       <button
         id="create-order-button"
@@ -936,7 +901,6 @@
       >
         🚗 Заказать исполнителя
       </button>
-
 
       <button
         class="button secondary"
@@ -948,7 +912,6 @@
     </div>
 
   </section>
-
 
   <!-- УСПЕШНЫЙ ЗАКАЗ -->
 
@@ -974,7 +937,6 @@
           рядом с вашим автомобилем.
         </div>
 
-
         <p>
           Номер заказа:
           <strong id="order-number"></strong>
@@ -986,11 +948,9 @@
 
   </section>
 
-
   <!-- НИЖНЯЯ НАВИГАЦИЯ -->
 
   <nav class="bottom-nav">
-
 
     <button
       id="nav-map"
@@ -1007,7 +967,6 @@
       </div>
 
     </button>
-
 
     <button
       id="nav-orders"
@@ -1029,7 +988,6 @@
 
     </button>
 
-
     <button
       id="nav-messages"
       class="nav-item"
@@ -1045,7 +1003,6 @@
       </div>
 
     </button>
-
 
     <button
       id="nav-profile"
@@ -1063,15 +1020,11 @@
 
     </button>
 
-
   </nav>
-
 
 </div>
 
-
 <script>
-
 
   /* =========================
      TELEGRAM
@@ -1094,17 +1047,11 @@
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_OObcKHZ0AGc5AI5c_3KY-Q_GpzEKI8C";
 
-
   const supabaseClient =
     window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
     );
-  console.log("Supabase:", {
-  url: SUPABASE_URL,
-  keyExists: !!SUPABASE_PUBLISHABLE_KEY,
-  keyLength: SUPABASE_PUBLISHABLE_KEY.length
-});
 
 
   /* =========================
@@ -1169,16 +1116,13 @@
 
       await ymaps3.ready;
 
-
       const {
         YMap,
         YMapDefaultSchemeLayer
       } = ymaps3;
 
-
       const mapElement =
         document.getElementById("map");
-
 
       map =
         new YMap(
@@ -1202,14 +1146,11 @@
 
         );
 
-
       map.addChild(
         new YMapDefaultSchemeLayer()
       );
 
-
       mapInitialized = true;
-
 
     } catch (error) {
 
@@ -1217,7 +1158,6 @@
         "Ошибка загрузки Яндекс Карты:",
         error
       );
-
 
       document.getElementById(
         "location-error"
@@ -1254,19 +1194,16 @@
 
       });
 
-
     const target =
       document.getElementById(
         "screen-" + name
       );
-
 
     if (target) {
 
       target.classList.add("active");
 
     }
-
 
     updateNavigation(name);
 
@@ -1276,7 +1213,6 @@
       setTimeout(function() {
 
         initMap();
-
 
         if (map) {
 
@@ -1305,7 +1241,6 @@
 
       });
 
-
     if (name === "location") {
 
       document
@@ -1313,7 +1248,6 @@
         .classList.add("active");
 
     }
-
 
     if (name === "orders") {
 
@@ -1323,7 +1257,6 @@
 
     }
 
-
     if (name === "messages") {
 
       document
@@ -1331,7 +1264,6 @@
         .classList.add("active");
 
     }
-
 
     if (name === "profile") {
 
@@ -1365,11 +1297,9 @@
         "location-next"
       );
 
-
     errorElement.textContent = "";
 
     nextButton.style.display = "none";
-
 
     if (!map) {
 
@@ -1380,18 +1310,14 @@
 
     }
 
-
     const center =
       map.center;
-
 
     order.longitude =
       center[0];
 
-
     order.latitude =
       center[1];
-
 
     document.getElementById(
       "coordinates"
@@ -1405,20 +1331,12 @@
 
       order.longitude.toFixed(6);
 
-
     addressInput.style.display =
       "block";
-
-
-    /*
-      Геокодирование пока оставляем
-      на следующий этап.
-    */
 
     addressInput.value = "";
 
     order.address = "";
-
 
     nextButton.style.display =
       "block";
@@ -1459,7 +1377,6 @@
 
       });
 
-
     document
       .getElementById(
         "service-" + id
@@ -1468,14 +1385,11 @@
         "selected"
       );
 
-
     order.service =
       id;
 
-
     order.price =
       services[id].price;
-
 
     document.getElementById(
       "service-next"
@@ -1504,7 +1418,6 @@
 
     }
 
-
     if (
       !order.address.trim()
     ) {
@@ -1517,7 +1430,6 @@
 
     }
 
-
     if (!order.service) {
 
       alert(
@@ -1528,12 +1440,10 @@
 
     }
 
-
     document.getElementById(
       "summary-location"
     ).textContent =
       order.address;
-
 
     document.getElementById(
       "summary-service"
@@ -1542,12 +1452,10 @@
         order.service
       ].name;
 
-
     document.getElementById(
       "summary-price"
     ).textContent =
       order.price + " ₽";
-
 
     document.getElementById(
       "summary-total"
@@ -1555,7 +1463,6 @@
       "Итого: " +
       order.price +
       " ₽";
-
 
     showScreen("summary");
 
@@ -1573,12 +1480,10 @@
         "create-order-button"
       );
 
-
     button.disabled = true;
 
     button.textContent =
       "⏳ Создаём заказ...";
-
 
     try {
 
@@ -1586,12 +1491,10 @@
         "Отправляем заказ в Supabase..."
       );
 
-
       const {
         data,
         error
       } = await supabaseClient
-        console.log("Supabase auth:", await supabaseClient.auth.getSession());
         .from("orders")
         .insert({
 
@@ -1619,7 +1522,6 @@
         .select()
         .single();
 
-
       if (error) {
 
         console.error(
@@ -1631,21 +1533,17 @@
 
       }
 
-
       console.log(
         "Заказ создан:",
         data
       );
-
 
       document.getElementById(
         "order-number"
       ).textContent =
         "#" + data.id;
 
-
       showScreen("success");
-
 
     } catch (error) {
 
@@ -1654,12 +1552,10 @@
         error
       );
 
-
       alert(
         "Не удалось создать заказ.\n\n" +
         error.message
       );
-
 
     } finally {
 
@@ -1672,9 +1568,7 @@
 
   }
 
-
 </script>
-
 
 </body>
 </html>
