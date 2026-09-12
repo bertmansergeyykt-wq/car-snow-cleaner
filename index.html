@@ -2,78 +2,675 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
   <title>Уборка снега</title>
 
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 24px;
-      font-family: Arial, sans-serif;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
       background: #f4f7fb;
       color: #172033;
     }
 
     .app {
-      max-width: 500px;
+      width: 100%;
+      max-width: 520px;
+      min-height: 100vh;
       margin: 0 auto;
+      padding: 24px 18px 40px;
     }
 
-    .icon {
-      font-size: 60px;
-      margin-top: 40px;
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .hero {
+      padding-top: 45px;
+    }
+
+    .snow {
+      font-size: 64px;
+      margin-bottom: 20px;
     }
 
     h1 {
       font-size: 32px;
-      margin: 20px 0 12px;
+      line-height: 1.15;
+      margin: 0 0 14px;
+    }
+
+    h2 {
+      font-size: 27px;
+      margin: 20px 0 10px;
     }
 
     p {
-      font-size: 18px;
+      font-size: 17px;
+      line-height: 1.5;
+      color: #667085;
+      margin: 0 0 20px;
+    }
+
+    .button {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 17px 20px;
+      margin-top: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #2481cc;
+      color: white;
+    }
+
+    .button:active {
+      transform: scale(0.98);
+    }
+
+    .button.secondary {
+      background: #e7eef5;
+      color: #172033;
+    }
+
+    .location-box {
+      margin-top: 25px;
+      padding: 20px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
+
+    .location-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .location-text {
+      font-size: 16px;
       line-height: 1.5;
       color: #667085;
     }
 
-    button {
-      width: 100%;
+    .service {
+      background: white;
+      border: 2px solid transparent;
+      border-radius: 18px;
       padding: 18px;
-      margin-top: 30px;
-      border: none;
-      border-radius: 14px;
-      background: #2481cc;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
+      margin-top: 14px;
       cursor: pointer;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
+
+    .service.selected {
+      border-color: #2481cc;
+      background: #eef7ff;
+    }
+
+    .service-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .service-description {
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .service-price {
+      margin-top: 12px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .summary {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 22px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 10px 0;
+      border-bottom: 1px solid #edf0f4;
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-label {
+      color: #667085;
+    }
+
+    .summary-value {
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .total {
+      font-size: 23px;
+      font-weight: 800;
+      margin-top: 15px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #2481cc;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .success {
+      text-align: center;
+      padding-top: 70px;
+    }
+
+    .success-icon {
+      font-size: 75px;
+      margin-bottom: 20px;
+    }
+
+    .order-number {
+      font-size: 16px;
+      color: #667085;
+      margin-top: 15px;
+    }
+
+    .error {
+      color: #d92d20;
+      font-size: 14px;
+      margin-top: 10px;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <div class="icon">❄️</div>
+  <!-- ЭКРАН 1 -->
+  <section id="screen-home" class="screen active">
 
-    <h1>Уборка снега с автомобиля</h1>
+    <div class="hero">
+
+      <div class="snow">❄️</div>
+
+      <h1>Уборка снега с автомобиля</h1>
+
+      <p>
+        Не трать время на очистку машины.
+        Найдём исполнителя рядом с вами.
+      </p>
+
+      <button class="button" onclick="showScreen('location')">
+        Заказать уборку
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ЭКРАН 2 -->
+  <section id="screen-location" class="screen">
+
+    <div class="back" onclick="showScreen('home')">
+      ← Назад
+    </div>
+
+    <h2>Где находится автомобиль?</h2>
 
     <p>
-      Не трать время на очистку машины.
-      Найдём исполнителя рядом с вами.
+      Укажите местоположение автомобиля,
+      чтобы мы могли найти исполнителя рядом.
     </p>
 
-    <button onclick="order()">
-      Заказать уборку
+    <div class="location-box">
+
+      <div class="location-icon">📍</div>
+
+      <div class="location-text" id="location-text">
+        Местоположение ещё не указано
+      </div>
+
+      <button class="button" onclick="getLocation()">
+        📍 Указать местоположение
+      </button>
+
+      <div id="location-error" class="error"></div>
+
+    </div>
+
+    <button
+      id="location-next"
+      class="button"
+      style="display:none;"
+      onclick="showScreen('services')"
+    >
+      Продолжить
     </button>
 
-  </div>
+  </section>
 
-  <script>
-    function order() {
-      alert("Начинаем оформление заказа!");
+
+  <!-- ЭКРАН 3 -->
+  <section id="screen-services" class="screen">
+
+    <div class="back" onclick="showScreen('location')">
+      ← Назад
+    </div>
+
+    <h2>Что нужно сделать?</h2>
+
+    <p>
+      Выберите подходящий вариант уборки.
+    </p>
+
+
+    <div
+      class="service"
+      id="service-1"
+      onclick="selectService(1)"
+    >
+
+      <div class="service-title">
+        ❄️ Убрать снег
+      </div>
+
+      <div class="service-description">
+        Очистка автомобиля от снега.
+      </div>
+
+      <div class="service-price">
+        300 ₽
+      </div>
+
+    </div>
+
+
+    <div
+      class="service"
+      id="service-2"
+      onclick="selectService(2)"
+    >
+
+      <div class="service-title">
+        ❄️ + 🪟 Снег и стёкла
+      </div>
+
+      <div class="service-description">
+        Уборка снега и очистка стёкол автомобиля.
+      </div>
+
+      <div class="service-price">
+        500 ₽
+      </div>
+
+    </div>
+
+
+    <div
+      class="service"
+      id="service-3"
+      onclick="selectService(3)"
+    >
+
+      <div class="service-title">
+        🚗 Полная очистка
+      </div>
+
+      <div class="service-description">
+        Полная очистка автомобиля от снега и льда.
+      </div>
+
+      <div class="service-price">
+        800 ₽
+      </div>
+
+    </div>
+
+
+    <button
+      id="service-next"
+      class="button"
+      style="display:none;"
+      onclick="showSummary()"
+    >
+      Продолжить
+    </button>
+
+  </section>
+
+
+  <!-- ЭКРАН 4 -->
+  <section id="screen-summary" class="screen">
+
+    <div class="back" onclick="showScreen('services')">
+      ← Назад
+    </div>
+
+    <h2>Проверьте заказ</h2>
+
+    <div class="summary">
+
+      <div class="summary-row">
+
+        <div class="summary-label">
+          Место
+        </div>
+
+        <div
+          class="summary-value"
+          id="summary-location"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="summary-row">
+
+        <div class="summary-label">
+          Услуга
+        </div>
+
+        <div
+          class="summary-value"
+          id="summary-service"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="summary-row">
+
+        <div class="summary-label">
+          Стоимость
+        </div>
+
+        <div
+          class="summary-value"
+          id="summary-price"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="total" id="summary-total">
+        Итого: —
+      </div>
+
+    </div>
+
+
+    <button
+      class="button"
+      onclick="createOrder()"
+    >
+      🚗 Заказать исполнителя
+    </button>
+
+
+    <button
+      class="button secondary"
+      onclick="showScreen('services')"
+    >
+      Изменить заказ
+    </button>
+
+  </section>
+
+
+  <!-- ЭКРАН 5 -->
+  <section id="screen-success" class="screen">
+
+    <div class="success">
+
+      <div class="success-icon">
+        ✅
+      </div>
+
+      <h1>
+        Заказ создан!
+      </h1>
+
+      <p>
+        Сейчас мы ищем исполнителя
+        рядом с вашим автомобилем.
+      </p>
+
+      <div class="order-number">
+        Номер заказа:
+        <strong id="order-number"></strong>
+      </div>
+
+      <button
+        class="button"
+        onclick="showScreen('home')"
+      >
+        Вернуться на главную
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<script>
+
+  // Подключение Telegram
+  const tg = window.Telegram.WebApp;
+
+  tg.ready();
+  tg.expand();
+
+
+  // Данные текущего заказа
+  let order = {
+    latitude: null,
+    longitude: null,
+    service: null,
+    price: null
+  };
+
+
+  // Названия услуг
+  const services = {
+
+    1: {
+      name: "Уборка снега",
+      price: 300
+    },
+
+    2: {
+      name: "Снег + стёкла",
+      price: 500
+    },
+
+    3: {
+      name: "Полная очистка",
+      price: 800
     }
-  </script>
+
+  };
+
+
+  // Переключение экранов
+  function showScreen(name) {
+
+    document.querySelectorAll(".screen").forEach(function(screen) {
+      screen.classList.remove("active");
+    });
+
+    document
+      .getElementById("screen-" + name)
+      .classList.add("active");
+
+    window.scrollTo(0, 0);
+  }
+
+
+  // Получение геолокации
+  function getLocation() {
+
+    const errorElement =
+      document.getElementById("location-error");
+
+    errorElement.textContent = "";
+
+    if (!navigator.geolocation) {
+
+      errorElement.textContent =
+        "Ваш браузер не поддерживает определение местоположения.";
+
+      return;
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+      function(position) {
+
+        order.latitude =
+          position.coords.latitude;
+
+        order.longitude =
+          position.coords.longitude;
+
+
+        document.getElementById("location-text").innerHTML =
+          "📍 Местоположение получено";
+
+
+        document.getElementById("location-next").style.display =
+          "block";
+
+      },
+
+      function(error) {
+
+        errorElement.textContent =
+          "Не удалось получить местоположение. Разрешите доступ к геолокации.";
+
+      },
+
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+
+    );
+
+  }
+
+
+  // Выбор услуги
+  function selectService(id) {
+
+    document.querySelectorAll(".service").forEach(function(service) {
+      service.classList.remove("selected");
+    });
+
+
+    document
+      .getElementById("service-" + id)
+      .classList.add("selected");
+
+
+    order.service = id;
+    order.price = services[id].price;
+
+
+    document.getElementById("service-next").style.display =
+      "block";
+
+  }
+
+
+  // Формирование итогового заказа
+  function showSummary() {
+
+    if (!order.service) {
+
+      alert("Выберите услугу.");
+
+      return;
+    }
+
+
+    document.getElementById("summary-location").textContent =
+      "Геолокация получена";
+
+
+    document.getElementById("summary-service").textContent =
+      services[order.service].name;
+
+
+    document.getElementById("summary-price").textContent =
+      order.price + " ₽";
+
+
+    document.getElementById("summary-total").textContent =
+      "Итого: " + order.price + " ₽";
+
+
+    showScreen("summary");
+
+  }
+
+
+  // Создание заказа
+  function createOrder() {
+
+    const orderNumber =
+      Math.floor(1000 + Math.random() * 9000);
+
+
+    document.getElementById("order-number").textContent =
+      "#" + orderNumber;
+
+
+    /*
+      Пока мы только показываем созданный заказ.
+
+      На следующем этапе подключим базу данных,
+      и заказ действительно будет сохраняться.
+    */
+
+
+    showScreen("success");
+
+  }
+
+</script>
 
 </body>
 </html>
