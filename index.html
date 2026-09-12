@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -1725,132 +1724,117 @@
 
   async function createOrder() {
 
-    const button =
-      document.getElementById(
-        "create-order-button"
-      );
+  const button =
+    document.getElementById(
+      "create-order-button"
+    );
 
+  button.disabled = true;
 
-    button.disabled = true;
+  button.textContent =
+    "⏳ Создаём заказ...";
 
-    button.textContent =
-      "⏳ Создаём заказ...";
+  try {
 
+    console.log(
+      "Отправляем заказ в Supabase..."
+    );
 
-    try {
+    const telegramUser =
+      window.Telegram?.WebApp?.initDataUnsafe?.user;
 
-      console.log(
-        "Отправляем заказ в Supabase..."
-      );
+    const telegramUserId =
+      telegramUser?.id || null;
 
+    console.log(
+      "Telegram user ID:",
+      telegramUserId
+    );
 
-      const {
-        data,
-        error
-      } = await supabaseClient
-        .from("orders")
-        .insert({
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("orders")
+      .insert({
+        telegram_user_id:
+          telegramUserId,
 
-          latitude:
-            order.latitude,
+        latitude:
+          order.latitude,
 
-          longitude:
-            order.longitude,
+        longitude:
+          order.longitude,
 
-          address:
-            order.address,
+        address:
+          order.address,
 
-          service:
-            services[
-              order.service
-            ].name,
+        service:
+          services[
+            order.service
+          ].name,
 
-          price:
-            order.price,
+        price:
+          order.price,
 
-          status:
-            "searching"
+        status:
+          "searching"
+      })
+      .select()
+      .single();
 
-        })
-        .select()
-        .single();
-
-
-      if (error) {
-
-        console.error(
-          "Supabase error:",
-          error
-        );
-
-        throw error;
-
-      }
-
-
-      console.log(
-        "Заказ создан:",
-        data
-      );
-
-
-      /*
-        Сохраняем созданный заказ
-        в памяти приложения.
-      */
-
-      createdOrder =
-        data;
-
-
-      document.getElementById(
-        "order-number"
-      ).textContent =
-        "#" + data.id;
-
-
-      /*
-        Показываем красный бейдж
-        на вкладке "Заказы".
-      */
-
-      document
-        .getElementById(
-          "orders-badge"
-        )
-        .classList.add(
-          "visible"
-        );
-
-
-      showScreen("success");
-
-
-    } catch (error) {
+    if (error) {
 
       console.error(
-        "Ошибка создания заказа:",
+        "Supabase error:",
         error
       );
 
-
-      alert(
-        "Не удалось создать заказ.\n\n" +
-        error.message
-      );
-
-
-    } finally {
-
-      button.disabled = false;
-
-      button.textContent =
-        "🚗 Заказать исполнителя";
-
+      throw error;
     }
 
-  }
+    console.log(
+      "Заказ создан:",
+      data
+    );
 
+    createdOrder = data;
+
+    document.getElementById(
+      "order-number"
+    ).textContent =
+      "#" + data.id;
+
+    document
+      .getElementById(
+        "orders-badge"
+      )
+      .classList.add(
+        "visible"
+      );
+
+    showScreen("success");
+
+  } catch (error) {
+
+    console.error(
+      "Ошибка создания заказа:",
+      error
+    );
+
+    alert(
+      "Не удалось создать заказ.\n\n" +
+      error.message
+    );
+
+  } finally {
+
+    button.disabled = false;
+
+    button.textContent =
+      "🚗 Заказать исполнителя";
+  }
+}
 
 </script>
 
