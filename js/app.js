@@ -1,4 +1,4 @@
-import { initTelegram } from "./telegram.js";
+import { initTelegram, telegramWebApp } from "./telegram.js";
 
 import {
   showScreen,
@@ -40,6 +40,21 @@ initTelegram();
 
 
 // ========================================
+// TELEGRAM BACK BUTTON
+// ========================================
+
+if (telegramWebApp) {
+
+  telegramWebApp.BackButton.onClick(() => {
+
+    showScreen("home");
+
+  });
+
+}
+
+
+// ========================================
 // ДЕЛАЕМ ФУНКЦИИ ДОСТУПНЫМИ HTML
 // ========================================
 
@@ -70,85 +85,30 @@ window.backToProfile = backToProfile;
 // АДРЕС
 // ========================================
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  const addressInput =
-    document.getElementById("address-input");
-
-  if (addressInput) {
-
-    addressInput.addEventListener(
-      "input",
-      () => {
-
-        selectedLocation.address =
-          addressInput.value.trim();
-
-      }
-    );
-
-  }
-
-});
-
-
-// ========================================
-// TELEGRAM BACK BUTTON
-// ========================================
-
-const telegramWebApp =
-  window.Telegram?.WebApp || null;
-
-
-if (telegramWebApp) {
-
-  telegramWebApp.BackButton.onClick(() => {
-
-    showScreen("home");
-
-    telegramWebApp.BackButton.hide();
-
-  });
-
-}
-
-
-// ========================================
-// УПРАВЛЕНИЕ TELEGRAM BACK BUTTON
-// ========================================
-
-const originalShowScreen =
-  window.showScreen;
-
-
-window.showScreen = function(screenName) {
-
-  originalShowScreen(screenName);
-
-  if (!telegramWebApp) {
-    return;
-  }
-
-  if (screenName === "home") {
-
-    telegramWebApp.BackButton.hide();
-
-  } else {
-
-    telegramWebApp.BackButton.show();
-
-  }
-
-};
-
-
-// ========================================
-// СТАРТОВЫЙ ЭКРАН
-// ========================================
-
 document.addEventListener(
   "DOMContentLoaded",
   () => {
+
+    const addressInput =
+      document.getElementById("address-input");
+
+    if (addressInput) {
+
+      addressInput.addEventListener(
+        "input",
+        () => {
+
+          selectedLocation.address =
+            addressInput.value.trim();
+
+        }
+      );
+
+    }
+
+    // ========================================
+    // СТАРТОВЫЙ ЭКРАН
+    // ========================================
 
     renderProfile();
 
