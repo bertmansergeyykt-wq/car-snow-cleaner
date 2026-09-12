@@ -117,8 +117,8 @@ export function initializeMap() {
 
 
         reverseGeocode(
-          latitude,
-          longitude
+          longitude,
+          latitude
         );
       }
     );
@@ -231,8 +231,8 @@ export async function reverseGeocode(
     const result =
       await ymaps.geocode(
         [
-          longitude,
-          latitude
+          latitude,
+          longitude
         ],
         {
           results: 1
