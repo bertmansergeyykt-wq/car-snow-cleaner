@@ -1,7 +1,3 @@
-// ============================================================
-// SUPABASE
-// ============================================================
-
 export const SUPABASE_URL =
   "https://dghcnwzqqmrsysewnvkn.supabase.co";
 
@@ -13,11 +9,6 @@ export const supabaseClient =
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
-
-
-// ============================================================
-// EDGE FUNCTION
-// ============================================================
 
 export const QUICK_PROCESSOR_URL =
   `${SUPABASE_URL}/functions/v1/quick-processor`;
