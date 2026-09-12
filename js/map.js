@@ -1,7 +1,3 @@
-// ============================================================
-// ЯНДЕКС КАРТЫ
-// ============================================================
-
 import {
   map,
   mapInitialized,
@@ -10,184 +6,164 @@ import {
   setMapInitialized
 } from "./state.js";
 
-import {
-  showScreen
-} from "./screens.js";
+import { showScreen } from "./screens.js";
 
 
-// ============================================================
-// ОТКРЫТЬ ЭКРАН КАРТЫ
-// ============================================================
+// ============================================
+// ОТКРЫТИЕ ЭКРАНА КАРТЫ
+// ============================================
 
 export function openMapScreen() {
-
   showScreen("map");
 
-  setTimeout(
-    () => {
-
-      initializeMap();
-
-    },
-    100
-  );
-
+  setTimeout(() => {
+    initializeMap();
+  }, 100);
 }
 
 
-// ============================================================
-// ИНИЦИАЛИЗАЦИЯ КАРТЫ
-// ============================================================
+// ============================================
+// ИНИЦИАЛИЗАЦИЯ ЯНДЕКС КАРТЫ
+// ============================================
 
 export function initializeMap() {
 
-  if (
-    mapInitialized &&
-    map
-  ) {
+  // Если карта уже создана —
+  // просто обновляем её размеры
+  if (mapInitialized && map) {
 
     if (
-      typeof map.requestReposition ===
-      "function"
+      typeof map.container?.fitToViewport === "function"
     ) {
-
-      map.requestReposition();
-
-    } else if (
-      map.container &&
-      typeof map.container.fitToViewport ===
-      "function"
-    ) {
-
       map.container.fitToViewport();
-
     }
 
     return;
-
   }
 
 
-  if (
-    typeof ymaps === "undefined"
-  ) {
+  // Проверяем наличие Yandex Maps API
+  if (typeof ymaps === "undefined") {
 
     alert(
       "Яндекс Карты ещё загружаются. Попробуйте ещё раз."
     );
 
     return;
-
   }
 
 
-  ymaps.ready(
-    () => {
+  ymaps.ready(() => {
 
-      if (mapInitialized) {
-
-        return;
-
-      }
-
-
-      const defaultCenter = [
-        56.8389,
-        60.6057
-      ];
-
-
-      const newMap =
-        new ymaps.Map(
-          "map",
-          {
-
-            center:
-              defaultCenter,
-
-            zoom: 13,
-
-            controls: [
-              "zoomControl"
-            ]
-
-          }
-        );
-
-
-      setMap(newMap);
-      setMapInitialized(true);
-
-
-      newMap.events.add(
-        "actionend",
-        () => {
-
-          const center =
-            newMap.getCenter();
-
-
-          if (!center) {
-
-            return;
-
-          }
-
-
-          selectedLocation.latitude =
-            center[0];
-
-          selectedLocation.longitude =
-            center[1];
-
-
-          reverseGeocode(
-            center[0],
-            center[1]
-          );
-
-        }
-      );
-
-
-      newMap.events.add(
-        "click",
-        (event) => {
-
-          const coordinates =
-            event.get("coords");
-
-
-          if (!coordinates) {
-
-            return;
-
-          }
-
-
-          setMapLocation(
-            coordinates[0],
-            coordinates[1]
-          );
-
-        }
-      );
-
-
-      setMapLocation(
-        defaultCenter[0],
-        defaultCenter[1]
-      );
-
+    // Защита от повторной инициализации
+    if (mapInitialized) {
+      return;
     }
-  );
 
+
+    // Екатеринбург — стартовая точка
+    const defaultCenter = [
+      56.8389,
+      60.6057
+    ];
+
+
+    // Создаём карту
+    const newMap = new ymaps.Map(
+      "map",
+      {
+        center: defaultCenter,
+        zoom: 13,
+        controls: [
+          "zoomControl"
+        ]
+      }
+    );
+
+
+    // Сохраняем карту в state
+    setMap(newMap);
+    setMapInitialized(true);
+
+
+    // ========================================
+    // КАРТА ПЕРЕМЕЩЕНА
+    // ========================================
+
+    newMap.events.add(
+      "actionend",
+      () => {
+
+        const center =
+          newMap.getCenter();
+
+        if (!center) {
+          return;
+        }
+
+
+        const latitude =
+          center[0];
+
+        const longitude =
+          center[1];
+
+
+        selectedLocation.latitude =
+          latitude;
+
+        selectedLocation.longitude =
+          longitude;
+
+
+        reverseGeocode(
+          latitude,
+          longitude
+        );
+      }
+    );
+
+
+    // ========================================
+    // КЛИК ПО КАРТЕ
+    // ========================================
+
+    newMap.events.add(
+      "click",
+      (event) => {
+
+        const coordinates =
+          event.get("coords");
+
+        if (!coordinates) {
+          return;
+        }
+
+
+        setMapLocation(
+          coordinates[0],
+          coordinates[1]
+        );
+      }
+    );
+
+
+    // ========================================
+    // СТАРТОВАЯ ТОЧКА
+    // ========================================
+
+    setMapLocation(
+      defaultCenter[0],
+      defaultCenter[1]
+    );
+
+  });
 }
 
 
-// ============================================================
-// УСТАНОВИТЬ ТОЧКУ НА КАРТЕ
-// ============================================================
+// ============================================
+// УСТАНОВИТЬ МЕСТО НА КАРТЕ
+// ============================================
 
 export function setMapLocation(
   latitude,
@@ -196,7 +172,6 @@ export function setMapLocation(
 
   selectedLocation.latitude =
     latitude;
-
 
   selectedLocation.longitude =
     longitude;
@@ -217,7 +192,6 @@ export function setMapLocation(
         duration: 250
       }
     );
-
   }
 
 
@@ -225,33 +199,30 @@ export function setMapLocation(
     latitude,
     longitude
   );
-
 }
 
 
-// ============================================================
-// ОБРАТНОЕ ГЕОКОДИРОВАНИЕ
-// ============================================================
+// ============================================
+// ОПРЕДЕЛЕНИЕ АДРЕСА
+// ============================================
 
 export async function reverseGeocode(
   latitude,
   longitude
 ) {
 
-  const input =
+  const addressInput =
     document.getElementById(
       "address-input"
     );
 
 
-  if (!input) {
-
+  if (!addressInput) {
     return;
-
   }
 
 
-  input.value =
+  addressInput.value =
     "Определяем адрес...";
 
 
@@ -275,16 +246,13 @@ export async function reverseGeocode(
 
     if (!firstGeoObject) {
 
-      input.value =
+      addressInput.value =
         "Адрес не найден";
-
 
       selectedLocation.address =
         "";
 
-
       return;
-
     }
 
 
@@ -296,7 +264,7 @@ export async function reverseGeocode(
       address || "";
 
 
-    input.value =
+    addressInput.value =
       address ||
       "Адрес не найден";
 
@@ -309,30 +277,28 @@ export async function reverseGeocode(
     );
 
 
-    input.value =
+    selectedLocation.address =
+      "";
+
+    addressInput.value =
       "Не удалось определить адрес";
-
   }
-
 }
 
 
-// ============================================================
+// ============================================
 // ТЕКУЩЕЕ МЕСТОПОЛОЖЕНИЕ
-// ============================================================
+// ============================================
 
 export function useCurrentLocation() {
 
-  if (
-    !navigator.geolocation
-  ) {
+  if (!navigator.geolocation) {
 
     alert(
       "Геолокация недоступна в этом браузере."
     );
 
     return;
-
   }
 
 
@@ -343,7 +309,6 @@ export function useCurrentLocation() {
       const latitude =
         position.coords.latitude;
 
-
       const longitude =
         position.coords.longitude;
 
@@ -352,7 +317,6 @@ export function useCurrentLocation() {
         latitude,
         longitude
       );
-
     },
 
 
@@ -367,20 +331,13 @@ export function useCurrentLocation() {
       alert(
         "Не удалось получить ваше местоположение."
       );
-
     },
 
 
     {
-
       enableHighAccuracy: true,
-
       timeout: 10000,
-
       maximumAge: 30000
-
     }
-
   );
-
 }
