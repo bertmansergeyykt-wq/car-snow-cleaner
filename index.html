@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -16,743 +18,840 @@
   <!-- Yandex Maps -->
   <script src="https://api-maps.yandex.ru/v3/?apikey=c355cb46-e31f-4942-a74d-336abc2cb19a&lang=ru_RU"></script>
 
+
   <style>
 
-* {
-  box-sizing: border-box;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  overscroll-behavior: none;
-}
 
-body {
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Arial,
-    sans-serif;
+    html,
+    body {
+      margin: 0;
+      padding: 0;
 
-  background: #fff0f5;
-  color: #172033;
-}
+      width: 100%;
+      height: 100%;
 
-button,
-input {
-  font-family: inherit;
-}
+      overflow: hidden;
 
-button {
-  -webkit-tap-highlight-color: transparent;
-}
+      overscroll-behavior: none;
+    }
 
 
-/* =========================
-   ОСНОВНОЕ ПРИЛОЖЕНИЕ
-========================= */
+    body {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 
-.app {
-  position: relative;
+      background: #fff0f5;
 
-  width: 100%;
-  max-width: 520px;
+      color: #172033;
+    }
 
-  height: 100vh;
-  min-height: 100vh;
 
-  margin: 0 auto;
+    button,
+    input {
+      font-family: inherit;
+    }
 
-  background: #fff0f5;
 
-  overflow: hidden;
-}
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
 
 
-/* =========================
-   ЭКРАНЫ
-========================= */
+    /* =========================
+       ОСНОВНОЕ ПРИЛОЖЕНИЕ
+    ========================= */
 
-.screen {
-  display: none;
+    .app {
+      position: relative;
 
-  width: 100%;
-  height: 100%;
+      width: 100%;
+      max-width: 520px;
 
-  overflow: hidden;
-}
+      height: 100vh;
 
-.screen.active {
-  display: block;
-}
+      margin: 0 auto;
 
+      background: #fff0f5;
 
-/* =========================
-   ГЛАВНЫЙ ЭКРАН
-========================= */
+      overflow: hidden;
 
-.home-screen {
-  position: relative;
+      display: flex;
+      flex-direction: column;
+    }
 
-  width: 100%;
-  height: 100%;
 
-  padding: 24px 20px 30px;
+    /* =========================
+       ЭКРАНЫ
+    ========================= */
 
-  display: flex;
-  flex-direction: column;
-}
+    .screen {
+      display: none;
 
-.home-top {
-  width: 100%;
-}
+      width: 100%;
 
-.logo {
-  font-size: 18px;
-  font-weight: 800;
-  color: #172033;
-}
+      flex: 1;
 
-.logo span {
-  color: #ed3972;
-}
+      min-height: 0;
 
-.home-content {
-  flex: 1;
+      overflow: hidden;
+    }
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 
-  padding-bottom: 110px;
-}
+    .screen.active {
+      display: block;
+    }
 
-.snow-icon {
-  font-size: 70px;
-  margin-bottom: 20px;
-}
 
-.home-title {
-  margin: 0 0 16px;
+    /* =========================
+       ГЛАВНЫЙ ЭКРАН
+    ========================= */
 
-  font-size: 36px;
-  line-height: 1.08;
-  font-weight: 800;
+    .home-screen {
+      position: relative;
 
-  letter-spacing: -1px;
-}
+      width: 100%;
+      height: 100%;
 
-.home-description {
-  margin: 0;
+      padding: 24px 20px 30px;
 
-  max-width: 400px;
+      display: flex;
+      flex-direction: column;
+    }
 
-  font-size: 17px;
-  line-height: 1.5;
 
-  color: #667085;
-}
+    .home-top {
+      width: 100%;
+    }
 
-.main-order-button {
- position: absolute;
-  bottom: 95px;
-  left: 20px;
 
-  width: calc(100% - 40px);
+    .logo {
+      font-size: 18px;
 
-  border: none;
-  border-radius: 18px;
-  background: #ff4f87;
-  color: white;
+      font-weight: 800;
 
-  font-size: 18px;
-  font-weight: 800;
+      color: #172033;
+    }
 
-  cursor: pointer;
 
-  box-shadow:
-    0 8px 20px rgba(255, 79, 135, 0.25);
-}
+    .logo span {
+      color: #ed3972;
+    }
 
-.main-order-button:active {
-  transform: scale(0.98);
-}
 
+    .home-content {
+      flex: 1;
 
-/* =========================
-   ОБЩИЕ ЭЛЕМЕНТЫ
-========================= */
+      display: flex;
+      flex-direction: column;
 
-.content-screen {
-  width: 100%;
-  height: 100%;
+      justify-content: center;
 
-  padding: 24px 18px 110px;
+      padding-bottom: 40px;
+    }
 
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
 
-.section-title {
-  margin: 15px 0 8px;
+    .snow-icon {
+      font-size: 70px;
 
-  font-size: 28px;
-  line-height: 1.15;
-  font-weight: 800;
-}
+      margin-bottom: 20px;
+    }
 
-.section-description {
-  margin: 0 0 20px;
 
-  color: #667085;
+    .home-title {
+      margin: 0 0 16px;
 
-  font-size: 16px;
-  line-height: 1.5;
-}
+      font-size: 36px;
 
-.button {
-  width: 100%;
+      line-height: 1.08;
 
-  border: 0;
-  border-radius: 16px;
+      font-weight: 800;
 
-  padding: 17px 20px;
+      letter-spacing: -1px;
+    }
 
-  margin-top: 14px;
 
-  font-size: 17px;
-  font-weight: 700;
+    .home-description {
+      margin: 0;
 
-  cursor: pointer;
+      max-width: 400px;
 
-  background: #ff4f87;
-  color: white;
+      font-size: 17px;
 
-  box-shadow:
-    0 6px 16px rgba(255, 79, 135, 0.18);
-}
+      line-height: 1.5;
 
-.button:active {
-  transform: scale(0.98);
-}
+      color: #667085;
+    }
 
-.button.secondary {
-  background: #f2dce5;
-  color: #172033;
-  box-shadow: none;
-}
 
+    .main-order-button {
+      width: 100%;
 
-/* =========================
-   ЭКРАН КАРТЫ
-========================= */
+      border: none;
 
-.map-screen {
-  position: relative;
+      border-radius: 18px;
 
-  width: 100%;
-  height: 100%;
+      padding: 18px 20px;
 
-  background: #f4f7fb;
-}
+      background: #ff4f87;
 
-.top-header {
-  position: absolute;
+      color: white;
 
-  top: 0;
-  left: 0;
+      font-size: 18px;
 
-  width: 100%;
+      font-weight: 800;
 
-  height: 64px;
+      cursor: pointer;
 
-  z-index: 2000;
+      box-shadow:
+        0 8px 20px rgba(255, 79, 135, 0.25);
+    }
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  padding: 0 18px;
+    .main-order-button:active {
+      transform: scale(0.98);
+    }
 
-  background: #ff4f87;
 
-  color: white;
-}
+    /* =========================
+       ОБЩИЕ ЭЛЕМЕНТЫ
+    ========================= */
 
-.header-back {
-  width: 32px;
-  height: 32px;
+    .content-screen {
+      width: 100%;
+      height: 100%;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+      padding: 24px 18px 30px;
 
-  border: none;
-  background: transparent;
+      overflow-y: auto;
 
-  color: white;
+      overscroll-behavior: contain;
+    }
 
-  font-size: 28px;
-  line-height: 1;
 
-  cursor: pointer;
-}
+    .section-title {
+      margin: 15px 0 8px;
 
-.header-title {
-  font-size: 17px;
-  font-weight: 800;
-}
+      font-size: 28px;
 
+      line-height: 1.15;
 
-/* =========================
-   КОНТЕЙНЕР КАРТЫ
-========================= */
+      font-weight: 800;
+    }
 
-.map-container {
-  position: absolute;
 
-  top: 64px;
-  left: 0;
-  right: 0;
-  bottom: 0;
+    .section-description {
+      margin: 0 0 20px;
 
-  overflow: hidden;
-}
+      color: #667085;
 
-#map {
-  position: absolute;
+      font-size: 16px;
 
-  inset: 0;
+      line-height: 1.5;
+    }
 
-  width: 100%;
-  height: 100%;
 
-  touch-action: none;
-}
+    .button {
+      width: 100%;
 
+      border: 0;
 
-/* =========================
-   ФИКСИРОВАННАЯ МЕТКА
-========================= */
+      border-radius: 16px;
 
-.map-marker {
-  position: absolute;
+      padding: 17px 20px;
 
-  left: 50%;
-  top: 50%;
+      margin-top: 14px;
 
-  transform:
-    translate(-50%, -100%);
+      font-size: 17px;
 
-  z-index: 1000;
+      font-weight: 700;
 
-  font-size: 42px;
+      cursor: pointer;
 
-  pointer-events: none;
+      background: #ff4f87;
 
-  filter:
-    drop-shadow(
-      0 3px 3px rgba(0, 0, 0, 0.25)
-    );
-}
+      color: white;
 
+      box-shadow:
+        0 6px 16px rgba(255, 79, 135, 0.18);
+    }
 
-/* =========================
-   КАРТОЧКА НА КАРТЕ
-========================= */
 
-.map-card {
-  position: absolute;
+    .button:active {
+      transform: scale(0.98);
+    }
 
-  left: 14px;
-  right: 14px;
-  bottom: 92px;
 
-  z-index: 1500;
+    .button.secondary {
+      background: #f2dce5;
 
-  padding: 18px;
+      color: #172033;
 
-  background: white;
+      box-shadow: none;
+    }
 
-  border-radius: 22px;
 
-  box-shadow:
-    0 8px 30px rgba(0, 0, 0, 0.12);
-}
+    /* =========================
+       ЭКРАН КАРТЫ
+    ========================= */
 
-.map-card-title {
-  font-size: 19px;
-  font-weight: 800;
+    .map-screen {
+      position: relative;
 
-  margin-bottom: 6px;
-}
+      width: 100%;
+      height: 100%;
 
-.map-card-description {
-  font-size: 14px;
-  line-height: 1.4;
+      background: #f4f7fb;
+    }
 
-  color: #667085;
 
-  margin-bottom: 14px;
-}
+    .top-header {
+      width: 100%;
 
-.select-location-button {
-  width: 100%;
+      height: 64px;
 
-  border: none;
-  border-radius: 14px;
+      display: flex;
 
-  padding: 15px;
+      align-items: center;
 
-  background: #ff4f87;
-  color: white;
+      justify-content: space-between;
 
-  font-size: 16px;
-  font-weight: 800;
+      padding: 0 18px;
 
-  cursor: pointer;
-}
+      background: #ff4f87;
 
-.select-location-button:active {
-  transform: scale(0.98);
-}
+      color: white;
+    }
 
 
-/* =========================
-   АДРЕС
-========================= */
+    .header-back {
+      width: 32px;
+      height: 32px;
 
-.address-input {
-  width: 100%;
+      display: flex;
 
-  margin-top: 12px;
+      align-items: center;
+      justify-content: center;
 
-  border: 1px solid #d9dee7;
-  border-radius: 12px;
+      border: none;
 
-  padding: 14px;
+      background: transparent;
 
-  font-size: 16px;
+      color: white;
 
-  outline: none;
+      font-size: 28px;
 
-  background: #fff;
-  color: #172033;
-}
+      line-height: 1;
 
-.address-input:focus {
-  border-color: #ff4f87;
-}
+      cursor: pointer;
+    }
 
-.coordinates {
-  margin-top: 8px;
 
-  font-size: 12px;
+    .header-title {
+      font-size: 17px;
 
-  color: #98a2b3;
-}
+      font-weight: 800;
+    }
 
 
-/* =========================
-   ОШИБКИ
-========================= */
+    /* =========================
+       КОНТЕЙНЕР КАРТЫ
+    ========================= */
 
-.error {
-  color: #d92d20;
+    .map-container {
+      position: relative;
 
-  font-size: 14px;
+      width: 100%;
 
-  margin-top: 8px;
-}
+      height: calc(100% - 64px);
 
+      overflow: hidden;
+    }
 
-/* =========================
-   УСЛУГИ
-========================= */
 
-.service {
-  background: white;
+    #map {
+      position: absolute;
 
-  border: 2px solid transparent;
+      inset: 0;
 
-  border-radius: 18px;
+      width: 100%;
+      height: 100%;
 
-  padding: 18px;
+      touch-action: none;
+    }
 
-  margin-top: 14px;
 
-  cursor: pointer;
+    /* =========================
+       ФИКСИРОВАННАЯ МЕТКА
+    ========================= */
 
-  box-shadow:
-    0 3px 15px rgba(0, 0, 0, 0.05);
-}
+    .map-marker {
+      position: absolute;
 
-.service.selected {
-  border-color: #ff4f87;
-  background: #fff0f5;
-}
+      left: 50%;
+      top: 50%;
 
-.service-title {
-  font-size: 18px;
-  font-weight: 700;
+      transform:
+        translate(-50%, -100%);
 
-  margin-bottom: 6px;
-}
+      z-index: 1000;
 
-.service-description {
-  color: #667085;
+      font-size: 42px;
 
-  font-size: 14px;
-  line-height: 1.4;
-}
+      pointer-events: none;
 
-.service-price {
-  margin-top: 12px;
+      filter:
+        drop-shadow(
+          0 3px 3px rgba(0, 0, 0, 0.25)
+        );
+    }
 
-  font-size: 18px;
-  font-weight: 700;
 
-  color: #ed3972;
-}
+    /* =========================
+       КАРТОЧКА НА КАРТЕ
+    ========================= */
 
+    .map-card {
+      position: absolute;
 
-/* =========================
-   КАРТОЧКИ
-========================= */
+      left: 14px;
+      right: 14px;
 
-.profile-card {
-  background: white;
+      bottom: 14px;
 
-  border-radius: 18px;
+      z-index: 1500;
 
-  padding: 20px;
+      padding: 18px;
 
-  margin-top: 20px;
+      background: white;
 
-  box-shadow:
-    0 3px 15px rgba(0, 0, 0, 0.05);
-}
+      border-radius: 22px;
 
+      box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.12);
+    }
 
-/* =========================
-   EMPTY STATE
-========================= */
 
-.empty-state {
-  background: white;
+    .map-card-title {
+      font-size: 19px;
 
-  border-radius: 20px;
+      font-weight: 800;
 
-  padding: 40px 20px;
+      margin-bottom: 6px;
+    }
 
-  margin-top: 20px;
 
-  text-align: center;
+    .map-card-description {
+      font-size: 14px;
 
-  box-shadow:
-    0 3px 15px rgba(0, 0, 0, 0.05);
-}
+      line-height: 1.4;
 
-.empty-icon {
-  font-size: 52px;
+      color: #667085;
 
-  margin-bottom: 15px;
-}
+      margin-bottom: 14px;
+    }
 
-.empty-title {
-  font-size: 20px;
 
-  font-weight: 800;
+    .select-location-button {
+      width: 100%;
 
-  margin-bottom: 8px;
-}
+      border: none;
 
-.empty-description {
-  color: #667085;
+      border-radius: 14px;
 
-  font-size: 15px;
+      padding: 15px;
 
-  line-height: 1.5;
-}
+      background: #ff4f87;
 
+      color: white;
 
-/* =========================
-   ПРОФИЛЬ
-========================= */
+      font-size: 16px;
 
-.profile-avatar {
-  width: 60px;
-  height: 60px;
+      font-weight: 800;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+      cursor: pointer;
+    }
 
-  margin-bottom: 12px;
 
-  border-radius: 50%;
+    .select-location-button:active {
+      transform: scale(0.98);
+    }
 
-  background: #fff0f5;
 
-  font-size: 30px;
-}
+    /* =========================
+       АДРЕС
+    ========================= */
 
-.profile-name {
-  font-size: 18px;
-  font-weight: 700;
-}
+    .address-input {
+      width: 100%;
 
+      margin-top: 12px;
 
-/* =========================
-   НИЖНЯЯ НАВИГАЦИЯ
-========================= */
+      border: 1px solid #d9dee7;
 
-.bottom-nav {
-  position: fixed;
+      border-radius: 12px;
 
-  left: 50%;
-  bottom: 0;
+      padding: 14px;
 
-  transform: translateX(-50%);
+      font-size: 16px;
 
-  width: 100%;
-  max-width: 520px;
+      outline: none;
 
-  height: 72px;
+      background: #fff;
 
-  z-index: 3000;
+      color: #172033;
+    }
 
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
 
-  padding:
-    7px 8px
-    calc(7px + env(safe-area-inset-bottom));
+    .address-input:focus {
+      border-color: #ff4f87;
+    }
 
-  background: rgba(255, 255, 255, 0.97);
 
-  border-top:
-    1px solid #eeeeee;
-}
+    .coordinates {
+      margin-top: 8px;
 
-.nav-item {
-  position: relative;
+      font-size: 12px;
 
-  flex: 1;
+      color: #98a2b3;
+    }
 
-  height: 58px;
 
-  border: none;
+    /* =========================
+       ОШИБКИ
+    ========================= */
 
-  background: transparent;
+    .error {
+      color: #d92d20;
 
-  color: #98a2b3;
+      font-size: 14px;
 
-  font-size: 11px;
-  font-weight: 600;
+      margin-top: 8px;
+    }
 
-  cursor: pointer;
-}
 
-.nav-icon {
-  font-size: 21px;
+    /* =========================
+       УСЛУГИ
+    ========================= */
 
-  margin-bottom: 2px;
-}
+    .service {
+      background: white;
 
-.nav-item.active {
-  color: #ed3972;
-}
+      border: 2px solid transparent;
 
-.badge {
-  position: absolute;
+      border-radius: 18px;
 
-  top: 1px;
-  right: 22%;
+      padding: 18px;
 
-  min-width: 18px;
-  height: 18px;
+      margin-top: 14px;
 
-  padding: 0 5px;
+      cursor: pointer;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+      box-shadow:
+        0 3px 15px rgba(0, 0, 0, 0.05);
+    }
 
-  border-radius: 20px;
 
-  background: #ed3972;
-  color: white;
+    .service.selected {
+      border-color: #ff4f87;
 
-  font-size: 10px;
-  font-weight: 800;
-}
+      background: #fff0f5;
+    }
 
 
-/* =========================
-   УСПЕШНЫЙ ЗАКАЗ
-========================= */
+    .service-title {
+      font-size: 18px;
 
-.success {
-  text-align: center;
+      font-weight: 700;
 
-  padding-top: 70px;
-}
+      margin-bottom: 6px;
+    }
 
-.success-icon {
-  font-size: 75px;
 
-  margin-bottom: 20px;
-}
+    .service-description {
+      color: #667085;
 
-.order-number {
-  font-size: 16px;
+      font-size: 14px;
 
-  color: #667085;
+      line-height: 1.4;
+    }
 
-  margin-top: 15px;
-}
 
+    .service-price {
+      margin-top: 12px;
 
-/* =========================
-   МОБИЛЬНЫЕ УСТРОЙСТВА
-========================= */
+      font-size: 18px;
 
-@media (max-width: 380px) {
+      font-weight: 700;
 
-  .home-title {
-    font-size: 31px;
-  }
+      color: #ed3972;
+    }
 
-  .home-description {
-    font-size: 15px;
-  }
 
-  .map-card {
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
+    /* =========================
+       КАРТОЧКИ
+    ========================= */
 
-    padding: 15px;
-  }
+    .profile-card {
+      background: white;
 
-}
+      border-radius: 18px;
 
-</style>
+      padding: 20px;
+
+      margin-top: 20px;
+
+      box-shadow:
+        0 3px 15px rgba(0, 0, 0, 0.05);
+    }
+
+
+    /* =========================
+       EMPTY STATE
+    ========================= */
+
+    .empty-state {
+      background: white;
+
+      border-radius: 20px;
+
+      padding: 40px 20px;
+
+      margin-top: 20px;
+
+      text-align: center;
+
+      box-shadow:
+        0 3px 15px rgba(0, 0, 0, 0.05);
+    }
+
+
+    .empty-icon {
+      font-size: 52px;
+
+      margin-bottom: 15px;
+    }
+
+
+    .empty-title {
+      font-size: 20px;
+
+      font-weight: 800;
+
+      margin-bottom: 8px;
+    }
+
+
+    .empty-description {
+      color: #667085;
+
+      font-size: 15px;
+
+      line-height: 1.5;
+    }
+
+
+    /* =========================
+       ПРОФИЛЬ
+    ========================= */
+
+    .profile-avatar {
+      width: 60px;
+      height: 60px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      margin-bottom: 12px;
+
+      border-radius: 50%;
+
+      background: #fff0f5;
+
+      font-size: 30px;
+    }
+
+
+    .profile-name {
+      font-size: 18px;
+
+      font-weight: 700;
+    }
+
+
+    /* =========================
+       НИЖНЯЯ НАВИГАЦИЯ
+    ========================= */
+
+    .bottom-nav {
+      position: relative;
+
+      flex-shrink: 0;
+
+      width: 100%;
+
+      height: 72px;
+
+      z-index: 3000;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-around;
+
+      padding:
+        7px 8px
+        calc(7px + env(safe-area-inset-bottom));
+
+      background: rgba(255, 255, 255, 0.97);
+
+      border-top:
+        1px solid #eeeeee;
+    }
+
+
+    .nav-item {
+      position: relative;
+
+      flex: 1;
+
+      height: 58px;
+
+      border: none;
+
+      background: transparent;
+
+      color: #98a2b3;
+
+      font-size: 11px;
+
+      font-weight: 600;
+
+      cursor: pointer;
+    }
+
+
+    .nav-icon {
+      font-size: 21px;
+
+      margin-bottom: 2px;
+    }
+
+
+    .nav-item.active {
+      color: #ed3972;
+    }
+
+
+    .badge {
+      position: absolute;
+
+      top: 1px;
+
+      right: 22%;
+
+      min-width: 18px;
+
+      height: 18px;
+
+      padding: 0 5px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      border-radius: 20px;
+
+      background: #ed3972;
+
+      color: white;
+
+      font-size: 10px;
+
+      font-weight: 800;
+    }
+
+
+    /* =========================
+       УСПЕШНЫЙ ЗАКАЗ
+    ========================= */
+
+    .success {
+      text-align: center;
+
+      padding-top: 70px;
+    }
+
+
+    .success-icon {
+      font-size: 75px;
+
+      margin-bottom: 20px;
+    }
+
+
+    .order-number {
+      font-size: 16px;
+
+      color: #667085;
+
+      margin-top: 15px;
+    }
+
+
+    /* =========================
+       МОБИЛЬНЫЕ УСТРОЙСТВА
+    ========================= */
+
+    @media (max-width: 380px) {
+
+      .home-title {
+        font-size: 31px;
+      }
+
+
+      .home-description {
+        font-size: 15px;
+      }
+
+
+      .map-card {
+        left: 10px;
+        right: 10px;
+
+        bottom: 10px;
+
+        padding: 15px;
+      }
+
+    }
+
+  </style>
+
 </head>
+
 
 <body>
 
+
 <div class="app">
 
-  <!-- ГЛАВНЫЙ ЭКРАН -->
+
+  <!-- =========================
+       ГЛАВНЫЙ ЭКРАН
+  ========================= -->
 
   <section
     id="screen-home"
@@ -768,6 +867,7 @@ button {
         </div>
 
       </div>
+
 
       <div class="home-content">
 
@@ -788,6 +888,7 @@ button {
 
       </div>
 
+
       <button
         class="main-order-button"
         onclick="openLocationScreen()"
@@ -800,7 +901,9 @@ button {
   </section>
 
 
-  <!-- ЭКРАН КАРТЫ -->
+  <!-- =========================
+       ЭКРАН КАРТЫ
+  ========================= -->
 
   <section
     id="screen-location"
@@ -820,7 +923,7 @@ button {
         Где автомобиль?
       </div>
 
-      <div style="width:26px;"></div>
+      <div style="width:32px;"></div>
 
     </div>
 
@@ -828,6 +931,7 @@ button {
     <div class="map-container">
 
       <div id="map"></div>
+
 
       <div class="map-marker">
         📍
@@ -846,6 +950,7 @@ button {
           возле автомобиля.
         </div>
 
+
         <button
           id="select-location-button"
           class="select-location-button"
@@ -853,6 +958,7 @@ button {
         >
           📍 Выбрать это место
         </button>
+
 
         <input
           id="address"
@@ -862,6 +968,7 @@ button {
           style="display:none;"
         >
 
+
         <div
           id="coordinates"
           class="coordinates"
@@ -869,10 +976,12 @@ button {
           Координаты ещё не выбраны
         </div>
 
+
         <div
           id="location-error"
           class="error"
         ></div>
+
 
         <button
           id="location-next"
@@ -890,7 +999,9 @@ button {
   </section>
 
 
-  <!-- УСЛУГИ -->
+  <!-- =========================
+       УСЛУГИ
+  ========================= -->
 
   <section
     id="screen-services"
@@ -907,9 +1018,11 @@ button {
         ←
       </div>
 
+
       <h2 class="section-title">
         Что нужно сделать?
       </h2>
+
 
       <p class="section-description">
         Выберите подходящий вариант уборки.
@@ -995,7 +1108,9 @@ button {
   </section>
 
 
-  <!-- ЗАКАЗЫ -->
+  <!-- =========================
+       ЗАКАЗЫ
+  ========================= -->
 
   <section
     id="screen-orders"
@@ -1007,6 +1122,7 @@ button {
       <h2 class="section-title">
         Мои заказы
       </h2>
+
 
       <div class="empty-state">
 
@@ -1029,7 +1145,9 @@ button {
   </section>
 
 
-  <!-- СООБЩЕНИЯ -->
+  <!-- =========================
+       СООБЩЕНИЯ
+  ========================= -->
 
   <section
     id="screen-messages"
@@ -1041,6 +1159,7 @@ button {
       <h2 class="section-title">
         Сообщения
       </h2>
+
 
       <div class="empty-state">
 
@@ -1064,7 +1183,9 @@ button {
   </section>
 
 
-  <!-- ПРОФИЛЬ -->
+  <!-- =========================
+       ПРОФИЛЬ
+  ========================= -->
 
   <section
     id="screen-profile"
@@ -1076,6 +1197,7 @@ button {
       <h2 class="section-title">
         Профиль
       </h2>
+
 
       <div class="profile-card">
 
@@ -1094,7 +1216,9 @@ button {
   </section>
 
 
-  <!-- ПОДТВЕРЖДЕНИЕ -->
+  <!-- =========================
+       ПОДТВЕРЖДЕНИЕ
+  ========================= -->
 
   <section
     id="screen-summary"
@@ -1111,9 +1235,11 @@ button {
         ←
       </div>
 
+
       <h2 class="section-title">
         Проверьте заказ
       </h2>
+
 
       <div class="profile-card">
 
@@ -1125,6 +1251,7 @@ button {
           —
         </p>
 
+
         <p>
           <strong>Услуга</strong>
         </p>
@@ -1133,6 +1260,7 @@ button {
           —
         </p>
 
+
         <p>
           <strong>Стоимость</strong>
         </p>
@@ -1140,6 +1268,7 @@ button {
         <p id="summary-price">
           —
         </p>
+
 
         <h2 id="summary-total">
           Итого: —
@@ -1155,6 +1284,7 @@ button {
         🚗 Заказать исполнителя
       </button>
 
+
       <button
         class="button secondary"
         onclick="showScreen('services')"
@@ -1167,7 +1297,9 @@ button {
   </section>
 
 
-  <!-- УСПЕШНЫЙ ЗАКАЗ -->
+  <!-- =========================
+       УСПЕШНЫЙ ЗАКАЗ
+  ========================= -->
 
   <section
     id="screen-success"
@@ -1191,6 +1323,7 @@ button {
           рядом с вашим автомобилем.
         </div>
 
+
         <p>
           Номер заказа:
           <strong id="order-number"></strong>
@@ -1203,9 +1336,12 @@ button {
   </section>
 
 
-  <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+  <!-- =========================
+       НИЖНЯЯ НАВИГАЦИЯ
+  ========================= -->
 
   <nav class="bottom-nav">
+
 
     <button
       id="nav-map"
@@ -1278,12 +1414,15 @@ button {
 
     </button>
 
+
   </nav>
+
 
 </div>
 
 
 <script>
+
 
   /* =========================
      TELEGRAM
@@ -1292,6 +1431,7 @@ button {
   const tg = window.Telegram.WebApp;
 
   tg.ready();
+
   tg.expand();
 
 
@@ -1302,9 +1442,13 @@ button {
   let order = {
 
     latitude: null,
+
     longitude: null,
+
     address: "",
+
     service: null,
+
     price: null
 
   };
@@ -1339,18 +1483,23 @@ button {
   ========================= */
 
   let map = null;
+
   let mapInitialized = false;
 
 
   async function initMap() {
 
     if (mapInitialized) {
+
       return;
+
     }
+
 
     try {
 
       await ymaps3.ready;
+
 
       const {
         YMap,
@@ -1362,26 +1511,27 @@ button {
         document.getElementById("map");
 
 
-      map = new YMap(
+      map =
+        new YMap(
 
-        mapElement,
+          mapElement,
 
-        {
+          {
 
-          location: {
+            location: {
 
-            center: [
-              60.6122,
-              56.8389
-            ],
+              center: [
+                60.6122,
+                56.8389
+              ],
 
-            zoom: 14
+              zoom: 14
+
+            }
 
           }
 
-        }
-
-      );
+        );
 
 
       map.addChild(
@@ -1398,6 +1548,7 @@ button {
         "Ошибка загрузки Яндекс Карты:",
         error
       );
+
 
       document.getElementById(
         "location-error"
@@ -1450,14 +1601,13 @@ button {
 
     updateNavigation(name);
 
-    window.scrollTo(0, 0);
-
 
     if (name === "location") {
 
       setTimeout(function() {
 
         initMap();
+
 
         if (map) {
 
@@ -1495,6 +1645,7 @@ button {
 
     }
 
+
     if (name === "orders") {
 
       document
@@ -1503,6 +1654,7 @@ button {
 
     }
 
+
     if (name === "messages") {
 
       document
@@ -1510,6 +1662,7 @@ button {
         .classList.add("active");
 
     }
+
 
     if (name === "profile") {
 
@@ -1533,26 +1686,6 @@ button {
         "location-error"
       );
 
-    const addressInput =
-      document.getElementById(
-        "address"
-      );
-
-    const coordinatesElement =
-      document.getElementById(
-        "coordinates"
-      );
-
-    const nextButton =
-      document.getElementById(
-        "location-next"
-      );
-
-    const button =
-      document.getElementById(
-        "select-location-button"
-      );
-
 
     errorElement.textContent = "";
 
@@ -1567,13 +1700,6 @@ button {
     }
 
 
-    /*
-      Получаем центр карты.
-
-      Формат:
-      [longitude, latitude]
-    */
-
     const center =
       map.center;
 
@@ -1581,15 +1707,14 @@ button {
     order.longitude =
       center[0];
 
+
     order.latitude =
       center[1];
 
 
-    /*
-      Показываем координаты
-    */
-
-    coordinatesElement.textContent =
+    document.getElementById(
+      "coordinates"
+    ).textContent =
 
       "Координаты: " +
 
@@ -1600,179 +1725,20 @@ button {
       order.longitude.toFixed(6);
 
 
-    /*
-      Показываем поле адреса
-    */
+    const addressInput =
+      document.getElementById(
+        "address"
+      );
+
 
     addressInput.style.display =
       "block";
 
 
-    /*
-      Блокируем кнопку
-    */
-
-    button.disabled = true;
-
-    button.textContent =
-      "⏳ Определяем адрес...";
-
-
-    try {
-
-      /*
-        Reverse geocoding:
-        координаты → адрес
-      */
-
-      const url =
-        "https://geocode-maps.yandex.ru/v1/" +
-
-        "?apikey=" +
-        encodeURIComponent(
-          "c355cb46-e31f-4942-a74d-336abc2cb19a"
-        ) +
-
-        "&geocode=" +
-        encodeURIComponent(
-          order.longitude +
-          "," +
-          order.latitude
-        ) +
-
-        "&lang=ru_RU" +
-
-        "&format=json" +
-
-        "&results=1";
-
-
-      const response =
-        await fetch(url);
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          "Ошибка геокодера: " +
-          response.status
-        );
-
-      }
-
-
-      const data =
-        await response.json();
-
-
-      /*
-        Получаем найденные объекты
-      */
-
-      const features =
-        data?.response
-          ?.GeoObjectCollection
-          ?.featureMember;
-
-
-      if (
-        !features ||
-        features.length === 0
-      ) {
-
-        throw new Error(
-          "Адрес не найден."
-        );
-
-      }
-
-
-      const geoObject =
-        features[0].GeoObject;
-
-
-      const address =
-        geoObject
-          ?.metaDataProperty
-          ?.GeocoderMetaData
-          ?.text;
-
-
-      if (!address) {
-
-        throw new Error(
-          "Не удалось получить адрес."
-        );
-
-      }
-
-
-      /*
-        Сохраняем адрес
-      */
-
-      order.address =
-        address;
-
-
-      /*
-        Вставляем адрес
-        в поле
-      */
-
-      addressInput.value =
-        address;
-
-
-      /*
-        Показываем кнопку
-        Продолжить
-      */
-
-      nextButton.style.display =
-        "block";
-
-
-    } catch (error) {
-
-      console.error(
-        "Ошибка определения адреса:",
-        error
-      );
-
-
-      errorElement.textContent =
-        "Не удалось определить адрес. " +
-        "Введите его вручную.";
-
-
-      /*
-        Даже если геокодирование
-        не сработало, пользователь
-        может ввести адрес вручную.
-      */
-
-      nextButton.style.display =
-        "block";
-
-    }
-
-
-    /*
-      Возвращаем кнопку
-    */
-
-    button.disabled = false;
-
-    button.textContent =
-      "📍 Выбрать это место";
-
-
-    /*
-      Фокусируем поле адреса
-    */
-
-    addressInput.focus();
+    document.getElementById(
+      "location-next"
+    ).style.display =
+      "block";
 
   }
 
@@ -1937,7 +1903,9 @@ button {
 
   }
 
+
 </script>
+
 
 </body>
 </html>
