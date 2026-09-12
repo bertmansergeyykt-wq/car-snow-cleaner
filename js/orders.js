@@ -16,8 +16,7 @@ import {
 } from "./state.js";
 
 import {
-  supabaseClient,
-  QUICK_PROCESSOR_URL
+  supabaseClient
 } from "./supabase.js";
 
 import {
@@ -34,9 +33,9 @@ import {
 } from "./screens.js";
 
 
-/* =========================================================
-   ПРОДОЛЖЕНИЕ ПОСЛЕ ВЫБОРА АДРЕСА
-========================================================= */
+// ======================================================
+// ПРОДОЛЖЕНИЕ ПОСЛЕ ВЫБОРА МЕСТА
+// ======================================================
 
 export function continueFromLocation() {
 
@@ -44,16 +43,12 @@ export function continueFromLocation() {
     selectedLocation.latitude === null ||
     selectedLocation.longitude === null
   ) {
-    alert(
-      "Сначала выберите место на карте."
-    );
+    alert("Сначала выберите место на карте.");
     return;
   }
 
   const addressInput =
-    document.getElementById(
-      "address-input"
-    );
+    document.getElementById("address-input");
 
   const address =
     addressInput
@@ -61,14 +56,11 @@ export function continueFromLocation() {
       : selectedLocation.address;
 
   if (!address) {
-    alert(
-      "Укажите адрес."
-    );
+    alert("Укажите адрес.");
     return;
   }
 
-  selectedLocation.address =
-    address;
+  selectedLocation.address = address;
 
   const addressText =
     document.getElementById(
@@ -76,86 +68,70 @@ export function continueFromLocation() {
     );
 
   if (addressText) {
-    addressText.textContent =
-      address;
+    addressText.textContent = address;
   }
 
-  showScreen(
-    "services"
-  );
+  showScreen("services");
 }
 
 
-/* =========================================================
-   ВЫБОР УСЛУГИ
-========================================================= */
+// ======================================================
+// ВЫБОР УСЛУГИ
+// ======================================================
 
-export function selectService(
-  button
-) {
+export function selectService(button) {
 
   if (!button) return;
 
   document
-    .querySelectorAll(
-      ".service-card"
-    )
+    .querySelectorAll(".service-card")
     .forEach((card) => {
-
-      card.classList.remove(
-        "selected"
-      );
-
+      card.classList.remove("selected");
     });
 
-  button.classList.add(
-    "selected"
-  );
+  button.classList.add("selected");
 
   const service =
     button.dataset.service;
 
   const price =
-    Number(
-      button.dataset.price
-    );
+    Number(button.dataset.price);
 
   setSelectedService({
     name: service,
     price: price
   });
 
-  const createButton =
+  const orderButton =
     document.getElementById(
       "create-order-button"
     );
 
-  if (!createButton) return;
+  if (!orderButton) return;
 
-  createButton.disabled = false;
+  orderButton.disabled = false;
 
-  createButton.classList.add(
-    "pink"
+  // Используем реальные классы из текущего HTML
+  orderButton.classList.remove(
+    "bg-gray-300"
+  );
+
+  orderButton.classList.add(
+    "bg-[#ff4f87]"
   );
 }
 
 
-/* =========================================================
-   СОЗДАНИЕ ЗАКАЗА
-========================================================= */
+// ======================================================
+// СОЗДАНИЕ ЗАКАЗА
+// ======================================================
 
 export async function createOrder() {
 
-  if (isCreatingOrder) {
-    return;
-  }
+  if (isCreatingOrder) return;
 
   if (!selectedService) {
-
-    alert(
-      "Выберите услугу."
-    );
-
+    alert("Выберите услугу.");
     return;
   }
 
@@ -163,17 +139,11 @@ export async function createOrder() {
     selectedLocation.latitude === null ||
     selectedLocation.longitude === null
   ) {
-
-    alert(
-      "Выберите место."
-    );
-
+    alert("Выберите место.");
     return;
   }
 
-  setIsCreatingOrder(
-    true
-  );
+  setIsCreatingOrder(true);
 
   const button =
     document.getElementById(
@@ -191,9 +161,10 @@ export async function createOrder() {
     const telegramUserId =
       getTelegramUserId();
 
-    /* -----------------------------------------
-       Создаём заказ
-    ----------------------------------------- */
+
+    // ----------------------------------------------
+    // СОЗДАЁМ ЗАКАЗ
+    // ----------------------------------------------
 
     const {
       data: order,
@@ -235,51 +206,53 @@ export async function createOrder() {
       );
     }
 
+
+    // ----------------------------------------------
+    // СОХРАНЯЕМ АКТИВНЫЙ ЗАКАЗ
+    // ----------------------------------------------
+
     setCurrentActiveOrderId(
       order.id
     );
 
-    /* -----------------------------------------
-       Добавляем в локальную историю
-    ----------------------------------------- */
-
-    setCurrentOrders([
-      order,
-      ...currentOrders
-    ]);
-
-    /* -----------------------------------------
-       Показываем поиск
-    ----------------------------------------- */
-
-    showSearching(
-      order.id
+    setCurrentActivePerformerId(
+      null
     );
 
-    /* -----------------------------------------
-       Ищем исполнителя
-    ----------------------------------------- */
+
+    // ----------------------------------------------
+    // ПОКАЗЫВАЕМ ПОИСК
+    // ----------------------------------------------
+
+    showSearching(order.id);
+
+
+    // ----------------------------------------------
+    // ИЩЕМ БЛИЖАЙШЕГО ИСПОЛНИТЕЛЯ
+    // ----------------------------------------------
 
     const {
       data: performerResult,
       error: performerError
-    } = await supabaseClient.functions.invoke(
-      "quick-processor",
-      {
-        body: {
+    } =
+      await supabaseClient
+        .functions
+        .invoke(
+          "quick-processor",
+          {
+            body: {
+              action:
+                "find_performer",
 
-          action:
-            "find_performer",
+              latitude:
+                selectedLocation.latitude,
 
-          latitude:
-            selectedLocation.latitude,
+              longitude:
+                selectedLocation.longitude
+            }
+          }
+        );
 
-          longitude:
-            selectedLocation.longitude
-
-        }
-      }
-    );
 
     if (performerError) {
 
@@ -288,27 +261,81 @@ export async function createOrder() {
         performerError
       );
 
+      setCurrentOrders([
+        order,
+        ...currentOrders
+      ]);
+
+      showSearching(order.id);
+
       return;
     }
 
+
     const foundPerformer =
       performerResult?.performer;
+
+
+    // ----------------------------------------------
+    // ЕСЛИ ИСПОЛНИТЕЛЬ НАЙДЕН
+    // ----------------------------------------------
 
     if (
       foundPerformer &&
       foundPerformer.id
     ) {
 
-      await acceptOrder(
-        order.id,
-        foundPerformer.id
-      );
+      const acceptedOrder =
+        await acceptOrder(
+          order.id,
+          foundPerformer.id
+        );
+
+      if (acceptedOrder) {
+
+        order.status =
+          acceptedOrder.status;
+
+        setCurrentActivePerformerId(
+          foundPerformer.id
+        );
+
+        setCurrentOrders([
+          acceptedOrder,
+          ...currentOrders
+        ]);
+
+        showPerformerFound(
+          acceptedOrder.id,
+          foundPerformer
+        );
+
+      } else {
+
+        setCurrentOrders([
+          order,
+          ...currentOrders
+        ]);
+
+        showSearching(order.id);
+      }
 
     } else {
+
+      // --------------------------------------------
+      // ИСПОЛНИТЕЛЕЙ НЕТ
+      // --------------------------------------------
 
       console.log(
         "Свободных исполнителей нет."
       );
+
+      setCurrentOrders([
+        order,
+        ...currentOrders
+      ]);
+
+      showSearching(order.id);
     }
 
   } catch (error) {
@@ -323,97 +350,129 @@ export async function createOrder() {
       "Не удалось создать заказ."
     );
 
-    showScreen(
-      "services"
-    );
+    showScreen("services");
 
   } finally {
 
-    setIsCreatingOrder(
-      false
-    );
+    setIsCreatingOrder(false);
 
     if (button) {
 
-      button.disabled =
-        false;
+      button.disabled = false;
 
       button.textContent =
         "Заказать исполнителя";
+
+      // Сохраняем розовый цвет
+      // после завершения создания заказа
+      if (selectedService) {
+
+        button.classList.remove(
+          "bg-gray-300"
+        );
+
+        button.classList.add(
+          "bg-[#ff4f87]"
+        );
+      }
     }
   }
 }
 
 
-/* =========================================================
-   ЭКРАН ПОИСКА
-========================================================= */
+// ======================================================
+// ЭКРАН ПОИСКА ИСПОЛНИТЕЛЯ
+// ======================================================
 
-export function showSearching(
-  orderId
-) {
+export function showSearching(orderId) {
 
-  const orderNumber =
+  const icon =
     document.getElementById(
-      "searching-order-number"
+      "searching-icon"
     );
 
-  if (orderNumber) {
-
-    orderNumber.textContent =
-      `Заказ №${orderId}`;
-
-  }
-
-  const searchingBlock =
+  const label =
     document.getElementById(
-      "searching-state"
+      "searching-label"
     );
 
-  const performerBlock =
+  const title =
     document.getElementById(
-      "performer-found"
+      "searching-title"
     );
 
-  const completedBlock =
+  const description =
     document.getElementById(
-      "order-completed"
+      "searching-description"
     );
 
-  if (searchingBlock) {
-    searchingBlock.style.display =
-      "block";
-  }
-
-  if (performerBlock) {
-    performerBlock.style.display =
-      "none";
-  }
-
-  if (completedBlock) {
-    completedBlock.style.display =
-      "none";
-  }
+  const performerCard =
+    document.getElementById(
+      "performer-card"
+    );
 
   const completeButton =
     document.getElementById(
       "complete-order-button"
     );
 
-  if (completeButton) {
-    completeButton.style.display =
-      "none";
+  const completedMessage =
+    document.getElementById(
+      "completed-message"
+    );
+
+  const orderNumber =
+    document.getElementById(
+      "success-order-number"
+    );
+
+
+  if (icon) {
+
+    icon.innerHTML = `
+      <div class="spinner"></div>
+    `;
   }
 
-  showScreen(
-    "searching"
-  );
+  if (label) {
+    label.textContent =
+      "Заказ создан";
+  }
+
+  if (title) {
+    title.textContent =
+      "Ищем исполнителя";
+  }
+
+  if (description) {
+    description.textContent =
+      "Подбираем ближайшего свободного исполнителя";
+  }
+
+  if (performerCard) {
+    performerCard.classList.add("hidden");
+  }
+
+  if (completeButton) {
+    completeButton.classList.add("hidden");
+  }
+
+  if (completedMessage) {
+    completedMessage.classList.add("hidden");
+  }
+
+  if (orderNumber) {
+    orderNumber.textContent =
+      `#${orderId}`;
+  }
+
+  showScreen("searching");
 }
 
 
-/* =========================================================
-   ПРИНЯТИЕ ЗАКАЗА
-========================================================= */
+// ======================================================
+// ПРИНЯТИЕ ЗАКАЗА ИСПОЛНИТЕЛЕМ
+// ======================================================
 
 export async function acceptOrder(
   orderId,
@@ -425,23 +484,25 @@ export async function acceptOrder(
     const {
       data,
       error
-    } = await supabaseClient.functions.invoke(
-      "quick-processor",
-      {
-        body: {
+    } =
+      await supabaseClient
+        .functions
+        .invoke(
+          "quick-processor",
+          {
+            body: {
+              action:
+                "accept_order",
 
-          action:
-            "accept_order",
+              order_id:
+                orderId,
 
-          order_id:
-            orderId,
+              performer_id:
+                performerId
+            }
+          }
+        );
 
-          performer_id:
-            performerId
-
-        }
-      }
-    );
 
     if (error) {
       throw error;
@@ -453,39 +514,8 @@ export async function acceptOrder(
       );
     }
 
-    if (
-      data?.success &&
-      data?.order
-    ) {
 
-      setCurrentActiveOrderId(
-        data.order.id
-      );
-
-      setCurrentActivePerformerId(
-        performerId
-      );
-
-      /* -----------------------------------------
-         Обновляем заказ в локальной истории
-      ----------------------------------------- */
-
-      setCurrentOrders(
-        currentOrders.map(
-          (item) =>
-            item.id === data.order.id
-              ? data.order
-              : item
-        )
-      );
-
-      showPerformerFound(
-        data.order.id,
-        data.performer || {
-          id: performerId
-        }
-      );
-    }
+    return data?.order || null;
 
   } catch (error) {
 
@@ -494,94 +524,122 @@ export async function acceptOrder(
       error
     );
 
+    return null;
   }
 }
 
 
-/* =========================================================
-   ИСПОЛНИТЕЛЬ НАЙДЕН
-========================================================= */
+// ======================================================
+// ИСПОЛНИТЕЛЬ НАЙДЕН
+// ======================================================
 
 export function showPerformerFound(
   orderId,
   performer
 ) {
 
-  /*
-    Важно:
-    показываем исполнителя только если
-    accept_order действительно установил
-    currentActivePerformerId.
-  */
-
-  if (
-    !performer ||
-    !currentActivePerformerId
-  ) {
-    return;
-  }
-
-  const searchingBlock =
+  const icon =
     document.getElementById(
-      "searching-state"
+      "searching-icon"
     );
 
-  const performerBlock =
+  const label =
     document.getElementById(
-      "performer-found"
+      "searching-label"
     );
 
-  const orderNumber =
+  const title =
     document.getElementById(
-      "found-order-number"
+      "searching-title"
     );
 
-  if (searchingBlock) {
-    searchingBlock.style.display =
-      "none";
-  }
+  const description =
+    document.getElementById(
+      "searching-description"
+    );
 
-  if (performerBlock) {
-    performerBlock.style.display =
-      "block";
-  }
-
-  if (orderNumber) {
-    orderNumber.textContent =
-      `Заказ №${orderId}`;
-  }
+  const performerCard =
+    document.getElementById(
+      "performer-card"
+    );
 
   const completeButton =
     document.getElementById(
       "complete-order-button"
     );
 
-  if (completeButton) {
-    completeButton.style.display =
-      "block";
-  }
+  const completedMessage =
+    document.getElementById(
+      "completed-message"
+    );
 
   const performerName =
     document.getElementById(
       "performer-name"
     );
 
-  if (performerName) {
+  const orderNumber =
+    document.getElementById(
+      "success-order-number"
+    );
 
-    performerName.textContent =
-      performer.name ||
+
+  if (icon) {
+    icon.textContent = "🚗";
+  }
+
+  if (label) {
+    label.textContent =
       "Исполнитель найден";
   }
 
-  showScreen(
-    "searching"
-  );
+  if (title) {
+    title.textContent =
+      "Помощь уже в пути";
+  }
+
+  if (description) {
+    description.textContent =
+      "Исполнитель направляется к вашему автомобилю";
+  }
+
+  if (performerName) {
+
+    performerName.textContent =
+      performer?.name ||
+      "Исполнитель найден";
+  }
+
+  if (performerCard) {
+    performerCard.classList.remove(
+      "hidden"
+    );
+  }
+
+  if (completeButton) {
+    completeButton.classList.remove(
+      "hidden"
+    );
+  }
+
+  if (completedMessage) {
+    completedMessage.classList.add(
+      "hidden"
+    );
+  }
+
+  if (orderNumber) {
+    orderNumber.textContent =
+      `#${orderId}`;
+  }
+
+  showScreen("searching");
 }
 
 
-/* =========================================================
-   ЗАВЕРШЕНИЕ ЗАКАЗА
-========================================================= */
+// ======================================================
+// ЗАВЕРШЕНИЕ ЗАКАЗА
+// ======================================================
 
 export async function completeOrder(
   orderId,
@@ -591,23 +649,25 @@ export async function completeOrder(
   const {
     data,
     error
-  } = await supabaseClient.functions.invoke(
-    "quick-processor",
-    {
-      body: {
+  } =
+    await supabaseClient
+      .functions
+      .invoke(
+        "quick-processor",
+        {
+          body: {
+            action:
+              "complete_order",
 
-        action:
-          "complete_order",
+            order_id:
+              orderId,
 
-        order_id:
-          orderId,
+            performer_id:
+              performerId
+          }
+        }
+      );
 
-        performer_id:
-          performerId
-
-      }
-    }
-  );
 
   if (error) {
     throw error;
@@ -623,9 +683,9 @@ export async function completeOrder(
 }
 
 
-/* =========================================================
-   ЗАВЕРШЕНИЕ ТЕКУЩЕГО ЗАКАЗА
-========================================================= */
+// ======================================================
+// ЗАВЕРШИТЬ ТЕКУЩИЙ ЗАКАЗ КЛИЕНТА
+// ======================================================
 
 export async function completeCurrentOrder() {
 
@@ -645,9 +705,8 @@ export async function completeCurrentOrder() {
     return;
   }
 
-  setIsCompletingOrder(
-    true
-  );
+  setIsCompletingOrder(true);
+
 
   const button =
     document.getElementById(
@@ -656,12 +715,12 @@ export async function completeCurrentOrder() {
 
   if (button) {
 
-    button.disabled =
-      true;
+    button.disabled = true;
 
     button.textContent =
       "Завершаем...";
   }
+
 
   try {
 
@@ -670,6 +729,11 @@ export async function completeCurrentOrder() {
         currentActiveOrderId,
         currentActivePerformerId
       );
+
+
+    // ----------------------------------------------
+    // ОБНОВЛЯЕМ ЗАКАЗ В ЛОКАЛЬНОМ СОСТОЯНИИ
+    // ----------------------------------------------
 
     if (data?.order) {
 
@@ -683,35 +747,80 @@ export async function completeCurrentOrder() {
       );
     }
 
-    const performerBlock =
+
+    // ----------------------------------------------
+    // ОБНОВЛЯЕМ ЭКРАН
+    // ----------------------------------------------
+
+    const performerCard =
       document.getElementById(
-        "performer-found"
+        "performer-card"
       );
 
-    const completedBlock =
+    const completedMessage =
       document.getElementById(
-        "order-completed"
+        "completed-message"
       );
 
-    const completeButton =
+    if (performerCard) {
+      performerCard.classList.add(
+        "hidden"
+      );
+    }
+
+    if (button) {
+      button.classList.add(
+        "hidden"
+      );
+    }
+
+    if (completedMessage) {
+      completedMessage.classList.remove(
+        "hidden"
+      );
+    }
+
+
+    const icon =
       document.getElementById(
-        "complete-order-button"
+        "searching-icon"
       );
 
-    if (performerBlock) {
-      performerBlock.style.display =
-        "none";
+    const label =
+      document.getElementById(
+        "searching-label"
+      );
+
+    const title =
+      document.getElementById(
+        "searching-title"
+      );
+
+    const description =
+      document.getElementById(
+        "searching-description"
+      );
+
+
+    if (icon) {
+      icon.textContent = "✅";
     }
 
-    if (completeButton) {
-      completeButton.style.display =
-        "none";
+    if (label) {
+      label.textContent =
+        "Заказ завершён";
     }
 
-    if (completedBlock) {
-      completedBlock.style.display =
-        "block";
+    if (title) {
+      title.textContent =
+        "Готово!";
     }
+
+    if (description) {
+      description.textContent =
+        "Спасибо, что воспользовались сервисом";
+    }
+
 
     setCurrentActiveOrderId(
       null
@@ -735,14 +844,11 @@ export async function completeCurrentOrder() {
 
   } finally {
 
-    setIsCompletingOrder(
-      false
-    );
+    setIsCompletingOrder(false);
 
     if (button) {
 
-      button.disabled =
-        false;
+      button.disabled = false;
 
       button.textContent =
         "Завершить заказ";
@@ -751,55 +857,64 @@ export async function completeCurrentOrder() {
 }
 
 
-/* =========================================================
-   ЭКРАН ЗАКАЗОВ
-========================================================= */
+// ======================================================
+// ЗАГРУЗКА ИСТОРИИ ЗАКАЗОВ
+// ======================================================
 
 export async function loadOrdersScreen() {
 
-  showScreen(
-    "orders"
-  );
+  showScreen("orders");
+
 
   const container =
     document.getElementById(
-      "orders-list"
+      "orders-container"
     );
 
-  if (!container) return;
+  if (!container) {
+    return;
+  }
+
 
   container.innerHTML = `
-    <div class="loading">
-      Загружаем заказы...
+    <div class="text-center py-10">
+      <div class="text-gray-500">
+        Загружаем заказы...
+      </div>
     </div>
   `;
+
 
   try {
 
     const {
       data,
       error
-    } = await supabaseClient.functions.invoke(
-      "quick-processor",
-      {
-        body: {
+    } =
+      await supabaseClient
+        .functions
+        .invoke(
+          "quick-processor",
+          {
+            body: {
+              action:
+                "get_orders",
 
-          action:
-            "get_orders",
+              telegram_user_id:
+                getTelegramUserId()
+            }
+          }
+        );
 
-          telegram_user_id:
-            getTelegramUserId()
-
-        }
-      }
-    );
 
     if (error) {
       throw error;
     }
 
+
     const orders =
       data?.orders || [];
+
 
     setCurrentOrders(
       orders
@@ -816,19 +931,20 @@ export async function loadOrdersScreen() {
       error
     );
 
-    container.innerHTML = `
-      <div class="empty-state">
 
-        <div class="empty-state-icon">
+    container.innerHTML = `
+      <div class="bg-white rounded-2xl p-6 text-center shadow-sm">
+
+        <div class="text-4xl mb-3">
           ⚠️
         </div>
 
-        <div class="empty-state-title">
+        <div class="font-semibold text-lg mb-2">
           Не удалось загрузить заказы
         </div>
 
         <button
-          class="secondary-button"
+          class="mt-4 px-5 py-3 rounded-xl bg-[#ff4f87] text-white"
           onclick="loadOrdersScreen()"
         >
           Повторить
@@ -840,9 +956,9 @@ export async function loadOrdersScreen() {
 }
 
 
-/* =========================================================
-   ОТОБРАЖЕНИЕ ЗАКАЗОВ
-========================================================= */
+// ======================================================
+// ОТОБРАЖЕНИЕ ИСТОРИИ
+// ======================================================
 
 export function renderOrders(
   orders
@@ -850,10 +966,13 @@ export function renderOrders(
 
   const container =
     document.getElementById(
-      "orders-list"
+      "orders-container"
     );
 
-  if (!container) return;
+  if (!container) {
+    return;
+  }
+
 
   if (
     !orders ||
@@ -861,17 +980,17 @@ export function renderOrders(
   ) {
 
     container.innerHTML = `
-      <div class="empty-state">
+      <div class="text-center py-12">
 
-        <div class="empty-state-icon">
+        <div class="text-5xl mb-4">
           📦
         </div>
 
-        <div class="empty-state-title">
+        <div class="font-semibold text-lg mb-2">
           Заказов пока нет
         </div>
 
-        <div class="empty-state-text">
+        <div class="text-gray-500">
           Здесь появится история ваших заказов.
         </div>
 
@@ -880,6 +999,7 @@ export function renderOrders(
 
     return;
   }
+
 
   container.innerHTML =
     orders
@@ -891,9 +1011,9 @@ export function renderOrders(
 }
 
 
-/* =========================================================
-   КАРТОЧКА ЗАКАЗА
-========================================================= */
+// ======================================================
+// КАРТОЧКА ЗАКАЗА
+// ======================================================
 
 export function createOrderCard(
   order
@@ -904,19 +1024,20 @@ export function createOrderCard(
       order.status
     );
 
+
   return `
-    <div class="order-card">
+    <div class="bg-white rounded-2xl p-4 shadow-sm mb-3">
 
-      <div class="order-card-header">
+      <div class="flex justify-between items-start mb-3">
 
-        <div class="order-card-title">
+        <div class="font-semibold text-base">
           ${escapeHtml(
             order.service ||
             "Заказ"
           )}
         </div>
 
-        <div class="order-card-price">
+        <div class="font-bold">
           ${Number(
             order.price || 0
           )} ₽
@@ -924,7 +1045,8 @@ export function createOrderCard(
 
       </div>
 
-      <div class="order-card-address">
+
+      <div class="text-sm text-gray-600 mb-3">
 
         📍 ${escapeHtml(
           order.address ||
@@ -933,17 +1055,22 @@ export function createOrderCard(
 
       </div>
 
-      <div class="order-card-info">
 
-        <span>
+      <div class="flex justify-between items-center text-sm">
+
+        <span class="${status.className}">
+
           ${status.icon}
-          ${status.text}
+          ${status.label}
+
         </span>
 
-        <span>
+        <span class="text-gray-400">
+
           ${formatDate(
             order.created_at
           )}
+
         </span>
 
       </div>
@@ -953,9 +1080,9 @@ export function createOrderCard(
 }
 
 
-/* =========================================================
-   СТАТУС ЗАКАЗА
-========================================================= */
+// ======================================================
+// СТАТУС ЗАКАЗА
+// ======================================================
 
 export function getStatusInfo(
   status
@@ -964,27 +1091,54 @@ export function getStatusInfo(
   switch (status) {
 
     case "searching":
+
       return {
         icon: "🔍",
-        text: "Ищем исполнителя"
+        label: "Ищем исполнителя",
+        className:
+          "text-yellow-600"
       };
+
 
     case "accepted":
+
       return {
         icon: "🚗",
-        text: "Исполнитель найден"
+        label: "Исполнитель найден",
+        className:
+          "text-blue-600"
       };
+
 
     case "completed":
+
       return {
         icon: "✅",
-        text: "Завершён"
+        label: "Завершён",
+        className:
+          "text-green-600"
       };
 
+
+    case "cancelled":
+
+      return {
+        icon: "❌",
+        label: "Отменён",
+        className:
+          "text-red-600"
+      };
+
+
     default:
+
       return {
         icon: "📋",
-        text: status || "Неизвестно"
+        label:
+          status ||
+          "Неизвестно",
+        className:
+          "text-gray-500"
       };
   }
 }
