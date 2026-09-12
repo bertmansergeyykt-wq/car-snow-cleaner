@@ -1,4 +1,4 @@
-'<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -10,16 +10,12 @@
 
   <title>Snow Patrol</title>
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Yandex Maps 2.1 -->
   <script
     src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=c355cb46-e31f-4942-a74d-336abc2cb19a"
     type="text/javascript"
@@ -204,7 +200,9 @@
 
 <div id="app">
 
+  <!-- ========================================================= -->
   <!-- HOME -->
+  <!-- ========================================================= -->
 
   <section
     id="screen-home"
@@ -343,7 +341,6 @@
           class="flex flex-col items-center justify-center text-[#ff4f87]"
         >
           <span class="text-xl">🏠</span>
-
           <span class="text-[11px] font-semibold mt-1">
             Главная
           </span>
@@ -355,7 +352,6 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">📋</span>
-
           <span class="text-[11px] font-semibold mt-1">
             Заказы
           </span>
@@ -367,7 +363,6 @@
           class="flex flex-col items-center justify-center text-gray-400"
         >
           <span class="text-xl">👤</span>
-
           <span class="text-[11px] font-semibold mt-1">
             Профиль
           </span>
@@ -380,7 +375,9 @@
   </section>
 
 
+  <!-- ========================================================= -->
   <!-- MAP -->
+  <!-- ========================================================= -->
 
   <section
     id="screen-map"
@@ -464,7 +461,9 @@
   </section>
 
 
+  <!-- ========================================================= -->
   <!-- SERVICES -->
+  <!-- ========================================================= -->
 
   <section
     id="screen-services"
@@ -545,7 +544,6 @@
 
           </button>
 
-
           <button
             type="button"
             data-service="Буксировка тросом"
@@ -579,7 +577,6 @@
             </div>
 
           </button>
-
 
           <button
             type="button"
@@ -638,7 +635,9 @@
   </section>
 
 
+  <!-- ========================================================= -->
   <!-- SEARCHING -->
+  <!-- ========================================================= -->
 
   <section
     id="screen-searching"
@@ -647,25 +646,57 @@
 
     <div class="flex-1 flex flex-col items-center justify-center px-6 text-center">
 
-      <div class="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center mb-7">
-
+      <div
+        id="searching-icon"
+        class="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center mb-7"
+      >
         <div class="spinner"></div>
-
       </div>
 
-      <div class="text-sm font-semibold text-[#ff4f87] uppercase">
+      <div
+        id="searching-label"
+        class="text-sm font-semibold text-[#ff4f87] uppercase"
+      >
         Заказ создан
       </div>
 
-      <h2 class="text-3xl font-black text-gray-900 mt-2">
+      <h2
+        id="searching-title"
+        class="text-3xl font-black text-gray-900 mt-2"
+      >
         Ищем исполнителя
       </h2>
 
-      <p class="text-gray-500 mt-3 leading-relaxed">
+      <p
+        id="searching-description"
+        class="text-gray-500 mt-3 leading-relaxed"
+      >
         Ищем ближайшего свободного исполнителя.
         Как только кто-то примет заказ,
         статус изменится.
       </p>
+
+      <div
+        id="performer-card"
+        class="hidden mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm"
+      >
+
+        <div class="text-xs uppercase font-semibold text-gray-400">
+          Исполнитель
+        </div>
+
+        <div
+          id="performer-name"
+          class="text-2xl font-black text-gray-900 mt-1"
+        >
+          —
+        </div>
+
+        <div class="text-sm text-gray-500 mt-2">
+          Свободный исполнитель найден
+        </div>
+
+      </div>
 
       <div class="mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm">
 
@@ -699,7 +730,9 @@
   </section>
 
 
+  <!-- ========================================================= -->
   <!-- ORDERS -->
+  <!-- ========================================================= -->
 
   <section
     id="screen-orders"
@@ -804,7 +837,9 @@
   </section>
 
 
+  <!-- ========================================================= -->
   <!-- PROFILE -->
+  <!-- ========================================================= -->
 
   <section
     id="screen-profile"
@@ -924,7 +959,6 @@
       return telegramId;
 
     }
-
 
     return 123456789;
 
@@ -1534,6 +1568,148 @@
 
 
   // ============================================================
+  // SHOW SEARCHING
+  // ============================================================
+
+  function showSearching(orderId) {
+
+    const icon =
+      document.getElementById(
+        "searching-icon"
+      );
+
+    const label =
+      document.getElementById(
+        "searching-label"
+      );
+
+    const title =
+      document.getElementById(
+        "searching-title"
+      );
+
+    const description =
+      document.getElementById(
+        "searching-description"
+      );
+
+    const performerCard =
+      document.getElementById(
+        "performer-card"
+      );
+
+
+    icon.innerHTML = `
+      <div class="spinner"></div>
+    `;
+
+
+    label.textContent =
+      "Заказ создан";
+
+
+    title.textContent =
+      "Ищем исполнителя";
+
+
+    description.textContent =
+      "Ищем ближайшего свободного исполнителя.";
+
+
+    performerCard.classList.add(
+      "hidden"
+    );
+
+
+    document.getElementById(
+      "success-order-number"
+    ).textContent =
+      "#" + orderId;
+
+
+    showScreen("searching");
+
+  }
+
+
+  // ============================================================
+  // SHOW FOUND PERFORMER
+  // ============================================================
+
+  function showPerformerFound(
+    orderId,
+    performer
+  ) {
+
+    const icon =
+      document.getElementById(
+        "searching-icon"
+      );
+
+    const label =
+      document.getElementById(
+        "searching-label"
+      );
+
+    const title =
+      document.getElementById(
+        "searching-title"
+      );
+
+    const description =
+      document.getElementById(
+        "searching-description"
+      );
+
+    const performerCard =
+      document.getElementById(
+        "performer-card"
+      );
+
+
+    icon.innerHTML = `
+      <div class="text-5xl">
+        🚗
+      </div>
+    `;
+
+
+    label.textContent =
+      "Исполнитель найден";
+
+
+    title.textContent =
+      "Помощь уже в пути";
+
+
+    description.textContent =
+      "Мы нашли свободного исполнителя для вашего заказа.";
+
+
+    document.getElementById(
+      "performer-name"
+    ).textContent =
+      performer?.name ||
+      "Исполнитель";
+
+
+    performerCard.classList.remove(
+      "hidden"
+    );
+
+
+    document.getElementById(
+      "success-order-number"
+    ).textContent =
+      "#" + orderId;
+
+
+    showScreen("searching");
+
+  }
+
+
+  // ============================================================
   // CREATE ORDER
   // ============================================================
 
@@ -1672,16 +1848,10 @@
       );
 
 
+      let foundPerformer = null;
+
+
       try {
-
-        console.log(
-          "Вызов quick-processor:find_performer",
-          {
-            latitude: Number(data.latitude),
-            longitude: Number(data.longitude)
-          }
-        );
-
 
         const {
           data: executorResult,
@@ -1713,7 +1883,7 @@
 
 
         console.log(
-          "quick-processor ответ:",
+          "Результат поиска исполнителя:",
           executorResult
         );
 
@@ -1731,24 +1901,33 @@
             executorError.message
           );
 
+        } else if (
+          executorResult?.error
+        ) {
+
+          alert(
+            "Ошибка поиска исполнителя:\n\n" +
+            executorResult.error
+          );
+
+        } else if (
+          executorResult?.performer
+        ) {
+
+          foundPerformer =
+            executorResult.performer;
+
+
+          console.log(
+            "Исполнитель найден:",
+            foundPerformer
+          );
+
         } else {
 
           console.log(
-            "Результат поиска исполнителя:",
-            executorResult
+            "Свободный исполнитель не найден."
           );
-
-
-          if (
-            executorResult?.error
-          ) {
-
-            alert(
-              "Ошибка quick-processor:\n\n" +
-              executorResult.error
-            );
-
-          }
 
         }
 
@@ -1761,18 +1940,15 @@
 
 
         alert(
-          "Не удалось вызвать quick-processor:\n\n" +
-          (
-            executorError?.message ||
-            String(executorError)
-          )
+          "Не удалось найти исполнителя:\n\n" +
+          executorError.message
         );
 
       }
 
 
       // ======================================================
-      // 3. ДОБАВЛЯЕМ В ЛОКАЛЬНЫЙ СПИСОК
+      // 3. СОХРАНЯЕМ ЗАКАЗ В ЛОКАЛЬНЫЙ СПИСОК
       // ======================================================
 
       currentOrders = [
@@ -1782,16 +1958,23 @@
 
 
       // ======================================================
-      // 4. ПОКАЗЫВАЕМ ПОИСК
+      // 4. ПОКАЗЫВАЕМ РЕЗУЛЬТАТ
       // ======================================================
 
-      document.getElementById(
-        "success-order-number"
-      ).textContent =
-        "#" + data.id;
+      if (foundPerformer) {
 
+        showPerformerFound(
+          data.id,
+          foundPerformer
+        );
 
-      showScreen("searching");
+      } else {
+
+        showSearching(
+          data.id
+        );
+
+      }
 
 
     } catch (error) {
