@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -20,6 +21,7 @@
 
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
   <style>
 
@@ -385,6 +387,55 @@
         0 3px 15px rgba(0, 0, 0, 0.05);
     }
 
+    .order-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow:
+        0 3px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .order-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .order-card-number {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .order-status {
+      padding: 7px 10px;
+      border-radius: 20px;
+      background: #fff0f5;
+      color: #ed3972;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .order-row {
+      margin-top: 12px;
+    }
+
+    .order-label {
+      font-size: 12px;
+      color: #98a2b3;
+      margin-bottom: 4px;
+    }
+
+    .order-value {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #172033;
+    }
+
     .empty-state {
       background: white;
       border-radius: 20px;
@@ -468,13 +519,13 @@
     }
 
     .badge {
+      display: none;
       position: absolute;
       top: 1px;
       right: 22%;
       min-width: 18px;
       height: 18px;
       padding: 0 5px;
-      display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 20px;
@@ -482,6 +533,10 @@
       color: white;
       font-size: 10px;
       font-weight: 800;
+    }
+
+    .badge.visible {
+      display: flex;
     }
 
     @media (max-width: 380px) {
@@ -557,6 +612,7 @@
     </div>
 
   </section>
+
 
   <!-- КАРТА -->
 
@@ -644,6 +700,7 @@
     </div>
 
   </section>
+
 
   <!-- УСЛУГИ -->
 
@@ -745,6 +802,7 @@
 
   </section>
 
+
   <!-- ЗАКАЗЫ -->
 
   <section
@@ -758,18 +816,25 @@
         Мои заказы
       </h2>
 
-      <div class="empty-state">
+      <div id="orders-container">
 
-        <div class="empty-icon">
-          📋
-        </div>
+        <div
+          id="orders-empty"
+          class="empty-state"
+        >
 
-        <div class="empty-title">
-          Здесь пока пусто
-        </div>
+          <div class="empty-icon">
+            📋
+          </div>
 
-        <div class="empty-description">
-          Ваши заказы появятся здесь.
+          <div class="empty-title">
+            Здесь пока пусто
+          </div>
+
+          <div class="empty-description">
+            Ваши заказы появятся здесь.
+          </div>
+
         </div>
 
       </div>
@@ -777,6 +842,7 @@
     </div>
 
   </section>
+
 
   <!-- СООБЩЕНИЯ -->
 
@@ -812,6 +878,7 @@
 
   </section>
 
+
   <!-- ПРОФИЛЬ -->
 
   <section
@@ -840,6 +907,7 @@
     </div>
 
   </section>
+
 
   <!-- ПОДТВЕРЖДЕНИЕ -->
 
@@ -913,6 +981,7 @@
 
   </section>
 
+
   <!-- УСПЕШНЫЙ ЗАКАЗ -->
 
   <section
@@ -942,11 +1011,19 @@
           <strong id="order-number"></strong>
         </p>
 
+        <button
+          class="button"
+          onclick="showScreen('orders')"
+        >
+          📋 Посмотреть заказ
+        </button>
+
       </div>
 
     </div>
 
   </section>
+
 
   <!-- НИЖНЯЯ НАВИГАЦИЯ -->
 
@@ -968,6 +1045,7 @@
 
     </button>
 
+
     <button
       id="nav-orders"
       class="nav-item"
@@ -982,11 +1060,15 @@
         Заказы
       </div>
 
-      <div class="badge">
+      <div
+        id="orders-badge"
+        class="badge"
+      >
         1
       </div>
 
     </button>
+
 
     <button
       id="nav-messages"
@@ -1003,6 +1085,7 @@
       </div>
 
     </button>
+
 
     <button
       id="nav-profile"
@@ -1024,13 +1107,16 @@
 
 </div>
 
+
 <script>
+
 
   /* =========================
      TELEGRAM
   ========================= */
 
-  const tg = window.Telegram.WebApp;
+  const tg =
+    window.Telegram.WebApp;
 
   tg.ready();
 
@@ -1071,6 +1157,15 @@
     price: null
 
   };
+
+
+  /*
+    Последний созданный заказ.
+    Пока используем его напрямую после
+    успешного создания в Supabase.
+  */
+
+  let createdOrder = null;
 
 
   /* =========================
@@ -1126,24 +1221,16 @@
 
       map =
         new YMap(
-
           mapElement,
-
           {
-
             location: {
-
               center: [
                 60.6122,
                 56.8389
               ],
-
               zoom: 14
-
             }
-
           }
-
         );
 
       map.addChild(
@@ -1194,16 +1281,19 @@
 
       });
 
+
     const target =
       document.getElementById(
         "screen-" + name
       );
+
 
     if (target) {
 
       target.classList.add("active");
 
     }
+
 
     updateNavigation(name);
 
@@ -1224,6 +1314,13 @@
 
     }
 
+
+    if (name === "orders") {
+
+      renderOrders();
+
+    }
+
   }
 
 
@@ -1241,6 +1338,7 @@
 
       });
 
+
     if (name === "location") {
 
       document
@@ -1248,6 +1346,7 @@
         .classList.add("active");
 
     }
+
 
     if (name === "orders") {
 
@@ -1257,6 +1356,7 @@
 
     }
 
+
     if (name === "messages") {
 
       document
@@ -1264,6 +1364,7 @@
         .classList.add("active");
 
     }
+
 
     if (name === "profile") {
 
@@ -1297,9 +1398,12 @@
         "location-next"
       );
 
+
     errorElement.textContent = "";
 
-    nextButton.style.display = "none";
+    nextButton.style.display =
+      "none";
+
 
     if (!map) {
 
@@ -1310,14 +1414,17 @@
 
     }
 
+
     const center =
       map.center;
+
 
     order.longitude =
       center[0];
 
     order.latitude =
       center[1];
+
 
     document.getElementById(
       "coordinates"
@@ -1331,12 +1438,15 @@
 
       order.longitude.toFixed(6);
 
+
     addressInput.style.display =
       "block";
+
 
     addressInput.value = "";
 
     order.address = "";
+
 
     nextButton.style.display =
       "block";
@@ -1377,6 +1487,7 @@
 
       });
 
+
     document
       .getElementById(
         "service-" + id
@@ -1385,11 +1496,14 @@
         "selected"
       );
 
+
     order.service =
       id;
 
+
     order.price =
       services[id].price;
+
 
     document.getElementById(
       "service-next"
@@ -1418,6 +1532,7 @@
 
     }
 
+
     if (
       !order.address.trim()
     ) {
@@ -1430,6 +1545,7 @@
 
     }
 
+
     if (!order.service) {
 
       alert(
@@ -1440,10 +1556,12 @@
 
     }
 
+
     document.getElementById(
       "summary-location"
     ).textContent =
       order.address;
+
 
     document.getElementById(
       "summary-service"
@@ -1452,10 +1570,12 @@
         order.service
       ].name;
 
+
     document.getElementById(
       "summary-price"
     ).textContent =
       order.price + " ₽";
+
 
     document.getElementById(
       "summary-total"
@@ -1464,7 +1584,137 @@
       order.price +
       " ₽";
 
+
     showScreen("summary");
+
+  }
+
+
+  /* =========================
+     ОТОБРАЖЕНИЕ ЗАКАЗА
+  ========================= */
+
+  function renderOrders() {
+
+    const container =
+      document.getElementById(
+        "orders-container"
+      );
+
+    const empty =
+      document.getElementById(
+        "orders-empty"
+      );
+
+
+    if (!createdOrder) {
+
+      empty.style.display =
+        "block";
+
+      return;
+
+    }
+
+
+    empty.style.display =
+      "none";
+
+
+    const date =
+      createdOrder.created_at
+        ? new Date(
+            createdOrder.created_at
+          ).toLocaleString(
+            "ru-RU",
+            {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit"
+            }
+          )
+        : "";
+
+
+    container.innerHTML = `
+
+      <div class="order-card">
+
+        <div class="order-card-header">
+
+          <div class="order-card-number">
+            Заказ #${createdOrder.id}
+          </div>
+
+          <div class="order-status">
+            🔎 Ищем исполнителя
+          </div>
+
+        </div>
+
+
+        <div class="order-row">
+
+          <div class="order-label">
+            Услуга
+          </div>
+
+          <div class="order-value">
+            ${createdOrder.service}
+          </div>
+
+        </div>
+
+
+        <div class="order-row">
+
+          <div class="order-label">
+            Адрес
+          </div>
+
+          <div class="order-value">
+            ${createdOrder.address}
+          </div>
+
+        </div>
+
+
+        <div class="order-row">
+
+          <div class="order-label">
+            Стоимость
+          </div>
+
+          <div class="order-value">
+            ${createdOrder.price} ₽
+          </div>
+
+        </div>
+
+
+        ${
+          date
+            ? `
+              <div class="order-row">
+
+                <div class="order-label">
+                  Создан
+                </div>
+
+                <div class="order-value">
+                  ${date}
+                </div>
+
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+
+    `;
 
   }
 
@@ -1475,107 +1725,135 @@
 
   async function createOrder() {
 
-  const button =
-    document.getElementById(
-      "create-order-button"
-    );
-
-  button.disabled = true;
-
-  button.textContent =
-    "⏳ Создаём заказ...";
-
-  try {
-
-    console.log(
-      "Отправляем заказ в Supabase..."
-    );
-
-    const {
-      data,
-      error
-    } = await supabaseClient
-      .from("orders")
-      .insert({
-
-        latitude:
-          order.latitude,
-
-        longitude:
-          order.longitude,
-
-        address:
-          order.address,
-
-        service:
-          services[
-            order.service
-          ].name,
-
-        price:
-          order.price,
-
-        status:
-          "searching"
-
-      })
-      .select()
-      .single();
+    const button =
+      document.getElementById(
+        "create-order-button"
+      );
 
 
-    if (error) {
+    button.disabled = true;
+
+    button.textContent =
+      "⏳ Создаём заказ...";
+
+
+    try {
+
+      console.log(
+        "Отправляем заказ в Supabase..."
+      );
+
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("orders")
+        .insert({
+
+          latitude:
+            order.latitude,
+
+          longitude:
+            order.longitude,
+
+          address:
+            order.address,
+
+          service:
+            services[
+              order.service
+            ].name,
+
+          price:
+            order.price,
+
+          status:
+            "searching"
+
+        })
+        .select()
+        .single();
+
+
+      if (error) {
+
+        console.error(
+          "Supabase error:",
+          error
+        );
+
+        throw error;
+
+      }
+
+
+      console.log(
+        "Заказ создан:",
+        data
+      );
+
+
+      /*
+        Сохраняем созданный заказ
+        в памяти приложения.
+      */
+
+      createdOrder =
+        data;
+
+
+      document.getElementById(
+        "order-number"
+      ).textContent =
+        "#" + data.id;
+
+
+      /*
+        Показываем красный бейдж
+        на вкладке "Заказы".
+      */
+
+      document
+        .getElementById(
+          "orders-badge"
+        )
+        .classList.add(
+          "visible"
+        );
+
+
+      showScreen("success");
+
+
+    } catch (error) {
 
       console.error(
-        "Supabase error:",
+        "Ошибка создания заказа:",
         error
       );
 
-      throw error;
+
+      alert(
+        "Не удалось создать заказ.\n\n" +
+        error.message
+      );
+
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "🚗 Заказать исполнителя";
 
     }
 
-
-    console.log(
-      "Заказ создан:",
-      data
-    );
-
-
-    document.getElementById(
-      "order-number"
-    ).textContent =
-      "#" + data.id;
-
-
-    showScreen("success");
-
-
-  } catch (error) {
-
-    console.error(
-      "Ошибка создания заказа:",
-      error
-    );
-
-
-    alert(
-      "Не удалось создать заказ.\n\n" +
-      error.message
-    );
-
-
-  } finally {
-
-    button.disabled = false;
-
-    button.textContent =
-      "🚗 Заказать исполнителя";
-
   }
 
-}
 
 </script>
 
 </body>
 </html>
+```
