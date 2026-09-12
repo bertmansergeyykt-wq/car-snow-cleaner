@@ -1,8 +1,6 @@
-'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
-
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -10,24 +8,24 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   >
 
-  <title>Уборка снега</title>
+  <title>Snow Patrol</title>
 
-  <!-- Telegram -->
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Yandex Maps -->
-  <script src="https://api-maps.yandex.ru/v3/?apikey=c355cb46-e31f-4942-a74d-336abc2cb19a&lang=ru_RU"></script>
-
-  <!-- Supabase -->
+  <!-- Supabase JS v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- Yandex Maps API 2.1 -->
+  <script
+    src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=c355cb46-e31f-4942-a74d-336abc2cb19a"
+    type="text/javascript"
+  ></script>
 
   <style>
-
-    * {
-      box-sizing: border-box;
-    }
-
     html,
     body {
       margin: 0;
@@ -35,214 +33,44 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      overscroll-behavior: none;
-    }
-
-    body {
+      background: #fff0f5;
       font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
+        Roboto,
         Arial,
         sans-serif;
-
-      background: #fff0f5;
-      color: #172033;
     }
 
-    button,
-    input {
-      font-family: inherit;
-    }
-
-    button {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .app {
-      position: relative;
+    #app {
       width: 100%;
-      max-width: 520px;
-      height: 100vh;
-      margin: 0 auto;
-      background: #fff0f5;
+      height: 100%;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
 
     .screen {
       display: none;
       width: 100%;
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
+      height: 100%;
     }
 
     .screen.active {
-      display: block;
-    }
-
-    .home-screen {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      padding: 24px 20px 30px;
       display: flex;
-      flex-direction: column;
     }
 
-    .home-top {
-      width: 100%;
-    }
-
-    .logo {
-      font-size: 18px;
-      font-weight: 800;
-      color: #172033;
-    }
-
-    .logo span {
-      color: #ed3972;
-    }
-
-    .home-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-bottom: 40px;
-    }
-
-    .snow-icon {
-      font-size: 70px;
-      margin-bottom: 20px;
-    }
-
-    .home-title {
-      margin: 0 0 16px;
-      font-size: 36px;
-      line-height: 1.08;
-      font-weight: 800;
-      letter-spacing: -1px;
-    }
-
-    .home-description {
-      margin: 0;
-      max-width: 400px;
-      font-size: 17px;
-      line-height: 1.5;
-      color: #667085;
-    }
-
-    .main-order-button {
-      width: calc(100% + 20px);
-      margin-left: -10px;
-      border: none;
-      border-radius: 18px;
-      padding: 18px 20px;
-      background: #ff4f87;
-      color: white;
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow:
-        0 8px 20px rgba(255, 79, 135, 0.25);
-    }
-
-    .main-order-button:active {
-      transform: scale(0.98);
-    }
-
-    .content-screen {
-      width: 100%;
-      height: 100%;
-      padding: 24px 18px 30px;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-    }
-
-    .section-title {
-      margin: 15px 0 8px;
-      font-size: 28px;
-      line-height: 1.15;
-      font-weight: 800;
-    }
-
-    .section-description {
-      margin: 0 0 20px;
-      color: #667085;
-      font-size: 16px;
-      line-height: 1.5;
-    }
-
-    .button {
-      width: 100%;
-      border: 0;
-      border-radius: 16px;
-      padding: 17px 20px;
-      margin-top: 14px;
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-      background: #ff4f87;
-      color: white;
-      box-shadow:
-        0 6px 16px rgba(255, 79, 135, 0.18);
-    }
-
-    .button:active {
-      transform: scale(0.98);
-    }
-
-    .button.secondary {
-      background: #f2dce5;
-      color: #172033;
-      box-shadow: none;
+    .safe-bottom {
+      padding-bottom: max(
+        20px,
+        env(safe-area-inset-bottom)
+      );
     }
 
     .map-screen {
       position: relative;
       width: 100%;
       height: 100%;
-      background: #f4f7fb;
-    }
-
-    .top-header {
-      width: 100%;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 18px;
-      background: #ff4f87;
-      color: white;
-    }
-
-    .header-back {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: transparent;
-      color: white;
-      font-size: 28px;
-      line-height: 1;
-      cursor: pointer;
-    }
-
-    .header-title {
-      font-size: 17px;
-      font-weight: 800;
-    }
-
-    .map-container {
-      position: relative;
-      width: 100%;
-      height: calc(100% - 52px);
-      overflow: hidden;
+      background: #fff;
     }
 
     #map {
@@ -250,448 +78,381 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      touch-action: none;
+    }
+
+    .map-overlay {
+      position: absolute;
+      z-index: 10;
+      left: 16px;
+      right: 16px;
+      top: 16px;
+    }
+
+    .map-bottom-panel {
+      position: absolute;
+      z-index: 20;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      border-radius: 28px 28px 0 0;
+      padding: 18px 16px;
+      box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.12);
     }
 
     .map-marker {
       position: absolute;
+      z-index: 15;
       left: 50%;
-      top: 40%;
+      top: 50%;
       transform: translate(-50%, -100%);
-      z-index: 1000;
-      font-size: 42px;
       pointer-events: none;
-      filter:
-        drop-shadow(
-          0 3px 3px rgba(0, 0, 0, 0.25)
-        );
     }
 
-    .map-card {
-      position: absolute;
-      left: 14px;
-      right: 14px;
-      bottom: 14px;
-      z-index: 1500;
-      padding: 18px;
-      background: white;
-      border-radius: 22px;
-      box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.12);
-    }
-
-    .map-card-title {
-      font-size: 19px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-
-    .map-card-description {
-      font-size: 14px;
-      line-height: 1.4;
-      color: #667085;
-      margin-bottom: 14px;
-    }
-
-    .select-location-button {
-      width: 100%;
-      border: none;
-      border-radius: 14px;
-      padding: 15px;
+    .marker-pin {
+      width: 42px;
+      height: 42px;
+      border-radius: 50% 50% 50% 0;
       background: #ff4f87;
-      color: white;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(255, 79, 135, 0.4);
     }
 
-    .select-location-button:active {
+    .marker-pin-inner {
+      width: 15px;
+      height: 15px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .service-card {
+      transition:
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .service-card:active {
       transform: scale(0.98);
     }
 
-    .select-location-button:disabled {
-      opacity: 0.7;
-      cursor: default;
-    }
-
-    .address-input {
-      width: 100%;
-      margin-top: 12px;
-      border: 1px solid #d9dee7;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 16px;
-      outline: none;
-      background: #fff;
-      color: #172033;
-    }
-
-    .address-input:focus {
-      border-color: #ff4f87;
-    }
-
-    .coordinates {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #98a2b3;
-    }
-
-    .error {
-      color: #d92d20;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-
-    .service {
-      background: white;
-      border: 2px solid transparent;
-      border-radius: 18px;
-      padding: 18px;
-      margin-top: 14px;
-      cursor: pointer;
-      box-shadow:
-        0 3px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .service.selected {
+    .service-card.selected {
       border-color: #ff4f87;
       background: #fff0f5;
-    }
-
-    .service-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .service-description {
-      color: #667085;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .service-price {
-      margin-top: 12px;
-      font-size: 18px;
-      font-weight: 700;
-      color: #ed3972;
-    }
-
-    .profile-card {
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      margin-top: 20px;
       box-shadow:
-        0 3px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .order-card {
-      background: white;
-      border-radius: 20px;
-      padding: 20px;
-      margin-top: 20px;
-      box-shadow:
-        0 3px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .order-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .order-card-number {
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .order-status {
-      padding: 7px 10px;
-      border-radius: 20px;
-      background: #fff0f5;
-      color: #ed3972;
-      font-size: 12px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .order-row {
-      margin-top: 12px;
-    }
-
-    .order-label {
-      font-size: 12px;
-      color: #98a2b3;
-      margin-bottom: 4px;
-    }
-
-    .order-value {
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 1.4;
-      color: #172033;
-    }
-
-    .empty-state {
-      background: white;
-      border-radius: 20px;
-      padding: 40px 20px;
-      margin-top: 20px;
-      text-align: center;
-      box-shadow:
-        0 3px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .empty-icon {
-      font-size: 52px;
-      margin-bottom: 15px;
-    }
-
-    .empty-title {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .empty-description {
-      color: #667085;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-
-    .profile-avatar {
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 12px;
-      border-radius: 50%;
-      background: #fff0f5;
-      font-size: 30px;
-    }
-
-    .profile-name {
-      font-size: 18px;
-      font-weight: 700;
+        0 0 0 2px rgba(255, 79, 135, 0.12);
     }
 
     .bottom-nav {
-      position: relative;
-      flex-shrink: 0;
-      width: 100%;
-      height: 72px;
-      z-index: 3000;
-      display: flex;
+      padding-bottom: max(
+        8px,
+        env(safe-area-inset-bottom)
+      );
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border: 4px solid #ffd1df;
+      border-top-color: #ff4f87;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .order-status {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-around;
-      padding:
-        7px 8px
-        calc(7px + env(safe-area-inset-bottom));
-      background: rgba(255, 255, 255, 0.97);
-      border-top:
-        1px solid #eeeeee;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
     }
 
-    .nav-item {
-      position: relative;
-      flex: 1;
-      height: 58px;
-      border: none;
-      background: transparent;
-      color: #98a2b3;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
+    .status-searching {
+      color: #a16207;
+      background: #fef3c7;
     }
 
-    .nav-icon {
-      font-size: 21px;
-      margin-bottom: 2px;
+    .status-accepted {
+      color: #166534;
+      background: #dcfce7;
     }
 
-    .nav-item.active {
-      color: #ed3972;
+    .status-completed {
+      color: #1d4ed8;
+      background: #dbeafe;
     }
 
-    .badge {
-      display: none;
-      position: absolute;
-      top: 1px;
-      right: 22%;
-      min-width: 18px;
-      height: 18px;
-      padding: 0 5px;
-      align-items: center;
-      justify-content: center;
-      border-radius: 20px;
-      background: #ed3972;
-      color: white;
-      font-size: 10px;
-      font-weight: 800;
+    .status-cancelled {
+      color: #991b1b;
+      background: #fee2e2;
     }
 
-    .badge.visible {
-      display: flex;
+    .hidden-screen {
+      display: none !important;
     }
-
-    @media (max-width: 380px) {
-
-      .home-title {
-        font-size: 31px;
-      }
-
-      .home-description {
-        font-size: 15px;
-      }
-
-      .map-card {
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
-        padding: 15px;
-      }
-
-    }
-
   </style>
-
 </head>
 
 <body>
 
-<div class="app">
+<div id="app">
 
-  <!-- ГЛАВНЫЙ ЭКРАН -->
+  <!-- ========================================================= -->
+  <!-- HOME -->
+  <!-- ========================================================= -->
 
   <section
     id="screen-home"
-    class="screen active"
+    class="screen active flex-col bg-[#fff0f5]"
   >
 
-    <div class="home-screen">
+    <div class="flex-1 overflow-y-auto">
 
-      <div class="home-top">
+      <div class="px-5 pt-8">
 
-        <div class="logo">
-          ❄️ <span>Снего</span>уборка
+        <div class="mb-8">
+
+          <div class="text-sm font-semibold text-[#ff4f87] mb-2">
+            SNOW PATROL
+          </div>
+
+          <h1 class="text-3xl font-black text-gray-900 leading-tight">
+            Помощь вашему<br>
+            автомобилю
+          </h1>
+
+          <p class="mt-3 text-gray-500 leading-relaxed">
+            Если автомобиль застрял в снегу —
+            вызовите исполнителя прямо через приложение.
+          </p>
+
         </div>
+
+        <button
+          type="button"
+          onclick="openMapScreen()"
+          class="w-full rounded-3xl bg-[#ff4f87] text-white px-6 py-7 shadow-lg shadow-pink-200 active:scale-[0.98] transition"
+        >
+
+          <div class="text-5xl mb-4">
+            🚗
+          </div>
+
+          <div class="text-2xl font-black">
+            Заказать помощь
+          </div>
+
+          <div class="mt-2 text-sm text-pink-100">
+            Укажите место автомобиля
+          </div>
+
+        </button>
 
       </div>
 
-      <div class="home-content">
+      <div class="px-5 mt-6 pb-8">
 
-        <div class="snow-icon">
-          ❄️
+        <div class="bg-white rounded-3xl p-5 shadow-sm">
+
+          <div class="text-lg font-bold text-gray-900">
+            Как это работает?
+          </div>
+
+          <div class="mt-5 space-y-5">
+
+            <div class="flex gap-4">
+              <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
+                📍
+              </div>
+
+              <div>
+                <div class="font-bold text-gray-900">
+                  Укажите место
+                </div>
+
+                <div class="text-sm text-gray-500 mt-1">
+                  Покажите на карте, где находится автомобиль.
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
+                🧹
+              </div>
+
+              <div>
+                <div class="font-bold text-gray-900">
+                  Выберите помощь
+                </div>
+
+                <div class="text-sm text-gray-500 mt-1">
+                  Откапывание, буксировка или комплексная помощь.
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="w-10 h-10 shrink-0 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-xl">
+                🚙
+              </div>
+
+              <div>
+                <div class="font-bold text-gray-900">
+                  Исполнитель приедет
+                </div>
+
+                <div class="text-sm text-gray-500 mt-1">
+                  Система найдёт доступного исполнителя.
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
-        <h1 class="home-title">
-          Уборка снега<br>
-          с автомобиля
-        </h1>
-
-        <p class="home-description">
-          Выберите место автомобиля,
-          а мы найдём человека,
-          который очистит его от снега.
-        </p>
-
       </div>
-
-      <button
-        class="main-order-button"
-        onclick="openLocationScreen()"
-      >
-        🚗 Заказать уборку
-      </button>
 
     </div>
+
+    <!-- Bottom navigation -->
+
+    <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
+
+      <div class="grid grid-cols-3 h-16">
+
+        <button
+          type="button"
+          onclick="showScreen('home')"
+          class="flex flex-col items-center justify-center text-[#ff4f87]"
+        >
+          <span class="text-xl">🏠</span>
+          <span class="text-[11px] font-semibold mt-1">
+            Главная
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onclick="loadOrdersScreen()"
+          class="flex flex-col items-center justify-center text-gray-400"
+        >
+          <span class="text-xl">📋</span>
+          <span class="text-[11px] font-semibold mt-1">
+            Заказы
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onclick="showScreen('profile')"
+          class="flex flex-col items-center justify-center text-gray-400"
+        >
+          <span class="text-xl">👤</span>
+          <span class="text-[11px] font-semibold mt-1">
+            Профиль
+          </span>
+        </button>
+
+      </div>
+
+    </nav>
 
   </section>
 
 
-  <!-- КАРТА -->
+  <!-- ========================================================= -->
+  <!-- MAP -->
+  <!-- ========================================================= -->
 
   <section
-    id="screen-location"
-    class="screen map-screen"
+    id="screen-map"
+    class="screen flex-col"
   >
 
-    <div class="top-header">
-
-      <button
-        class="header-back"
-        onclick="showScreen('home')"
-      >
-        ←
-      </button>
-
-      <div class="header-title">
-        Где автомобиль?
-      </div>
-
-      <div style="width:32px;"></div>
-
-    </div>
-
-    <div class="map-container">
+    <div class="map-screen">
 
       <div id="map"></div>
 
+      <!-- Центрированный маркер -->
+
       <div class="map-marker">
-        📍
+
+        <div class="marker-pin">
+          <div class="marker-pin-inner"></div>
+        </div>
+
       </div>
 
-      <div class="map-card">
+      <!-- Верхняя панель -->
 
-        <div class="map-card-title">
-          Укажите место автомобиля
-        </div>
-
-        <div class="map-card-description">
-          Передвиньте карту так,
-          чтобы метка оказалась
-          возле автомобиля.
-        </div>
+      <div class="map-overlay">
 
         <button
-          id="select-location-button"
-          class="select-location-button"
-          onclick="selectMapLocation()"
+          type="button"
+          onclick="showScreen('home')"
+          class="w-11 h-11 rounded-full bg-white shadow-lg flex items-center justify-center text-xl"
         >
-          📍 Выбрать это место
+          ←
         </button>
 
-        <input
-          id="address"
-          class="address-input"
-          type="text"
-          placeholder="Адрес автомобиля"
-          style="display:none;"
-        >
+      </div>
 
-        <div
-          id="coordinates"
-          class="coordinates"
-        >
-          Координаты ещё не выбраны
+      <!-- Нижняя панель -->
+
+      <div class="map-bottom-panel">
+
+        <div class="text-center mb-3">
+
+          <div class="font-black text-gray-900 text-lg">
+            Где находится автомобиль?
+          </div>
+
+          <div class="text-sm text-gray-500 mt-1">
+            Передвиньте карту так, чтобы маркер оказался
+            над автомобилем
+          </div>
+
         </div>
 
-        <div
-          id="location-error"
-          class="error"
-        ></div>
+        <div class="relative">
+
+          <input
+            id="address-input"
+            type="text"
+            placeholder="Определяем адрес..."
+            class="w-full h-14 rounded-2xl bg-gray-100 px-4 pr-12 outline-none text-gray-900 focus:ring-2 focus:ring-[#ff4f87]"
+          >
+
+          <button
+            type="button"
+            onclick="useCurrentLocation()"
+            class="absolute right-2 top-2 w-10 h-10 rounded-xl bg-white shadow-sm text-lg"
+            title="Моё местоположение"
+          >
+            📍
+          </button>
+
+        </div>
 
         <button
-          id="location-next"
-          class="button"
-          style="display:none; background:white; color:#ed3972;"
-          onclick="showScreen('services')"
+          id="location-next-button"
+          type="button"
+          onclick="continueFromLocation()"
+          class="mt-3 w-full h-14 rounded-2xl bg-[#ff4f87] text-white font-bold text-lg active:scale-[0.98] transition"
         >
-          Продолжить
+          Далее
         </button>
 
       </div>
@@ -701,279 +462,181 @@
   </section>
 
 
-  <!-- УСЛУГИ -->
+  <!-- ========================================================= -->
+  <!-- SERVICES -->
+  <!-- ========================================================= -->
 
   <section
     id="screen-services"
-    class="screen"
+    class="screen flex-col bg-[#fff0f5]"
   >
 
-    <div class="content-screen">
+    <div class="flex-1 overflow-y-auto">
 
-      <div
-        class="header-back"
-        style="color:#ff4f87;"
-        onclick="showScreen('location')"
-      >
-        ←
-      </div>
+      <div class="px-5 pt-6 pb-8">
 
-      <h2 class="section-title">
-        Что нужно сделать?
-      </h2>
-
-      <p class="section-description">
-        Выберите подходящий вариант уборки.
-      </p>
-
-      <div
-        class="service"
-        id="service-1"
-        onclick="selectService(1)"
-      >
-
-        <div class="service-title">
-          ❄️ Убрать снег
-        </div>
-
-        <div class="service-description">
-          Очистка автомобиля от снега.
-        </div>
-
-        <div class="service-price">
-          300 ₽
-        </div>
-
-      </div>
-
-      <div
-        class="service"
-        id="service-2"
-        onclick="selectService(2)"
-      >
-
-        <div class="service-title">
-          ❄️ + 🪟 Снег и стёкла
-        </div>
-
-        <div class="service-description">
-          Уборка снега и очистка
-          стёкол автомобиля.
-        </div>
-
-        <div class="service-price">
-          500 ₽
-        </div>
-
-      </div>
-
-      <div
-        class="service"
-        id="service-3"
-        onclick="selectService(3)"
-      >
-
-        <div class="service-title">
-          🚗 Полная очистка
-        </div>
-
-        <div class="service-description">
-          Полная очистка автомобиля
-          от снега и льда.
-        </div>
-
-        <div class="service-price">
-          800 ₽
-        </div>
-
-      </div>
-
-      <button
-        id="service-next"
-        class="button"
-        style="display:none;"
-        onclick="showSummary()"
-      >
-        Продолжить
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- ЗАКАЗЫ -->
-
-  <section
-    id="screen-orders"
-    class="screen"
-  >
-
-    <div class="content-screen">
-
-      <h2 class="section-title">
-        Мои заказы
-      </h2>
-
-      <div id="orders-container">
-
-        <div
-          id="orders-empty"
-          class="empty-state"
+        <button
+          type="button"
+          onclick="showScreen('map')"
+          class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-xl mb-6"
         >
+          ←
+        </button>
 
-          <div class="empty-icon">
-            📋
-          </div>
-
-          <div class="empty-title">
-            Здесь пока пусто
-          </div>
-
-          <div class="empty-description">
-            Ваши заказы появятся здесь.
-          </div>
-
+        <div class="text-sm font-semibold text-[#ff4f87]">
+          ШАГ 2
         </div>
 
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- СООБЩЕНИЯ -->
-
-  <section
-    id="screen-messages"
-    class="screen"
-  >
-
-    <div class="content-screen">
-
-      <h2 class="section-title">
-        Сообщения
-      </h2>
-
-      <div class="empty-state">
-
-        <div class="empty-icon">
-          💬
-        </div>
-
-        <div class="empty-title">
-          Пока нет сообщений
-        </div>
-
-        <div class="empty-description">
-          Здесь будут сообщения
-          по вашим заказам.
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ПРОФИЛЬ -->
-
-  <section
-    id="screen-profile"
-    class="screen"
-  >
-
-    <div class="content-screen">
-
-      <h2 class="section-title">
-        Профиль
-      </h2>
-
-      <div class="profile-card">
-
-        <div class="profile-avatar">
-          👤
-        </div>
-
-        <div class="profile-name">
-          Пользователь Telegram
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ПОДТВЕРЖДЕНИЕ -->
-
-  <section
-    id="screen-summary"
-    class="screen"
-  >
-
-    <div class="content-screen">
-
-      <div
-        class="header-back"
-        style="color:#ff4f87;"
-        onclick="showScreen('services')"
-      >
-        ←
-      </div>
-
-      <h2 class="section-title">
-        Проверьте заказ
-      </h2>
-
-      <div class="profile-card">
-
-        <p>
-          <strong>Адрес</strong>
-        </p>
-
-        <p id="summary-location">
-          —
-        </p>
-
-        <p>
-          <strong>Услуга</strong>
-        </p>
-
-        <p id="summary-service">
-          —
-        </p>
-
-        <p>
-          <strong>Стоимость</strong>
-        </p>
-
-        <p id="summary-price">
-          —
-        </p>
-
-        <h2 id="summary-total">
-          Итого: —
+        <h2 class="text-3xl font-black text-gray-900 mt-1">
+          Какая помощь нужна?
         </h2>
 
+        <div
+          id="selected-address-preview"
+          class="mt-4 bg-white rounded-2xl p-4 shadow-sm"
+        >
+
+          <div class="text-xs text-gray-400 font-semibold uppercase">
+            Место
+          </div>
+
+          <div
+            id="selected-address-text"
+            class="font-semibold text-gray-900 mt-1"
+          >
+            Адрес не выбран
+          </div>
+
+        </div>
+
+        <div class="mt-5 space-y-3">
+
+          <!-- Service 1 -->
+
+          <button
+            type="button"
+            data-service="Откапывание лопатой"
+            data-price="500"
+            onclick="selectService(this)"
+            class="service-card w-full text-left bg-white border-2 border-transparent rounded-3xl p-5 shadow-sm"
+          >
+
+            <div class="flex items-center gap-4">
+
+              <div class="w-14 h-14 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-3xl">
+                🧹
+              </div>
+
+              <div class="flex-1">
+
+                <div class="font-black text-gray-900 text-lg">
+                  Откапывание лопатой
+                </div>
+
+                <div class="text-sm text-gray-500 mt-1">
+                  Поможем освободить автомобиль из снега.
+                </div>
+
+              </div>
+
+              <div class="font-black text-gray-900">
+                500 ₽
+              </div>
+
+            </div>
+
+          </button>
+
+
+          <!-- Service 2 -->
+
+          <button
+            type="button"
+            data-service="Буксировка тросом"
+            data-price="1000"
+            onclick="selectService(this)"
+            class="service-card w-full text-left bg-white border-2 border-transparent rounded-3xl p-5 shadow-sm"
+          >
+
+            <div class="flex items-center gap-4">
+
+              <div class="w-14 h-14 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-3xl">
+                🪢
+              </div>
+
+              <div class="flex-1">
+
+                <div class="font-black text-gray-900 text-lg">
+                  Буксировка тросом
+                </div>
+
+                <div class="text-sm text-gray-500 mt-1">
+                  Вытащим автомобиль из снежного плена.
+                </div>
+
+              </div>
+
+              <div class="font-black text-gray-900">
+                1 000 ₽
+              </div>
+
+            </div>
+
+          </button>
+
+
+          <!-- Service 3 -->
+
+          <button
+            type="button"
+            data-service="Комплекс"
+            data-price="1500"
+            onclick="selectService(this)"
+            class="service-card w-full text-left bg-white border-2 border-transparent rounded-3xl p-5 shadow-sm"
+          >
+
+            <div class="flex items-center gap-4">
+
+              <div class="w-14 h-14 rounded-2xl bg-[#fff0f5] flex items-center justify-center text-3xl">
+                🚗
+              </div>
+
+              <div class="flex-1">
+
+                <div class="font-black text-gray-900 text-lg">
+                  Комплекс
+                </div>
+
+                <div class="text-sm text-gray-500 mt-1">
+                  Откапывание и буксировка.
+                </div>
+
+              </div>
+
+              <div class="font-black text-gray-900">
+                1 500 ₽
+              </div>
+
+            </div>
+
+          </button>
+
+        </div>
+
       </div>
+
+    </div>
+
+    <div class="p-5 bg-white border-t border-gray-100 safe-bottom">
 
       <button
         id="create-order-button"
-        class="button"
+        type="button"
         onclick="createOrder()"
+        disabled
+        class="w-full h-14 rounded-2xl bg-gray-300 text-white font-bold text-lg transition"
       >
-        🚗 Заказать исполнителя
-      </button>
-
-      <button
-        class="button secondary"
-        onclick="showScreen('services')"
-      >
-        Изменить заказ
+        Заказать исполнителя
       </button>
 
     </div>
@@ -981,150 +644,306 @@
   </section>
 
 
-  <!-- УСПЕШНЫЙ ЗАКАЗ -->
+  <!-- ========================================================= -->
+  <!-- SEARCHING / SUCCESS -->
+  <!-- ========================================================= -->
 
   <section
-    id="screen-success"
-    class="screen"
+    id="screen-searching"
+    class="screen flex-col bg-[#fff0f5]"
   >
 
-    <div class="content-screen">
+    <div class="flex-1 flex flex-col items-center justify-center px-6 text-center">
 
-      <div class="empty-state">
+      <div class="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center mb-7">
 
-        <div class="empty-icon">
-          ✅
+        <div class="spinner"></div>
+
+      </div>
+
+      <div class="text-sm font-semibold text-[#ff4f87] uppercase">
+        Заказ создан
+      </div>
+
+      <h2 class="text-3xl font-black text-gray-900 mt-2">
+        Ищем исполнителя
+      </h2>
+
+      <p class="text-gray-500 mt-3 leading-relaxed">
+        Ищем ближайшего свободного исполнителя.
+        Как только кто-то примет заказ,
+        статус изменится.
+      </p>
+
+      <div class="mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm">
+
+        <div class="text-xs uppercase font-semibold text-gray-400">
+          Номер заказа
         </div>
 
-        <div class="empty-title">
-          Заказ создан!
+        <div
+          id="success-order-number"
+          class="text-2xl font-black text-gray-900 mt-1"
+        >
+          —
         </div>
 
-        <div class="empty-description">
-          Сейчас мы ищем исполнителя
-          рядом с вашим автомобилем.
+      </div>
+
+    </div>
+
+    <div class="p-5 safe-bottom">
+
+      <button
+        type="button"
+        onclick="loadOrdersScreen()"
+        class="w-full h-14 rounded-2xl bg-[#ff4f87] text-white font-bold text-lg"
+      >
+        📋 Мои заказы
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================= -->
+  <!-- ORDERS -->
+  <!-- ========================================================= -->
+
+  <section
+    id="screen-orders"
+    class="screen flex-col bg-[#fff0f5]"
+  >
+
+    <div class="flex-1 overflow-y-auto">
+
+      <div class="px-5 pt-7 pb-8">
+
+        <div class="flex items-center justify-between">
+
+          <div>
+
+            <div class="text-sm font-semibold text-[#ff4f87]">
+              SNOW PATROL
+            </div>
+
+            <h2 class="text-3xl font-black text-gray-900 mt-1">
+              Мои заказы
+            </h2>
+
+          </div>
+
+          <button
+            type="button"
+            onclick="loadOrdersScreen()"
+            class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center"
+          >
+            ↻
+          </button>
+
         </div>
 
-        <p>
-          Номер заказа:
-          <strong id="order-number"></strong>
-        </p>
+        <div
+          id="orders-container"
+          class="mt-6"
+        >
+
+          <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+
+            <div class="text-4xl">
+              📋
+            </div>
+
+            <div class="font-bold text-gray-900 mt-3">
+              Загружаем заказы
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
+
+      <div class="grid grid-cols-3 h-16">
 
         <button
-          class="button"
-          onclick="showScreen('orders')"
+          type="button"
+          onclick="showScreen('home')"
+          class="flex flex-col items-center justify-center text-gray-400"
         >
-          📋 Посмотреть заказ
+          <span class="text-xl">🏠</span>
+          <span class="text-[11px] font-semibold mt-1">
+            Главная
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onclick="loadOrdersScreen()"
+          class="flex flex-col items-center justify-center text-[#ff4f87]"
+        >
+          <span class="text-xl">📋</span>
+          <span class="text-[11px] font-semibold mt-1">
+            Заказы
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onclick="showScreen('profile')"
+          class="flex flex-col items-center justify-center text-gray-400"
+        >
+          <span class="text-xl">👤</span>
+          <span class="text-[11px] font-semibold mt-1">
+            Профиль
+          </span>
         </button>
 
       </div>
 
-    </div>
+    </nav>
 
   </section>
 
 
-  <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+  <!-- ========================================================= -->
+  <!-- PROFILE -->
+  <!-- ========================================================= -->
 
-  <nav class="bottom-nav">
+  <section
+    id="screen-profile"
+    class="screen flex-col bg-[#fff0f5]"
+  >
 
-    <button
-      id="nav-map"
-      class="nav-item active"
-      onclick="showScreen('location')"
-    >
+    <div class="flex-1 overflow-y-auto px-5 pt-8">
 
-      <div class="nav-icon">
-        🗺
+      <div class="text-sm font-semibold text-[#ff4f87]">
+        SNOW PATROL
       </div>
 
-      <div>
-        Карта
-      </div>
-
-    </button>
-
-
-    <button
-      id="nav-orders"
-      class="nav-item"
-      onclick="showScreen('orders')"
-    >
-
-      <div class="nav-icon">
-        📋
-      </div>
-
-      <div>
-        Заказы
-      </div>
-
-      <div
-        id="orders-badge"
-        class="badge"
-      >
-        1
-      </div>
-
-    </button>
-
-
-    <button
-      id="nav-messages"
-      class="nav-item"
-      onclick="showScreen('messages')"
-    >
-
-      <div class="nav-icon">
-        💬
-      </div>
-
-      <div>
-        Сообщения
-      </div>
-
-    </button>
-
-
-    <button
-      id="nav-profile"
-      class="nav-item"
-      onclick="showScreen('profile')"
-    >
-
-      <div class="nav-icon">
-        👤
-      </div>
-
-      <div>
+      <h2 class="text-3xl font-black text-gray-900 mt-1">
         Профиль
+      </h2>
+
+      <div class="mt-6 bg-white rounded-3xl p-6 shadow-sm">
+
+        <div class="w-16 h-16 rounded-full bg-[#fff0f5] flex items-center justify-center text-3xl">
+          👤
+        </div>
+
+        <div
+          id="profile-user-id"
+          class="mt-4 font-bold text-gray-900"
+        >
+          Пользователь
+        </div>
+
+        <div class="text-sm text-gray-500 mt-1">
+          Telegram
+        </div>
+
       </div>
 
-    </button>
+    </div>
 
-  </nav>
+    <nav class="bottom-nav bg-white border-t border-gray-100 shrink-0">
+
+      <div class="grid grid-cols-3 h-16">
+
+        <button
+          type="button"
+          onclick="showScreen('home')"
+          class="flex flex-col items-center justify-center text-gray-400"
+        >
+          <span class="text-xl">🏠</span>
+          <span class="text-[11px] font-semibold mt-1">
+            Главная
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onclick="loadOrdersScreen()"
+          class="flex flex-col items-center justify-center text-gray-400"
+        >
+          <span class="text-xl">📋</span>
+          <span class="text-[11px] font-semibold mt-1">
+            Заказы
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onclick="showScreen('profile')"
+          class="flex flex-col items-center justify-center text-[#ff4f87]"
+        >
+          <span class="text-xl">👤</span>
+          <span class="text-[11px] font-semibold mt-1">
+            Профиль
+          </span>
+        </button>
+
+      </div>
+
+    </nav>
+
+  </section>
 
 </div>
 
 
 <script>
+  // ============================================================
+  // TELEGRAM
+  // ============================================================
+
+  const telegramWebApp =
+    window.Telegram?.WebApp || null;
+
+  if (telegramWebApp) {
+    telegramWebApp.ready();
+    telegramWebApp.expand();
+  }
 
 
-  /* =========================
-     TELEGRAM
-  ========================= */
+  function getTelegramUserId() {
 
-  const tg =
-    window.Telegram.WebApp;
+    const telegramId =
+      telegramWebApp
+        ?.initDataUnsafe
+        ?.user
+        ?.id;
 
-  tg.ready();
+    if (telegramId) {
+      return telegramId;
+    }
 
-  tg.expand();
+    // Fallback для тестирования
+    // приложения напрямую в браузере.
+
+    return 123456789;
+  }
 
 
-  /* =========================
-     SUPABASE
-  ========================= */
+  function getTelegramUser() {
+
+    return (
+      telegramWebApp
+        ?.initDataUnsafe
+        ?.user || null
+    );
+  }
+
+
+  // ============================================================
+  // SUPABASE
+  // ============================================================
 
   const SUPABASE_URL =
     "https://dghcnwzqqmrsysewnvkn.supabase.co";
@@ -1139,402 +958,445 @@
     );
 
 
-  /* =========================
-     EDGE FUNCTION
-  ========================= */
-
-  const EDGE_FUNCTION_URL =
-    SUPABASE_URL +
-    "/functions/v1/quick-processor";
-
-
-  /* =========================
-     ЗАКАЗ
-  ========================= */
-
-  let order = {
-
-    latitude: null,
-
-    longitude: null,
-
-    address: "",
-
-    service: null,
-
-    price: null
-
-  };
-
-
-  let createdOrder = null;
-
-
-  /*
-    Все загруженные заказы
-  */
-
-  let userOrders = [];
-
-
-  /* =========================
-     УСЛУГИ
-  ========================= */
-
-  const services = {
-
-    1: {
-      name: "Уборка снега",
-      price: 300
-    },
-
-    2: {
-      name: "Снег + стёкла",
-      price: 500
-    },
-
-    3: {
-      name: "Полная очистка",
-      price: 800
-    }
-
-  };
-
-
-  /* =========================
-     КАРТА
-  ========================= */
+  // ============================================================
+  // APP STATE
+  // ============================================================
 
   let map = null;
 
+  let mapPlacemark = null;
+
   let mapInitialized = false;
 
+  let selectedLocation = {
+    latitude: null,
+    longitude: null,
+    address: ""
+  };
 
-  async function initMap() {
+  let selectedService = null;
 
-    if (mapInitialized) {
-      return;
+  let currentOrders = [];
+
+  let isCreatingOrder = false;
+
+
+  // ============================================================
+  // SERVICES
+  // ============================================================
+
+  const services = {
+
+    "Откапывание лопатой": {
+      name: "Откапывание лопатой",
+      price: 500
+    },
+
+    "Буксировка тросом": {
+      name: "Буксировка тросом",
+      price: 1000
+    },
+
+    "Комплекс": {
+      name: "Комплекс",
+      price: 1500
     }
 
-    try {
-
-      await ymaps3.ready;
-
-      const {
-        YMap,
-        YMapDefaultSchemeLayer
-      } = ymaps3;
-
-      const mapElement =
-        document.getElementById("map");
-
-      map =
-        new YMap(
-          mapElement,
-          {
-            location: {
-              center: [
-                60.6122,
-                56.8389
-              ],
-              zoom: 14
-            }
-          }
-        );
-
-      map.addChild(
-        new YMapDefaultSchemeLayer()
-      );
-
-      mapInitialized = true;
-
-    } catch (error) {
-
-      console.error(
-        "Ошибка загрузки Яндекс Карты:",
-        error
-      );
-
-      document.getElementById(
-        "location-error"
-      ).textContent =
-        "Не удалось загрузить карту.";
-
-    }
-
-  }
+  };
 
 
-  /* =========================
-     ГЛАВНАЯ → КАРТА
-  ========================= */
+  // ============================================================
+  // SCREEN MANAGEMENT
+  // ============================================================
 
-  function openLocationScreen() {
+  function showScreen(screenName) {
 
-    showScreen("location");
+    const screens =
+      document.querySelectorAll(".screen");
 
-  }
-
-
-  /* =========================
-     ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ
-  ========================= */
-
-  function showScreen(name) {
-
-    document
-      .querySelectorAll(".screen")
-      .forEach(function(screen) {
-
+    screens.forEach(
+      (screen) => {
         screen.classList.remove("active");
-
-      });
-
-
-    const target =
-      document.getElementById(
-        "screen-" + name
-      );
-
-
-    if (target) {
-
-      target.classList.add("active");
-
-    }
-
-
-    updateNavigation(name);
-
-
-    if (name === "location") {
-
-      setTimeout(function() {
-
-        initMap();
-
-        if (map) {
-
-          map.requestReposition();
-
-        }
-
-      }, 100);
-
-    }
-
-
-    if (name === "orders") {
-
-      loadOrders();
-
-    }
-
-  }
-
-
-  /* =========================
-     НАВИГАЦИЯ
-  ========================= */
-
-  function updateNavigation(name) {
-
-    document
-      .querySelectorAll(".nav-item")
-      .forEach(function(item) {
-
-        item.classList.remove("active");
-
-      });
-
-
-    if (name === "location") {
-
-      document
-        .getElementById("nav-map")
-        .classList.add("active");
-
-    }
-
-
-    if (name === "orders") {
-
-      document
-        .getElementById("nav-orders")
-        .classList.add("active");
-
-    }
-
-
-    if (name === "messages") {
-
-      document
-        .getElementById("nav-messages")
-        .classList.add("active");
-
-    }
-
-
-    if (name === "profile") {
-
-      document
-        .getElementById("nav-profile")
-        .classList.add("active");
-
-    }
-
-  }
-
-
-  /* =========================
-     ВЫБОР МЕСТА
-  ========================= */
-
-  async function selectMapLocation() {
-
-    const errorElement =
-      document.getElementById(
-        "location-error"
-      );
-
-    const addressInput =
-      document.getElementById(
-        "address"
-      );
-
-    const nextButton =
-      document.getElementById(
-        "location-next"
-      );
-
-
-    errorElement.textContent = "";
-
-    nextButton.style.display =
-      "none";
-
-
-    if (!map) {
-
-      errorElement.textContent =
-        "Карта ещё загружается.";
-
-      return;
-
-    }
-
-
-    const center =
-      map.center;
-
-
-    order.longitude =
-      center[0];
-
-    order.latitude =
-      center[1];
-
-
-    document.getElementById(
-      "coordinates"
-    ).textContent =
-
-      "Координаты: " +
-
-      order.latitude.toFixed(6) +
-
-      ", " +
-
-      order.longitude.toFixed(6);
-
-
-    addressInput.style.display =
-      "block";
-
-
-    addressInput.value = "";
-
-    order.address = "";
-
-
-    nextButton.style.display =
-      "block";
-
-  }
-
-
-  /* =========================
-     АДРЕС
-  ========================= */
-
-  document
-    .getElementById("address")
-    .addEventListener(
-      "input",
-      function(event) {
-
-        order.address =
-          event.target.value;
-
       }
     );
 
 
-  /* =========================
-     УСЛУГИ
-  ========================= */
-
-  function selectService(id) {
-
-    document
-      .querySelectorAll(".service")
-      .forEach(function(service) {
-
-        service.classList.remove(
-          "selected"
-        );
-
-      });
-
-
-    document
-      .getElementById(
-        "service-" + id
-      )
-      .classList.add(
-        "selected"
+    const target =
+      document.getElementById(
+        "screen-" + screenName
       );
 
 
-    order.service =
-      id;
+    if (!target) {
+      console.error(
+        "Экран не найден:",
+        screenName
+      );
+
+      return;
+    }
 
 
-    order.price =
-      services[id].price;
+    target.classList.add("active");
 
 
-    document.getElementById(
-      "service-next"
-    ).style.display =
-      "block";
+    if (screenName === "map") {
+
+      setTimeout(
+        () => {
+
+          if (map) {
+
+            map.container.fitToViewport();
+
+          }
+
+        },
+        100
+      );
+
+    }
+
+
+    if (screenName === "profile") {
+      renderProfile();
+    }
 
   }
 
 
-  /* =========================
-     ПОДТВЕРЖДЕНИЕ
-  ========================= */
+  // ============================================================
+  // MAP
+  // ============================================================
 
-  function showSummary() {
+  function openMapScreen() {
+
+    showScreen("map");
+
+    setTimeout(
+      () => {
+
+        initializeMap();
+
+      },
+      100
+    );
+
+  }
+
+
+  function initializeMap() {
 
     if (
-      order.latitude === null ||
-      order.longitude === null
+      mapInitialized &&
+      map
+    ) {
+
+      map.container.fitToViewport();
+
+      return;
+
+    }
+
+
+    if (
+      typeof ymaps === "undefined"
     ) {
 
       alert(
-        "Сначала выберите место автомобиля."
+        "Яндекс Карты ещё загружаются. Попробуйте ещё раз."
+      );
+
+      return;
+
+    }
+
+
+    ymaps.ready(
+      () => {
+
+        if (mapInitialized) {
+          return;
+        }
+
+
+        const defaultCenter = [
+          56.8389,
+          60.6057
+        ];
+
+
+        map =
+          new ymaps.Map(
+            "map",
+            {
+              center:
+                defaultCenter,
+
+              zoom: 13,
+
+              controls: [
+                "zoomControl"
+              ]
+            }
+          );
+
+
+        mapInitialized = true;
+
+
+        map.events.add(
+          "actionend",
+          () => {
+
+            const center =
+              map.getCenter();
+
+            if (!center) {
+              return;
+            }
+
+
+            selectedLocation.latitude =
+              center[0];
+
+            selectedLocation.longitude =
+              center[1];
+
+
+            reverseGeocode(
+              center[0],
+              center[1]
+            );
+
+          }
+        );
+
+
+        map.events.add(
+          "click",
+          (event) => {
+
+            const coordinates =
+              event.get(
+                "coords"
+              );
+
+            if (!coordinates) {
+              return;
+            }
+
+
+            setMapLocation(
+              coordinates[0],
+              coordinates[1]
+            );
+
+          }
+        );
+
+
+        setMapLocation(
+          defaultCenter[0],
+          defaultCenter[1]
+        );
+
+      }
+    );
+
+  }
+
+
+  function setMapLocation(
+    latitude,
+    longitude
+  ) {
+
+    selectedLocation.latitude =
+      latitude;
+
+    selectedLocation.longitude =
+      longitude;
+
+
+    if (map) {
+
+      map.setCenter(
+        [
+          latitude,
+          longitude
+        ],
+        16,
+        {
+          duration: 250
+        }
+      );
+
+    }
+
+
+    reverseGeocode(
+      latitude,
+      longitude
+    );
+
+  }
+
+
+  async function reverseGeocode(
+    latitude,
+    longitude
+  ) {
+
+    const input =
+      document.getElementById(
+        "address-input"
+      );
+
+
+    input.value =
+      "Определяем адрес...";
+
+
+    try {
+
+      const result =
+        await ymaps.geocode(
+          [
+            latitude,
+            longitude
+          ],
+          {
+            results: 1
+          }
+        );
+
+
+      const firstGeoObject =
+        result.geoObjects.get(0);
+
+
+      if (!firstGeoObject) {
+
+        input.value =
+          "Адрес не найден";
+
+        selectedLocation.address =
+          "";
+
+        return;
+
+      }
+
+
+      const address =
+        firstGeoObject.getAddressLine();
+
+
+      selectedLocation.address =
+        address || "";
+
+
+      input.value =
+        address ||
+        "Адрес не найден";
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка геокодирования:",
+        error
+      );
+
+
+      input.value =
+        "Не удалось определить адрес";
+
+    }
+
+  }
+
+
+  async function useCurrentLocation() {
+
+    if (
+      !navigator.geolocation
+    ) {
+
+      alert(
+        "Геолокация недоступна в этом браузере."
+      );
+
+      return;
+
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+
+        const latitude =
+          position.coords.latitude;
+
+        const longitude =
+          position.coords.longitude;
+
+
+        setMapLocation(
+          latitude,
+          longitude
+        );
+
+      },
+
+      (error) => {
+
+        console.error(
+          "Ошибка геолокации:",
+          error
+        );
+
+
+        alert(
+          "Не удалось получить ваше местоположение."
+        );
+
+      },
+
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 30000
+      }
+    );
+
+  }
+
+
+  // ============================================================
+  // LOCATION
+  // ============================================================
+
+  function continueFromLocation() {
+
+    const addressInput =
+      document.getElementById(
+        "address-input"
+      );
+
+
+    const manuallyEditedAddress =
+      addressInput.value.trim();
+
+
+    if (
+      !selectedLocation.latitude ||
+      !selectedLocation.longitude
+    ) {
+
+      alert(
+        "Сначала выберите место на карте."
       );
 
       return;
@@ -1543,11 +1405,21 @@
 
 
     if (
-      !order.address.trim()
+      manuallyEditedAddress
+    ) {
+
+      selectedLocation.address =
+        manuallyEditedAddress;
+
+    }
+
+
+    if (
+      !selectedLocation.address
     ) {
 
       alert(
-        "Введите адрес автомобиля."
+        "Не удалось определить адрес. Укажите адрес вручную."
       );
 
       return;
@@ -1555,7 +1427,106 @@
     }
 
 
-    if (!order.service) {
+    document.getElementById(
+      "selected-address-text"
+    ).textContent =
+      selectedLocation.address;
+
+
+    showScreen("services");
+
+  }
+
+
+  // ============================================================
+  // SERVICES
+  // ============================================================
+
+  function selectService(button) {
+
+    const buttons =
+      document.querySelectorAll(
+        ".service-card"
+      );
+
+
+    buttons.forEach(
+      (item) => {
+        item.classList.remove(
+          "selected"
+        );
+      }
+    );
+
+
+    button.classList.add(
+      "selected"
+    );
+
+
+    const serviceName =
+      button.dataset.service;
+
+    const price =
+      Number(
+        button.dataset.price
+      );
+
+
+    selectedService = {
+      name: serviceName,
+      price: price
+    };
+
+
+    const orderButton =
+      document.getElementById(
+        "create-order-button"
+      );
+
+
+    orderButton.disabled =
+      false;
+
+
+    orderButton.classList.remove(
+      "bg-gray-300"
+    );
+
+
+    orderButton.classList.add(
+      "bg-[#ff4f87]"
+    );
+
+  }
+
+
+  // ============================================================
+  // CREATE ORDER
+  // ============================================================
+
+  async function createOrder() {
+
+    if (isCreatingOrder) {
+      return;
+    }
+
+
+    if (
+      !selectedLocation.latitude ||
+      !selectedLocation.longitude
+    ) {
+
+      alert(
+        "Не выбрано место автомобиля."
+      );
+
+      return;
+
+    }
+
+
+    if (!selectedService) {
 
       alert(
         "Выберите услугу."
@@ -1566,161 +1537,276 @@
     }
 
 
-    document.getElementById(
-      "summary-location"
-    ).textContent =
-      order.address;
+    isCreatingOrder = true;
 
 
-    document.getElementById(
-      "summary-service"
-    ).textContent =
-      services[
-        order.service
-      ].name;
+    const button =
+      document.getElementById(
+        "create-order-button"
+      );
 
 
-    document.getElementById(
-      "summary-price"
-    ).textContent =
-      order.price + " ₽";
+    button.disabled =
+      true;
+
+    button.textContent =
+      "Создаём заказ...";
 
 
-    document.getElementById(
-      "summary-total"
-    ).textContent =
-      "Итого: " +
-      order.price +
-      " ₽";
+    const telegramId =
+      getTelegramUserId();
 
 
-    showScreen("summary");
+    try {
+
+      // --------------------------------------------------------
+      // 1. СОЗДАЁМ ЗАКАЗ
+      // --------------------------------------------------------
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("orders")
+          .insert({
+
+            telegram_id:
+              telegramId,
+
+            latitude:
+              selectedLocation.latitude,
+
+            longitude:
+              selectedLocation.longitude,
+
+            address:
+              selectedLocation.address,
+
+            service:
+              selectedService.name,
+
+            price:
+              selectedService.price,
+
+            status:
+              "searching"
+
+          })
+          .select()
+          .single();
+
+
+      if (error) {
+
+        console.error(
+          "Ошибка создания заказа:",
+          error
+        );
+
+        throw new Error(
+          error.message
+        );
+
+      }
+
+
+      if (!data) {
+
+        throw new Error(
+          "Supabase не вернул созданный заказ."
+        );
+
+      }
+
+
+      console.log(
+        "Заказ создан:",
+        data
+      );
+
+
+      // --------------------------------------------------------
+      // 2. КРИТИЧЕСКИ ВАЖНЫЙ ШАГ
+      // СРАЗУ ПОСЛЕ СОЗДАНИЯ ЗАКАЗА
+      // ВЫЗЫВАЕМ find-executor
+      // --------------------------------------------------------
+
+      console.log(
+        "Ищем исполнителя для заказа:",
+        data.id
+      );
+
+
+      const {
+        data: executorResult,
+        error: executorError
+      } =
+        await supabaseClient.functions.invoke(
+          "find-executor",
+          {
+            body: {
+              orderId: data.id
+            }
+          }
+        );
+
+
+      if (executorError) {
+
+        console.error(
+          "Ошибка Edge Function find-executor:",
+          executorError
+        );
+
+        // ВАЖНО:
+        // Сам заказ уже создан.
+        // Поэтому не считаем создание заказа неудачным.
+        //
+        // Показываем пользователю экран поиска,
+        // а функцию можно будет повторить позже.
+
+      } else {
+
+        console.log(
+          "Результат поиска исполнителя:",
+          executorResult
+        );
+
+      }
+
+
+      // --------------------------------------------------------
+      // 3. ДОБАВЛЯЕМ ЗАКАЗ В ЛОКАЛЬНЫЙ СПИСОК
+      // --------------------------------------------------------
+
+      currentOrders = [
+        data,
+        ...currentOrders
+      ];
+
+
+      // --------------------------------------------------------
+      // 4. ПОКАЗЫВАЕМ ЭКРАН ПОИСКА
+      // --------------------------------------------------------
+
+      document.getElementById(
+        "success-order-number"
+      ).textContent =
+        "#" + data.id;
+
+
+      showScreen("searching");
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка:",
+        error
+      );
+
+
+      alert(
+        "Не удалось создать заказ.\n\n" +
+        error.message
+      );
+
+
+    } finally {
+
+      isCreatingOrder =
+        false;
+
+
+      button.disabled =
+        false;
+
+
+      button.textContent =
+        "Заказать исполнителя";
+
+
+      if (
+        selectedService
+      ) {
+
+        button.classList.remove(
+          "bg-gray-300"
+        );
+
+        button.classList.add(
+          "bg-[#ff4f87]"
+        );
+
+      }
+
+    }
 
   }
 
 
-  /* =========================
-     TELEGRAM USER ID
-  ========================= */
+  // ============================================================
+  // ORDERS
+  // ============================================================
 
-  function getTelegramUserId() {
+  async function loadOrdersScreen() {
 
-    const telegramUser =
-      window.Telegram
-        ?.WebApp
-        ?.initDataUnsafe
-        ?.user;
+    showScreen("orders");
 
-    return telegramUser?.id || null;
-
-  }
-
-
-  /* =========================
-     ЗАГРУЗКА ЗАКАЗОВ
-  ========================= */
-
-  async function loadOrders() {
 
     const container =
       document.getElementById(
         "orders-container"
       );
 
-    const telegramUserId =
-      getTelegramUserId();
-
-
-    if (!telegramUserId) {
-
-      console.error(
-        "Telegram user ID не найден"
-      );
-
-      renderOrders();
-
-      return;
-
-    }
-
 
     container.innerHTML = `
-
-      <div class="empty-state">
-
-        <div class="empty-icon">
-          ⏳
-        </div>
-
-        <div class="empty-title">
+      <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
+        <div class="spinner mx-auto"></div>
+        <div class="font-bold text-gray-900 mt-4">
           Загружаем заказы
         </div>
-
-        <div class="empty-description">
-          Пожалуйста, подождите.
-        </div>
-
       </div>
-
     `;
+
+
+    const telegramId =
+      getTelegramUserId();
 
 
     try {
 
-      console.log(
-        "Загружаем заказы пользователя:",
-        telegramUserId
-      );
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("orders")
+          .select("*")
+          .eq(
+            "telegram_id",
+            telegramId
+          )
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
 
 
-      const response =
-        await fetch(
-          EDGE_FUNCTION_URL,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json",
-
-              "Authorization":
-                "Bearer " +
-                SUPABASE_PUBLISHABLE_KEY,
-
-              "apikey":
-                SUPABASE_PUBLISHABLE_KEY
-            },
-
-            body: JSON.stringify({
-              telegram_user_id:
-                telegramUserId
-            })
-          }
-        );
-
-
-      const result =
-        await response.json();
-
-
-      console.log(
-        "Ответ Edge Function:",
-        result
-      );
-
-
-      if (!response.ok) {
+      if (error) {
 
         throw new Error(
-          result.error ||
-          "Ошибка загрузки заказов"
+          error.message
         );
 
       }
 
 
-      userOrders =
-        result.orders || [];
+      currentOrders =
+        data || [];
 
 
       renderOrders();
@@ -1735,33 +1821,35 @@
 
 
       container.innerHTML = `
+        <div class="bg-white rounded-3xl p-6 text-center shadow-sm">
 
-        <div class="empty-state">
-
-          <div class="empty-icon">
+          <div class="text-4xl">
             ⚠️
           </div>
 
-          <div class="empty-title">
+          <div class="font-bold text-gray-900 mt-3">
             Не удалось загрузить заказы
           </div>
 
-          <div class="empty-description">
-            ${error.message}
+          <div class="text-sm text-gray-500 mt-2">
+            ${escapeHtml(error.message)}
           </div>
 
-        </div>
+          <button
+            type="button"
+            onclick="loadOrdersScreen()"
+            class="mt-5 px-5 h-11 rounded-xl bg-[#ff4f87] text-white font-bold"
+          >
+            Повторить
+          </button>
 
+        </div>
       `;
 
     }
 
   }
 
-
-  /* =========================
-     ОТОБРАЖЕНИЕ ЗАКАЗОВ
-  ========================= */
 
   function renderOrders() {
 
@@ -1771,343 +1859,376 @@
       );
 
 
-    if (!userOrders.length) {
+    if (
+      !currentOrders ||
+      currentOrders.length === 0
+    ) {
 
       container.innerHTML = `
+        <div class="bg-white rounded-3xl p-7 text-center shadow-sm">
 
-        <div
-          id="orders-empty"
-          class="empty-state"
-        >
-
-          <div class="empty-icon">
-            📋
+          <div class="text-5xl">
+            🚗
           </div>
 
-          <div class="empty-title">
-            Здесь пока пусто
+          <div class="font-black text-gray-900 text-lg mt-4">
+            Заказов пока нет
           </div>
 
-          <div class="empty-description">
-            Ваши заказы появятся здесь.
+          <div class="text-sm text-gray-500 mt-2">
+            Если автомобиль застрял в снегу,
+            мы поможем.
           </div>
+
+          <button
+            type="button"
+            onclick="openMapScreen()"
+            class="mt-5 w-full h-12 rounded-2xl bg-[#ff4f87] text-white font-bold"
+          >
+            🚗 Заказать помощь
+          </button>
 
         </div>
-
       `;
-
-      document
-        .getElementById(
-          "orders-badge"
-        )
-        .classList.remove(
-          "visible"
-        );
 
       return;
 
     }
 
 
-    document
-      .getElementById(
-        "orders-badge"
-      )
-      .classList.add(
-        "visible"
-      );
-
-
     container.innerHTML =
-      userOrders
-        .map(function(orderItem) {
-
-          const date =
-            orderItem.created_at
-              ? new Date(
-                  orderItem.created_at
-                ).toLocaleString(
-                  "ru-RU",
-                  {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit"
-                  }
-                )
-              : "";
-
-
-          let statusText =
-            "🔎 Ищем исполнителя";
-
-
-          if (
-            orderItem.status ===
-            "accepted"
-          ) {
-
-            statusText =
-              "🚗 Исполнитель найден";
-
-          }
-
-
-          if (
-            orderItem.status ===
-            "completed"
-          ) {
-
-            statusText =
-              "✅ Выполнен";
-
-          }
-
-
-          return `
-
-            <div class="order-card">
-
-              <div class="order-card-header">
-
-                <div class="order-card-number">
-                  Заказ #${orderItem.id}
-                </div>
-
-                <div class="order-status">
-                  ${statusText}
-                </div>
-
-              </div>
-
-
-              <div class="order-row">
-
-                <div class="order-label">
-                  Услуга
-                </div>
-
-                <div class="order-value">
-                  ${orderItem.service || "—"}
-                </div>
-
-              </div>
-
-
-              <div class="order-row">
-
-                <div class="order-label">
-                  Адрес
-                </div>
-
-                <div class="order-value">
-                  ${orderItem.address || "—"}
-                </div>
-
-              </div>
-
-
-              <div class="order-row">
-
-                <div class="order-label">
-                  Стоимость
-                </div>
-
-                <div class="order-value">
-                  ${orderItem.price || 0} ₽
-                </div>
-
-              </div>
-
-
-              ${
-                date
-                  ? `
-                    <div class="order-row">
-
-                      <div class="order-label">
-                        Создан
-                      </div>
-
-                      <div class="order-value">
-                        ${date}
-                      </div>
-
-                    </div>
-                  `
-                  : ""
-              }
-
-            </div>
-
-          `;
-
-        })
+      currentOrders
+        .map(
+          (order) =>
+            createOrderCard(order)
+        )
         .join("");
 
   }
 
 
-  /* =========================
-     СОЗДАНИЕ ЗАКАЗА
-  ========================= */
+  function createOrderCard(order) {
 
-  async function createOrder() {
-
-    const button =
-      document.getElementById(
-        "create-order-button"
+    const status =
+      getStatusInfo(
+        order.status
       );
 
 
-    button.disabled = true;
-
-
-    button.textContent =
-      "⏳ Создаём заказ...";
-
-
-    try {
-
-      console.log(
-        "Отправляем заказ в Supabase..."
+    const date =
+      formatDate(
+        order.created_at
       );
 
 
-      const telegramUserId =
-        getTelegramUserId();
+    return `
+      <div class="bg-white rounded-3xl p-5 shadow-sm mb-3">
+
+        <div class="flex items-start justify-between gap-3">
+
+          <div>
+
+            <div class="text-xs text-gray-400 font-semibold">
+              ЗАКАЗ
+            </div>
+
+            <div class="font-black text-gray-900 text-xl mt-1">
+              #${escapeHtml(String(order.id))}
+            </div>
+
+          </div>
+
+          <span class="order-status ${status.className}">
+            ${status.icon}
+            <span class="ml-1">
+              ${status.label}
+            </span>
+          </span>
+
+        </div>
 
 
-      console.log(
-        "Telegram user ID:",
-        telegramUserId
-      );
+        <div class="mt-5 space-y-3">
+
+          <div>
+
+            <div class="text-xs text-gray-400">
+              Услуга
+            </div>
+
+            <div class="font-semibold text-gray-900 mt-1">
+              ${escapeHtml(order.service || "—")}
+            </div>
+
+          </div>
 
 
-      const {
-        data,
-        error
-      } = await supabaseClient
-        .from("orders")
-        .insert({
+          <div>
 
-          telegram_user_id:
-            telegramUserId,
+            <div class="text-xs text-gray-400">
+              Адрес
+            </div>
 
-          latitude:
-            order.latitude,
+            <div class="font-semibold text-gray-900 mt-1">
+              ${escapeHtml(order.address || "—")}
+            </div>
 
-          longitude:
-            order.longitude,
-
-          address:
-            order.address,
-
-          service:
-            services[
-              order.service
-            ].name,
-
-          price:
-            order.price,
-
-          status:
-            "searching"
-
-        })
-        .select()
-        .single();
+          </div>
 
 
-      if (error) {
+          <div class="flex items-end justify-between">
 
-        console.error(
-          "Supabase error:",
-          error
-        );
+            <div>
 
-        throw error;
+              <div class="text-xs text-gray-400">
+                Создан
+              </div>
 
-      }
+              <div class="font-semibold text-gray-900 mt-1">
+                ${escapeHtml(date)}
+              </div>
 
+            </div>
 
-      console.log(
-        "Заказ создан:",
-        data
-      );
+            <div class="text-xl font-black text-gray-900">
+              ${Number(order.price || 0).toLocaleString("ru-RU")} ₽
+            </div>
 
+          </div>
 
-      createdOrder =
-        data;
+        </div>
 
+      </div>
+    `;
 
-      /*
-        Добавляем новый заказ
-        сразу в локальный список,
-        чтобы он появился мгновенно.
-      */
-
-      userOrders = [
-        data,
-        ...userOrders
-      ];
+  }
 
 
-      document.getElementById(
-        "order-number"
-      ).textContent =
-        "#" + data.id;
+  function getStatusInfo(status) {
+
+    switch (status) {
+
+      case "accepted":
+
+        return {
+          label:
+            "Исполнитель найден",
+          icon:
+            "🚗",
+          className:
+            "status-accepted"
+        };
 
 
-      document
-        .getElementById(
-          "orders-badge"
-        )
-        .classList.add(
-          "visible"
-        );
+      case "completed":
+
+        return {
+          label:
+            "Выполнен",
+          icon:
+            "✅",
+          className:
+            "status-completed"
+        };
 
 
-      showScreen("success");
+      case "cancelled":
+
+        return {
+          label:
+            "Отменён",
+          icon:
+            "❌",
+          className:
+            "status-cancelled"
+        };
 
 
-    } catch (error) {
+      case "searching":
 
-      console.error(
-        "Ошибка создания заказа:",
-        error
-      );
+      default:
 
-
-      alert(
-        "Не удалось создать заказ.\n\n" +
-        error.message
-      );
-
-
-    } finally {
-
-      button.disabled = false;
-
-
-      button.textContent =
-        "🚗 Заказать исполнителя";
+        return {
+          label:
+            "Поиск исполнителя",
+          icon:
+            "🔎",
+          className:
+            "status-searching"
+        };
 
     }
 
   }
 
 
-  /* =========================
-     ПЕРВИЧЕСКАЯ ЗАГРУЗКА
-  ========================= */
+  // ============================================================
+  // PROFILE
+  // ============================================================
 
-  console.log(
-    "Telegram user ID:",
-    getTelegramUserId()
+  function renderProfile() {
+
+    const user =
+      getTelegramUser();
+
+
+    const element =
+      document.getElementById(
+        "profile-user-id"
+      );
+
+
+    if (!element) {
+      return;
+    }
+
+
+    if (user) {
+
+      const name =
+        [
+          user.first_name,
+          user.last_name
+        ]
+          .filter(Boolean)
+          .join(" ");
+
+
+      element.textContent =
+        name ||
+        ("ID: " + user.id);
+
+    } else {
+
+      element.textContent =
+        "Тестовый пользователь";
+
+    }
+
+  }
+
+
+  // ============================================================
+  // UTILITIES
+  // ============================================================
+
+  function formatDate(
+    value
+  ) {
+
+    if (!value) {
+      return "—";
+    }
+
+
+    const date =
+      new Date(value);
+
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+
+      return "—";
+
+    }
+
+
+    return date.toLocaleString(
+      "ru-RU",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+
+  }
+
+
+  function escapeHtml(
+    value
+  ) {
+
+    return String(value)
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+
+  // ============================================================
+  // ADDRESS INPUT
+  // ============================================================
+
+  document
+    .getElementById(
+      "address-input"
+    )
+    .addEventListener(
+      "input",
+      function () {
+
+        selectedLocation.address =
+          this.value.trim();
+
+      }
+    );
+
+
+  // ============================================================
+  // TELEGRAM BACK BUTTON
+  // ============================================================
+
+  if (telegramWebApp) {
+
+    telegramWebApp.BackButton.onClick(
+      () => {
+
+        showScreen("home");
+
+        telegramWebApp.BackButton.hide();
+
+      }
+    );
+
+  }
+
+
+  // ============================================================
+  // INITIALIZATION
+  // ============================================================
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+      renderProfile();
+
+    }
   );
-
 </script>
 
 </body>
