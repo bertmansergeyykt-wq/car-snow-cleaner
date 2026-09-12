@@ -18,288 +18,286 @@
 
   <style>
 
-  * {
-    box-sizing: border-box;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
 
-  body {
-    font-family:
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Arial,
-      sans-serif;
+    body {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 
-    background: #f4f7fb;
-    color: #172033;
-  }
+      background: #f4f7fb;
+      color: #172033;
+    }
 
-  .app {
-    width: 100%;
-    max-width: 520px;
-    height: 100vh;
-    min-height: 100vh;
-    margin: 0 auto;
-    padding: 24px 18px 40px;
-    overflow: hidden;
-  }
+    .app {
+      width: 100%;
+      max-width: 520px;
+      height: 100vh;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+      overflow: hidden;
+    }
 
-  .screen {
-    display: none;
-    height: 100%;
-  }
+    .screen {
+      display: none;
+      height: 100%;
+    }
 
-  .screen.active {
-    display: block;
-  }
+    .screen.active {
+      display: block;
+    }
 
-  .hero {
-    padding-top: 45px;
-  }
+    .hero {
+      padding-top: 45px;
+    }
 
-  .snow {
-    font-size: 64px;
-    margin-bottom: 20px;
-  }
+    .snow {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
 
-  h1 {
-    font-size: 32px;
-    line-height: 1.15;
-    margin: 0 0 14px;
-  }
+    h1 {
+      font-size: 32px;
+      line-height: 1.15;
+      margin: 0 0 14px;
+    }
 
-  h2 {
-    font-size: 27px;
-    margin: 20px 0 10px;
-  }
+    h2 {
+      font-size: 27px;
+      margin: 20px 0 10px;
+    }
 
-  p {
-    font-size: 17px;
-    line-height: 1.5;
-    color: #667085;
-    margin: 0 0 20px;
-  }
+    p {
+      font-size: 17px;
+      line-height: 1.5;
+      color: #667085;
+      margin: 0 0 20px;
+    }
 
-  .button {
-    width: 100%;
-    border: 0;
-    border-radius: 16px;
-    padding: 17px 20px;
-    margin-top: 14px;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    background: #2481cc;
-    color: white;
-  }
+    .button {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 17px 20px;
+      margin-top: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #2481cc;
+      color: white;
+    }
 
-  .button:active {
-    transform: scale(0.98);
-  }
+    .button:active {
+      transform: scale(0.98);
+    }
 
-  .button.secondary {
-    background: #e7eef5;
-    color: #172033;
-  }
+    .button.secondary {
+      background: #e7eef5;
+      color: #172033;
+    }
 
-  /* КАРТА */
+    /* КАРТА */
 
-  .map-wrapper {
-    margin-top: 20px;
-    background: white;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-  }
+    .map-wrapper {
+      margin-top: 20px;
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
 
-  #map {
-    width: 100%;
-    height: 360px;
-    touch-action: none;
-  }
+    #map {
+      width: 100%;
+      height: 360px;
+      touch-action: none;
+    }
 
-  .map-hint {
-    padding: 12px 15px;
-    text-align: center;
-    font-size: 14px;
-    color: #667085;
-    background: white;
-  }
+    .map-hint {
+      padding: 12px 15px;
+      text-align: center;
+      font-size: 14px;
+      color: #667085;
+      background: white;
+    }
 
-  /* Фиксированная метка */
+    /* Фиксированная метка */
 
-  .map-marker {
-    position: absolute;
+    .map-marker {
+      position: absolute;
 
-    left: 50%;
-    top: 50%;
+      left: 50%;
+      top: 50%;
 
-    transform:
-      translate(-50%, -100%);
+      transform:
+        translate(-50%, -100%);
 
-    z-index: 1000;
+      z-index: 1000;
 
-    font-size: 42px;
+      font-size: 42px;
 
-    pointer-events: none;
+      pointer-events: none;
 
-    filter:
-      drop-shadow(0 3px 3px rgba(0,0,0,0.25));
-  }
+      filter:
+        drop-shadow(0 3px 3px rgba(0,0,0,0.25));
+    }
 
-  .location-box {
-    margin-top: 18px;
-    padding: 18px;
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-  }
+    .location-box {
+      margin-top: 18px;
+      padding: 18px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
 
-  .location-label {
-    display: block;
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
+    .location-label {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-  .address-input {
-    width: 100%;
-    border: 1px solid #d9dee7;
-    border-radius: 12px;
-    padding: 14px;
-    font-size: 16px;
-    outline: none;
-    background: #fff;
-    color: #172033;
-  }
+    .address-input {
+      width: 100%;
+      border: 1px solid #d9dee7;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      outline: none;
+      background: #fff;
+      color: #172033;
+    }
 
-  .address-input:focus {
-    border-color: #2481cc;
-  }
+    .address-input:focus {
+      border-color: #2481cc;
+    }
 
-  .coordinates {
-    margin-top: 8px;
-    font-size: 12px;
-    color: #98a2b3;
-  }
+    .coordinates {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #98a2b3;
+    }
 
-  .service {
-    background: white;
-    border: 2px solid transparent;
-    border-radius: 18px;
-    padding: 18px;
-    margin-top: 14px;
-    cursor: pointer;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-  }
+    .service {
+      background: white;
+      border: 2px solid transparent;
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 14px;
+      cursor: pointer;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
 
-  .service.selected {
-    border-color: #2481cc;
-    background: #eef7ff;
-  }
+    .service.selected {
+      border-color: #2481cc;
+      background: #eef7ff;
+    }
 
-  .service-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
+    .service-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
 
-  .service-description {
-    color: #667085;
-    font-size: 14px;
-    line-height: 1.4;
-  }
+    .service-description {
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.4;
+    }
 
-  .service-price {
-    margin-top: 12px;
-    font-size: 18px;
-    font-weight: 700;
-  }
+    .service-price {
+      margin-top: 12px;
+      font-size: 18px;
+      font-weight: 700;
+    }
 
-  .summary {
-    background: white;
-    border-radius: 18px;
-    padding: 20px;
-    margin-top: 22px;
-  }
+    .summary {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 22px;
+    }
 
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 10px 0;
-    border-bottom: 1px solid #edf0f4;
-  }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 10px 0;
+      border-bottom: 1px solid #edf0f4;
+    }
 
-  .summary-row:last-child {
-    border-bottom: none;
-  }
+    .summary-row:last-child {
+      border-bottom: none;
+    }
 
-  .summary-label {
-    color: #667085;
-  }
+    .summary-label {
+      color: #667085;
+    }
 
-  .summary-value {
-    text-align: right;
-    font-weight: 600;
-  }
+    .summary-value {
+      text-align: right;
+      font-weight: 600;
+    }
 
-  .total {
-    font-size: 23px;
-    font-weight: 800;
-    margin-top: 15px;
-  }
+    .total {
+      font-size: 23px;
+      font-weight: 800;
+      margin-top: 15px;
+    }
 
-  .back {
-    display: inline-block;
-    margin-bottom: 15px;
-    color: #2481cc;
-    font-size: 16px;
-    cursor: pointer;
-  }
+    .back {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #2481cc;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-  .success {
-    text-align: center;
-    padding-top: 70px;
-  }
+    .success {
+      text-align: center;
+      padding-top: 70px;
+    }
 
-  .success-icon {
-    font-size: 75px;
-    margin-bottom: 20px;
-  }
+    .success-icon {
+      font-size: 75px;
+      margin-bottom: 20px;
+    }
 
-  .order-number {
-    font-size: 16px;
-    color: #667085;
-    margin-top: 15px;
-  }
+    .order-number {
+      font-size: 16px;
+      color: #667085;
+      margin-top: 15px;
+    }
 
-  .error {
-    color: #d92d20;
-    font-size: 14px;
-    margin-top: 10px;
-  }
+    .error {
+      color: #d92d20;
+      font-size: 14px;
+      margin-top: 10px;
+    }
 
-</style>
+  </style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <!-- =========================
-       ГЛАВНЫЙ ЭКРАН
-  ========================= -->
+  <!-- ГЛАВНЫЙ ЭКРАН -->
 
   <section
     id="screen-home"
@@ -315,7 +313,6 @@
         </div>
 
       </div>
-
 
       <div class="home-content">
 
@@ -336,7 +333,6 @@
 
       </div>
 
-
       <button
         class="main-order-button"
         onclick="openLocationScreen()"
@@ -349,9 +345,7 @@
   </section>
 
 
-  <!-- =========================
-       ЭКРАН КАРТЫ
-  ========================= -->
+  <!-- ЭКРАН КАРТЫ -->
 
   <section
     id="screen-location"
@@ -441,9 +435,7 @@
   </section>
 
 
-  <!-- =========================
-       УСЛУГИ
-  ========================= -->
+  <!-- УСЛУГИ -->
 
   <section
     id="screen-services"
@@ -548,9 +540,7 @@
   </section>
 
 
-  <!-- =========================
-       ЗАКАЗЫ
-  ========================= -->
+  <!-- ЗАКАЗЫ -->
 
   <section
     id="screen-orders"
@@ -584,9 +574,7 @@
   </section>
 
 
-  <!-- =========================
-       СООБЩЕНИЯ
-  ========================= -->
+  <!-- СООБЩЕНИЯ -->
 
   <section
     id="screen-messages"
@@ -621,9 +609,7 @@
   </section>
 
 
-  <!-- =========================
-       ПРОФИЛЬ
-  ========================= -->
+  <!-- ПРОФИЛЬ -->
 
   <section
     id="screen-profile"
@@ -653,9 +639,7 @@
   </section>
 
 
-  <!-- =========================
-       ПОДТВЕРЖДЕНИЕ
-  ========================= -->
+  <!-- ПОДТВЕРЖДЕНИЕ -->
 
   <section
     id="screen-summary"
@@ -728,9 +712,7 @@
   </section>
 
 
-  <!-- =========================
-       УСПЕШНЫЙ ЗАКАЗ
-  ========================= -->
+  <!-- УСПЕШНЫЙ ЗАКАЗ -->
 
   <section
     id="screen-success"
@@ -766,9 +748,7 @@
   </section>
 
 
-  <!-- =========================
-       НИЖНЯЯ НАВИГАЦИЯ
-  ========================= -->
+  <!-- НИЖНЯЯ НАВИГАЦИЯ -->
 
   <nav class="bottom-nav">
 
@@ -1018,12 +998,6 @@
     window.scrollTo(0, 0);
 
 
-    /*
-      ВАЖНО:
-      карта создаётся только после того,
-      как экран карты стал видимым.
-    */
-
     if (name === "location") {
 
       setTimeout(function() {
@@ -1104,6 +1078,26 @@
         "location-error"
       );
 
+    const addressInput =
+      document.getElementById(
+        "address"
+      );
+
+    const coordinatesElement =
+      document.getElementById(
+        "coordinates"
+      );
+
+    const nextButton =
+      document.getElementById(
+        "location-next"
+      );
+
+    const button =
+      document.getElementById(
+        "select-location-button"
+      );
+
 
     errorElement.textContent = "";
 
@@ -1120,6 +1114,9 @@
 
     /*
       Получаем центр карты.
+
+      Формат:
+      [longitude, latitude]
     */
 
     const center =
@@ -1129,14 +1126,15 @@
     order.longitude =
       center[0];
 
-
     order.latitude =
       center[1];
 
 
-    document.getElementById(
-      "coordinates"
-    ).textContent =
+    /*
+      Показываем координаты
+    */
+
+    coordinatesElement.textContent =
 
       "Координаты: " +
 
@@ -1148,27 +1146,178 @@
 
 
     /*
-      Пока адрес вводится вручную.
-      Геокодирование подключим следующим этапом.
+      Показываем поле адреса
     */
-
-    const addressInput =
-      document.getElementById(
-        "address"
-      );
-
 
     addressInput.style.display =
       "block";
 
 
+    /*
+      Блокируем кнопку
+    */
+
+    button.disabled = true;
+
+    button.textContent =
+      "⏳ Определяем адрес...";
+
+
+    try {
+
+      /*
+        Reverse geocoding:
+        координаты → адрес
+      */
+
+      const url =
+        "https://geocode-maps.yandex.ru/v1/" +
+
+        "?apikey=" +
+        encodeURIComponent(
+          "c355cb46-e31f-4942-a74d-336abc2cb19a"
+        ) +
+
+        "&geocode=" +
+        encodeURIComponent(
+          order.longitude +
+          "," +
+          order.latitude
+        ) +
+
+        "&lang=ru_RU" +
+
+        "&format=json" +
+
+        "&results=1";
+
+
+      const response =
+        await fetch(url);
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Ошибка геокодера: " +
+          response.status
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      /*
+        Получаем найденные объекты
+      */
+
+      const features =
+        data?.response
+          ?.GeoObjectCollection
+          ?.featureMember;
+
+
+      if (
+        !features ||
+        features.length === 0
+      ) {
+
+        throw new Error(
+          "Адрес не найден."
+        );
+
+      }
+
+
+      const geoObject =
+        features[0].GeoObject;
+
+
+      const address =
+        geoObject
+          ?.metaDataProperty
+          ?.GeocoderMetaData
+          ?.text;
+
+
+      if (!address) {
+
+        throw new Error(
+          "Не удалось получить адрес."
+        );
+
+      }
+
+
+      /*
+        Сохраняем адрес
+      */
+
+      order.address =
+        address;
+
+
+      /*
+        Вставляем адрес
+        в поле
+      */
+
+      addressInput.value =
+        address;
+
+
+      /*
+        Показываем кнопку
+        Продолжить
+      */
+
+      nextButton.style.display =
+        "block";
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка определения адреса:",
+        error
+      );
+
+
+      errorElement.textContent =
+        "Не удалось определить адрес. " +
+        "Введите его вручную.";
+
+
+      /*
+        Даже если геокодирование
+        не сработало, пользователь
+        может ввести адрес вручную.
+      */
+
+      nextButton.style.display =
+        "block";
+
+    }
+
+
+    /*
+      Возвращаем кнопку
+    */
+
+    button.disabled = false;
+
+    button.textContent =
+      "📍 Выбрать это место";
+
+
+    /*
+      Фокусируем поле адреса
+    */
+
     addressInput.focus();
-
-
-    document.getElementById(
-      "location-next"
-    ).style.display =
-      "block";
 
   }
 
