@@ -37,7 +37,6 @@ import {
   selectedLocation
 } from "./state.js";
 
-
 // ============================================================
 // SUPABASE
 // ============================================================
@@ -48,28 +47,11 @@ const SUPABASE_FUNCTION_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_OObcKHZ0AGc5AI5c_3KY-Q_GpzEKI8C";
 
-
 // ============================================================
 // TELEGRAM
 // ============================================================
 
 initTelegram();
-
-
-// ============================================================
-// TELEGRAM BACK BUTTON
-// ============================================================
-
-if (telegramWebApp) {
-
-  telegramWebApp.BackButton.onClick(() => {
-
-    showScreen("home");
-
-  });
-
-}
-
 
 // ============================================================
 // РЕГИСТРАЦИЯ TELEGRAM-ПОЛЬЗОВАТЕЛЯ
@@ -80,11 +62,6 @@ async function registerTelegramUser() {
   const telegramUserId =
     getTelegramUserId();
 
-
-  // ----------------------------------------------------------
-  // Если приложение открыто не внутри Telegram
-  // ----------------------------------------------------------
-
   if (!telegramUserId) {
 
     console.warn(
@@ -92,16 +69,13 @@ async function registerTelegramUser() {
     );
 
     return null;
-
   }
-
 
   const name =
     getTelegramUserName();
 
   const username =
     getTelegramUsername();
-
 
   console.log(
     "Регистрация Telegram пользователя:",
@@ -111,7 +85,6 @@ async function registerTelegramUser() {
       username
     }
   );
-
 
   try {
 
@@ -125,12 +98,11 @@ async function registerTelegramUser() {
             "Content-Type":
               "application/json",
 
-            "Authorization":
-              `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+            "apikey":
+              SUPABASE_PUBLISHABLE_KEY
           },
 
           body: JSON.stringify({
-
             action:
               "register_user",
 
@@ -142,26 +114,17 @@ async function registerTelegramUser() {
 
             username:
               username
-
           })
-
         }
       );
 
-
     const data =
       await response.json();
-
 
     console.log(
       "Ответ quick-processor:",
       data
     );
-
-
-    // --------------------------------------------------------
-    // Ошибка HTTP
-    // --------------------------------------------------------
 
     if (!response.ok) {
 
@@ -175,19 +138,12 @@ async function registerTelegramUser() {
       );
 
       return null;
-
     }
-
-
-    // --------------------------------------------------------
-    // Пользователь получен
-    // --------------------------------------------------------
 
     console.log(
       "Telegram пользователь:",
       data.user
     );
-
 
     if (data.created) {
 
@@ -200,17 +156,10 @@ async function registerTelegramUser() {
       console.log(
         "Пользователь уже существует."
       );
-
     }
-
-
-    // --------------------------------------------------------
-    // Сохраняем пользователя глобально
-    // --------------------------------------------------------
 
     window.currentUser =
       data.user;
-
 
     return data.user;
 
@@ -222,11 +171,8 @@ async function registerTelegramUser() {
     );
 
     return null;
-
   }
-
 }
-
 
 // ============================================================
 // HTML FUNCTIONS
@@ -274,7 +220,6 @@ window.completePerformerOrder =
 window.backToProfile =
   backToProfile;
 
-
 // ============================================================
 // ADDRESS INPUT
 // ============================================================
@@ -288,7 +233,6 @@ document.addEventListener(
         "address-input"
       );
 
-
     if (addressInput) {
 
       addressInput.addEventListener(
@@ -297,32 +241,26 @@ document.addEventListener(
 
           selectedLocation.address =
             addressInput.value.trim();
-
         }
       );
-
     }
 
-
-    // --------------------------------------------------------
-    // Регистрируем Telegram пользователя
-    // --------------------------------------------------------
+    // ========================================================
+    // РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ
+    // ========================================================
 
     await registerTelegramUser();
 
-
-    // --------------------------------------------------------
-    // Загружаем профиль
-    // --------------------------------------------------------
+    // ========================================================
+    // ПРОФИЛЬ
+    // ========================================================
 
     renderProfile();
 
-
-    // --------------------------------------------------------
-    // Открываем главный экран
-    // --------------------------------------------------------
+    // ========================================================
+    // ГЛАВНЫЙ ЭКРАН
+    // ========================================================
 
     showScreen("home");
-
   }
 );
