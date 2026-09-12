@@ -879,6 +879,7 @@
           <span class="text-[11px] font-semibold mt-1">
             Главная
           </span>
+
         </button>
 
         <button
@@ -891,6 +892,7 @@
           <span class="text-[11px] font-semibold mt-1">
             Заказы
           </span>
+
         </button>
 
         <button
@@ -903,6 +905,7 @@
           <span class="text-[11px] font-semibold mt-1">
             Профиль
           </span>
+
         </button>
 
       </div>
@@ -1566,20 +1569,24 @@
         "searching-icon"
       );
 
+
     const label =
       document.getElementById(
         "searching-label"
       );
+
 
     const title =
       document.getElementById(
         "searching-title"
       );
 
+
     const description =
       document.getElementById(
         "searching-description"
       );
+
 
     const performerCard =
       document.getElementById(
@@ -1634,20 +1641,24 @@
         "searching-icon"
       );
 
+
     const label =
       document.getElementById(
         "searching-label"
       );
+
 
     const title =
       document.getElementById(
         "searching-title"
       );
 
+
     const description =
       document.getElementById(
         "searching-description"
       );
+
 
     const performerCard =
       document.getElementById(
@@ -1701,11 +1712,16 @@
   // ACCEPT ORDER
   // ============================================================
 
-  async function acceptOrder(orderId) {
+  async function acceptOrder(
+    orderId,
+    performerId
+  ) {
 
     console.log(
       "Подтверждаем исполнителя для заказа:",
-      orderId
+      orderId,
+      "Исполнитель:",
+      performerId
     );
 
 
@@ -1723,7 +1739,10 @@
               "accept_order",
 
             order_id:
-              orderId
+              orderId,
+
+            performer_id:
+              performerId
 
           }
 
@@ -1737,6 +1756,7 @@
         "Ошибка подтверждения заказа:",
         error
       );
+
 
       throw new Error(
         error.message
@@ -1753,6 +1773,7 @@
         "Ошибка accept_order:",
         data.error
       );
+
 
       throw new Error(
         data.error
@@ -2020,7 +2041,8 @@
 
           const acceptedOrder =
             await acceptOrder(
-              data.id
+              data.id,
+              foundPerformer.id
             );
 
 
