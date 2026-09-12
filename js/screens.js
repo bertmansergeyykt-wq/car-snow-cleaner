@@ -1,4 +1,5 @@
 import { map } from "./state.js";
+import { telegramWebApp } from "./telegram.js";
 
 /**
  * Переключение экранов приложения
@@ -26,8 +27,22 @@ export function showScreen(screenName) {
 
   target.classList.add("active");
 
-  // Если открываем карту —
-  // даём ей время появиться и подгоняем viewport
+  // ========================================
+  // TELEGRAM BACK BUTTON
+  // ========================================
+
+  if (telegramWebApp) {
+    if (screenName === "home") {
+      telegramWebApp.BackButton.hide();
+    } else {
+      telegramWebApp.BackButton.show();
+    }
+  }
+
+  // ========================================
+  // КАРТА
+  // ========================================
+
   if (screenName === "map") {
     setTimeout(() => {
       if (!map) return;
@@ -50,7 +65,10 @@ export function showScreen(screenName) {
     }, 100);
   }
 
-  // При открытии профиля обновляем данные пользователя
+  // ========================================
+  // ПРОФИЛЬ
+  // ========================================
+
   if (screenName === "profile") {
     renderProfile();
   }
