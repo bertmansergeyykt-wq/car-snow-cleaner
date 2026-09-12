@@ -92,6 +92,16 @@ async function registerTelegramUser() {
     getTelegramUsername();
 
 
+  console.log(
+    "Регистрация Telegram пользователя:",
+    {
+      telegramUserId,
+      name,
+      username
+    }
+  );
+
+
   try {
 
     const response =
@@ -128,11 +138,21 @@ async function registerTelegramUser() {
       await response.json();
 
 
+    console.log(
+      "Ответ quick-processor:",
+      data
+    );
+
+
     if (!response.ok) {
 
       console.error(
         "Ошибка регистрации пользователя:",
-        data
+        JSON.stringify(
+          data,
+          null,
+          2
+        )
       );
 
       return null;
@@ -162,7 +182,7 @@ async function registerTelegramUser() {
 
 
     // --------------------------------------------------------
-    // Сохраняем роль глобально
+    // Сохраняем пользователя глобально
     // --------------------------------------------------------
 
     window.currentUser =
