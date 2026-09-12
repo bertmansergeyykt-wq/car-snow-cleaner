@@ -1,5 +1,14 @@
+// ===============================
+// Глобальное состояние приложения
+// ===============================
+
+// ---------- Карта ----------
+
 export let map = null;
 export let mapInitialized = false;
+
+
+// ---------- Выбранное место ----------
 
 export let selectedLocation = {
   latitude: null,
@@ -7,36 +16,49 @@ export let selectedLocation = {
   address: ""
 };
 
+
+// ---------- Выбранная услуга ----------
+
 export let selectedService = null;
+
+
+// ---------- Заказы клиента ----------
+
 export let currentOrders = [];
 
 export let isCreatingOrder = false;
 
 export let currentActiveOrderId = null;
+
 export let currentActivePerformerId = null;
 
 export let isCompletingOrder = false;
 
-// ============================================================
-// ИСПОЛНИТЕЛЬ
-// ============================================================
 
+// ---------- Исполнитель ----------
+
+// ID тестового исполнителя.
+// Позже заменим на реальную авторизацию исполнителей.
 export const TEST_PERFORMER_ID = 1;
 
 export let performerData = null;
 
 export let performerLatitude = 56.8389;
+
 export let performerLongitude = 60.6057;
 
 export let performerActiveOrder = null;
 
 export let isAcceptingPerformerOrder = false;
+
 export let isCompletingPerformerOrder = false;
 
 
-// ============================================================
-// ФУНКЦИИ ИЗМЕНЕНИЯ СОСТОЯНИЯ
-// ============================================================
+// ===============================
+// SETTERS
+// ===============================
+
+// ---------- Карта ----------
 
 export function setMap(value) {
   map = value;
@@ -46,13 +68,22 @@ export function setMapInitialized(value) {
   mapInitialized = value;
 }
 
+
+// ---------- Выбранное место ----------
+
 export function setSelectedLocation(value) {
   selectedLocation = value;
 }
 
+
+// ---------- Выбранная услуга ----------
+
 export function setSelectedService(value) {
   selectedService = value;
 }
+
+
+// ---------- Заказы клиента ----------
 
 export function setCurrentOrders(value) {
   currentOrders = value;
@@ -73,6 +104,9 @@ export function setCurrentActivePerformerId(value) {
 export function setIsCompletingOrder(value) {
   isCompletingOrder = value;
 }
+
+
+// ---------- Исполнитель ----------
 
 export function setPerformerData(value) {
   performerData = value;
