@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -636,71 +637,105 @@
     class="screen flex-col bg-[#fff0f5]"
   >
 
-    <div class="flex-1 flex flex-col items-center justify-center px-6 text-center">
+    <div class="flex-1 overflow-y-auto">
 
-      <div
-        id="searching-icon"
-        class="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center mb-7"
-      >
-        <div class="spinner"></div>
-      </div>
+      <div class="flex flex-col items-center justify-center px-6 text-center min-h-full pb-8">
 
-      <div
-        id="searching-label"
-        class="text-sm font-semibold text-[#ff4f87] uppercase"
-      >
-        Заказ создан
-      </div>
-
-      <h2
-        id="searching-title"
-        class="text-3xl font-black text-gray-900 mt-2"
-      >
-        Ищем исполнителя
-      </h2>
-
-      <p
-        id="searching-description"
-        class="text-gray-500 mt-3 leading-relaxed"
-      >
-        Ищем ближайшего свободного исполнителя.
-        Как только кто-то примет заказ,
-        статус изменится.
-      </p>
-
-      <div
-        id="performer-card"
-        class="hidden mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm"
-      >
-
-        <div class="text-xs uppercase font-semibold text-gray-400">
-          Исполнитель
+        <div
+          id="searching-icon"
+          class="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center mb-7"
+        >
+          <div class="spinner"></div>
         </div>
 
         <div
-          id="performer-name"
-          class="text-2xl font-black text-gray-900 mt-1"
+          id="searching-label"
+          class="text-sm font-semibold text-[#ff4f87] uppercase"
         >
-          —
+          Заказ создан
         </div>
 
-        <div class="text-sm text-gray-500 mt-2">
-          Свободный исполнитель найден
-        </div>
+        <h2
+          id="searching-title"
+          class="text-3xl font-black text-gray-900 mt-2"
+        >
+          Ищем исполнителя
+        </h2>
 
-      </div>
-
-      <div class="mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm">
-
-        <div class="text-xs uppercase font-semibold text-gray-400">
-          Номер заказа
-        </div>
+        <p
+          id="searching-description"
+          class="text-gray-500 mt-3 leading-relaxed"
+        >
+          Ищем ближайшего свободного исполнителя.
+          Как только кто-то примет заказ,
+          статус изменится.
+        </p>
 
         <div
-          id="success-order-number"
-          class="text-2xl font-black text-gray-900 mt-1"
+          id="performer-card"
+          class="hidden mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm"
         >
-          —
+
+          <div class="text-xs uppercase font-semibold text-gray-400">
+            Исполнитель
+          </div>
+
+          <div
+            id="performer-name"
+            class="text-2xl font-black text-gray-900 mt-1"
+          >
+            —
+          </div>
+
+          <div class="text-sm text-gray-500 mt-2">
+            Свободный исполнитель найден
+          </div>
+
+        </div>
+
+        <div class="mt-6 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm">
+
+          <div class="text-xs uppercase font-semibold text-gray-400">
+            Номер заказа
+          </div>
+
+          <div
+            id="success-order-number"
+            class="text-2xl font-black text-gray-900 mt-1"
+          >
+            —
+          </div>
+
+        </div>
+
+        <!-- КНОПКА ЗАВЕРШЕНИЯ -->
+
+        <button
+          id="complete-order-button"
+          type="button"
+          onclick="completeCurrentOrder()"
+          class="hidden mt-5 w-full max-w-sm h-14 rounded-2xl bg-[#ff4f87] text-white font-bold text-lg active:scale-[0.98] transition"
+        >
+          ✅ Завершить заказ
+        </button>
+
+        <div
+          id="completed-message"
+          class="hidden mt-5 bg-white rounded-3xl px-6 py-5 shadow-sm w-full max-w-sm"
+        >
+
+          <div class="text-4xl">
+            🎉
+          </div>
+
+          <div class="font-black text-gray-900 text-xl mt-3">
+            Заказ завершён
+          </div>
+
+          <div class="text-sm text-gray-500 mt-2">
+            Спасибо! Исполнитель снова доступен для новых заказов.
+          </div>
+
         </div>
 
       </div>
@@ -712,7 +747,7 @@
       <button
         type="button"
         onclick="loadOrdersScreen()"
-        class="w-full h-14 rounded-2xl bg-[#ff4f87] text-white font-bold text-lg"
+        class="w-full h-14 rounded-2xl bg-white border border-gray-200 text-gray-900 font-bold text-lg"
       >
         📋 Мои заказы
       </button>
@@ -1011,6 +1046,14 @@
   let currentOrders = [];
 
   let isCreatingOrder = false;
+
+  // Текущий активный заказ
+
+  let currentActiveOrderId = null;
+
+  let currentActivePerformerId = null;
+
+  let isCompletingOrder = false;
 
 
   // ============================================================
@@ -1594,6 +1637,18 @@
       );
 
 
+    const completeButton =
+      document.getElementById(
+        "complete-order-button"
+      );
+
+
+    const completedMessage =
+      document.getElementById(
+        "completed-message"
+      );
+
+
     icon.innerHTML = `
       <div class="spinner"></div>
     `;
@@ -1612,6 +1667,16 @@
 
 
     performerCard.classList.add(
+      "hidden"
+    );
+
+
+    completeButton.classList.add(
+      "hidden"
+    );
+
+
+    completedMessage.classList.add(
       "hidden"
     );
 
@@ -1666,6 +1731,18 @@
       );
 
 
+    const completeButton =
+      document.getElementById(
+        "complete-order-button"
+      );
+
+
+    const completedMessage =
+      document.getElementById(
+        "completed-message"
+      );
+
+
     icon.innerHTML = `
       <div class="text-5xl">
         🚗
@@ -1693,6 +1770,16 @@
 
 
     performerCard.classList.remove(
+      "hidden"
+    );
+
+
+    completeButton.classList.remove(
+      "hidden"
+    );
+
+
+    completedMessage.classList.add(
       "hidden"
     );
 
@@ -1789,6 +1876,273 @@
 
 
     return data?.order || null;
+
+  }
+
+
+  // ============================================================
+  // COMPLETE ORDER
+  // ============================================================
+
+  async function completeOrder(
+    orderId,
+    performerId
+  ) {
+
+    console.log(
+      "Завершаем заказ:",
+      orderId,
+      "Исполнитель:",
+      performerId
+    );
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.functions.invoke(
+        "quick-processor",
+        {
+
+          body: {
+
+            action:
+              "complete_order",
+
+            order_id:
+              orderId,
+
+            performer_id:
+              performerId
+
+          }
+
+        }
+      );
+
+
+    if (error) {
+
+      console.error(
+        "Ошибка завершения заказа:",
+        error
+      );
+
+
+      throw new Error(
+        error.message
+      );
+
+    }
+
+
+    if (
+      data?.error
+    ) {
+
+      console.error(
+        "Ошибка complete_order:",
+        data.error
+      );
+
+
+      throw new Error(
+        data.error
+      );
+
+    }
+
+
+    console.log(
+      "Заказ завершён:",
+      data
+    );
+
+
+    return data;
+
+  }
+
+
+  // ============================================================
+  // COMPLETE CURRENT ORDER
+  // ============================================================
+
+  async function completeCurrentOrder() {
+
+    if (isCompletingOrder) {
+
+      return;
+
+    }
+
+
+    if (!currentActiveOrderId) {
+
+      alert(
+        "Активный заказ не найден."
+      );
+
+      return;
+
+    }
+
+
+    if (!currentActivePerformerId) {
+
+      alert(
+        "Исполнитель заказа не найден."
+      );
+
+      return;
+
+    }
+
+
+    const button =
+      document.getElementById(
+        "complete-order-button"
+      );
+
+
+    isCompletingOrder =
+      true;
+
+
+    button.disabled =
+      true;
+
+
+    button.textContent =
+      "Завершаем заказ...";
+
+
+    try {
+
+      const result =
+        await completeOrder(
+          currentActiveOrderId,
+          currentActivePerformerId
+        );
+
+
+      if (
+        !result?.success
+      ) {
+
+        throw new Error(
+          "Не удалось завершить заказ."
+        );
+
+      }
+
+
+      // Обновляем локальный заказ
+
+      const localOrder =
+        currentOrders.find(
+          (order) =>
+            String(order.id) ===
+            String(currentActiveOrderId)
+        );
+
+
+      if (localOrder) {
+
+        localOrder.status =
+          "completed";
+
+      }
+
+
+      // Прячем кнопку
+
+      button.classList.add(
+        "hidden"
+      );
+
+
+      // Показываем сообщение
+
+      document.getElementById(
+        "completed-message"
+      ).classList.remove(
+        "hidden"
+      );
+
+
+      // Меняем основной экран
+
+      document.getElementById(
+        "searching-icon"
+      ).innerHTML = `
+        <div class="text-5xl">
+          ✅
+        </div>
+      `;
+
+
+      document.getElementById(
+        "searching-label"
+      ).textContent =
+        "Заказ завершён";
+
+
+      document.getElementById(
+        "searching-title"
+      ).textContent =
+        "Готово!";
+
+
+      document.getElementById(
+        "searching-description"
+      ).textContent =
+        "Исполнитель освобождён и снова доступен для новых заказов.";
+
+
+      console.log(
+        "Исполнитель автоматически освобождён."
+      );
+
+
+      // Активный заказ больше не существует
+
+      currentActiveOrderId =
+        null;
+
+
+      currentActivePerformerId =
+        null;
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка завершения заказа:",
+        error
+      );
+
+
+      alert(
+        "Не удалось завершить заказ.\n\n" +
+        error.message
+      );
+
+
+      button.disabled =
+        false;
+
+
+      button.textContent =
+        "✅ Завершить заказ";
+
+    } finally {
+
+      isCompletingOrder =
+        false;
+
+    }
 
   }
 
@@ -1920,6 +2274,17 @@
         "Заказ создан:",
         data
       );
+
+
+      // ======================================================
+      // Сохраняем активный заказ
+      // ======================================================
+
+      currentActiveOrderId =
+        data.id;
+
+      currentActivePerformerId =
+        null;
 
 
       // ======================================================
@@ -2059,6 +2424,18 @@
           }
 
 
+          // Запоминаем исполнителя
+
+          currentActivePerformerId =
+            foundPerformer.id;
+
+
+          console.log(
+            "Активный исполнитель:",
+            currentActivePerformerId
+          );
+
+
           console.log(
             "Статус заказа после accept_order:",
             data.status
@@ -2071,6 +2448,10 @@
             "Не удалось изменить статус заказа:",
             acceptError
           );
+
+
+          currentActivePerformerId =
+            null;
 
 
           alert(
@@ -2097,7 +2478,10 @@
       // 5. ПОКАЗЫВАЕМ РЕЗУЛЬТАТ
       // ======================================================
 
-      if (foundPerformer) {
+      if (
+        foundPerformer &&
+        currentActivePerformerId
+      ) {
 
         showPerformerFound(
           data.id,
@@ -2119,6 +2503,13 @@
         "Ошибка:",
         error
       );
+
+
+      currentActiveOrderId =
+        null;
+
+      currentActivePerformerId =
+        null;
 
 
       alert(
@@ -2705,3 +3096,4 @@
 
 </body>
 </html>
+```
