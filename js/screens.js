@@ -1,149 +1,89 @@
-// ============================================================
-// ЭКРАНЫ
-// ============================================================
+import { map } from "./state.js";
 
-import {
-  map
-} from "./state.js";
-
-
-// ============================================================
-// ПОКАЗ ЭКРАНА
-// ============================================================
-
+/**
+ * Переключение экранов приложения
+ */
 export function showScreen(screenName) {
-
   const screens =
     document.querySelectorAll(".screen");
 
-
-  screens.forEach(
-    (screen) => {
-
-      screen.classList.remove("active");
-
-    }
-  );
-
+  screens.forEach((screen) => {
+    screen.classList.remove("active");
+  });
 
   const target =
     document.getElementById(
       "screen-" + screenName
     );
 
-
   if (!target) {
-
     console.error(
       "Экран не найден:",
       screenName
     );
-
     return;
-
   }
-
 
   target.classList.add("active");
 
-
-  // ----------------------------------------------------------
-  // Если открываем карту
-  // ----------------------------------------------------------
-
+  // Если открываем карту —
+  // даём ей время появиться и подгоняем viewport
   if (screenName === "map") {
+    setTimeout(() => {
+      if (!map) return;
 
-    setTimeout(
-      () => {
+      if (
+        typeof map.requestReposition ===
+        "function"
+      ) {
+        map.requestReposition();
+        return;
+      }
 
-        if (!map) {
-          return;
-        }
-
-
-        if (
-          typeof map.requestReposition ===
-          "function"
-        ) {
-
-          map.requestReposition();
-
-        } else if (
-          map.container &&
-          typeof map.container.fitToViewport ===
-          "function"
-        ) {
-
-          map.container.fitToViewport();
-
-        }
-
-      },
-      100
-    );
-
+      if (
+        map.container &&
+        typeof map.container.fitToViewport ===
+        "function"
+      ) {
+        map.container.fitToViewport();
+      }
+    }, 100);
   }
 
-
-  // ----------------------------------------------------------
-  // Если открываем профиль
-  // ----------------------------------------------------------
-
+  // При открытии профиля обновляем данные пользователя
   if (screenName === "profile") {
-
     renderProfile();
-
   }
-
 }
 
-
-// ============================================================
-// ПРОФИЛЬ
-// ============================================================
-
+/**
+ * Отображение данных пользователя Telegram
+ */
 export function renderProfile() {
-
   const user =
-    window.Telegram
-      ?.WebApp
-      ?.initDataUnsafe
-      ?.user || null;
-
+    window.Telegram?.WebApp?.initDataUnsafe?.user ||
+    null;
 
   const element =
     document.getElementById(
       "profile-user-id"
     );
 
-
-  if (!element) {
-
-    return;
-
-  }
-
+  if (!element) return;
 
   if (user) {
-
-    const name =
-      [
-        user.first_name,
-        user.last_name
-      ]
-        .filter(Boolean)
-        .join(" ");
-
+    const name = [
+      user.first_name,
+      user.last_name
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     element.textContent =
       name ||
-      ("ID: " + user.id);
-
+      `ID: ${user.id}`;
   } else {
-
     element.textContent =
       "Тестовый пользователь";
-
   }
-
 }
