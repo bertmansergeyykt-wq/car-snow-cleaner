@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -18,6 +17,9 @@
 
   <!-- Yandex Maps -->
   <script src="https://api-maps.yandex.ru/v3/?apikey=c355cb46-e31f-4942-a74d-336abc2cb19a&lang=ru_RU"></script>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
   <style>
@@ -57,43 +59,23 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-
-    /* =========================
-       ОСНОВНОЕ ПРИЛОЖЕНИЕ
-    ========================= */
-
     .app {
       position: relative;
-
       width: 100%;
       max-width: 520px;
-
       height: 100vh;
-
       margin: 0 auto;
-
       background: #fff0f5;
-
       overflow: hidden;
-
       display: flex;
       flex-direction: column;
     }
 
-
-    /* =========================
-       ЭКРАНЫ
-    ========================= */
-
     .screen {
       display: none;
-
       width: 100%;
-
       flex: 1;
-
       min-height: 0;
-
       overflow: hidden;
     }
 
@@ -101,19 +83,11 @@
       display: block;
     }
 
-
-    /* =========================
-       ГЛАВНЫЙ ЭКРАН
-    ========================= */
-
     .home-screen {
       position: relative;
-
       width: 100%;
       height: 100%;
-
       padding: 24px 20px 30px;
-
       display: flex;
       flex-direction: column;
     }
@@ -134,12 +108,9 @@
 
     .home-content {
       flex: 1;
-
       display: flex;
       flex-direction: column;
-
       justify-content: center;
-
       padding-bottom: 40px;
     }
 
@@ -150,54 +121,31 @@
 
     .home-title {
       margin: 0 0 16px;
-
       font-size: 36px;
-
       line-height: 1.08;
-
       font-weight: 800;
-
       letter-spacing: -1px;
     }
 
     .home-description {
       margin: 0;
-
       max-width: 400px;
-
       font-size: 17px;
-
       line-height: 1.5;
-
       color: #667085;
     }
 
-
-    /* =========================
-       ГЛАВНАЯ КНОПКА
-    ========================= */
-
     .main-order-button {
       width: calc(100% + 20px);
-
       margin-left: -10px;
-
       border: none;
-
       border-radius: 18px;
-
       padding: 18px 20px;
-
       background: #ff4f87;
-
       color: white;
-
       font-size: 18px;
-
       font-weight: 800;
-
       cursor: pointer;
-
       box-shadow:
         0 8px 20px rgba(255, 79, 135, 0.25);
     }
@@ -206,63 +154,39 @@
       transform: scale(0.98);
     }
 
-
-    /* =========================
-       ОБЩИЕ ЭЛЕМЕНТЫ
-    ========================= */
-
     .content-screen {
       width: 100%;
       height: 100%;
-
       padding: 24px 18px 30px;
-
       overflow-y: auto;
-
       overscroll-behavior: contain;
     }
 
     .section-title {
       margin: 15px 0 8px;
-
       font-size: 28px;
-
       line-height: 1.15;
-
       font-weight: 800;
     }
 
     .section-description {
       margin: 0 0 20px;
-
       color: #667085;
-
       font-size: 16px;
-
       line-height: 1.5;
     }
 
     .button {
       width: 100%;
-
       border: 0;
-
       border-radius: 16px;
-
       padding: 17px 20px;
-
       margin-top: 14px;
-
       font-size: 17px;
-
       font-weight: 700;
-
       cursor: pointer;
-
       background: #ff4f87;
-
       color: white;
-
       box-shadow:
         0 6px 16px rgba(255, 79, 135, 0.18);
     }
@@ -273,185 +197,111 @@
 
     .button.secondary {
       background: #f2dce5;
-
       color: #172033;
-
       box-shadow: none;
     }
 
-
-    /* =========================
-       ЭКРАН КАРТЫ
-    ========================= */
-
     .map-screen {
       position: relative;
-
       width: 100%;
       height: 100%;
-
       background: #f4f7fb;
     }
 
     .top-header {
       width: 100%;
-
       height: 52px;
-
       display: flex;
-
       align-items: center;
-
       justify-content: space-between;
-
       padding: 0 18px;
-
       background: #ff4f87;
-
       color: white;
     }
 
     .header-back {
       width: 32px;
       height: 32px;
-
       display: flex;
-
       align-items: center;
       justify-content: center;
-
       border: none;
-
       background: transparent;
-
       color: white;
-
       font-size: 28px;
-
       line-height: 1;
-
       cursor: pointer;
     }
 
     .header-title {
       font-size: 17px;
-
       font-weight: 800;
     }
 
-
-    /* =========================
-       КОНТЕЙНЕР КАРТЫ
-    ========================= */
-
     .map-container {
       position: relative;
-
       width: 100%;
-
       height: calc(100% - 52px);
-
       overflow: hidden;
     }
 
     #map {
       position: absolute;
-
       inset: 0;
-
       width: 100%;
       height: 100%;
-
       touch-action: none;
     }
 
-
-    /* =========================
-       ФИКСИРОВАННАЯ МЕТКА
-    ========================= */
-
     .map-marker {
       position: absolute;
-
       left: 50%;
-
       top: 40%;
-
-      transform:
-        translate(-50%, -100%);
-
+      transform: translate(-50%, -100%);
       z-index: 1000;
-
       font-size: 42px;
-
       pointer-events: none;
-
       filter:
         drop-shadow(
           0 3px 3px rgba(0, 0, 0, 0.25)
         );
     }
 
-
-    /* =========================
-       КАРТОЧКА НА КАРТЕ
-    ========================= */
-
     .map-card {
       position: absolute;
-
       left: 14px;
       right: 14px;
-
       bottom: 14px;
-
       z-index: 1500;
-
       padding: 18px;
-
       background: white;
-
       border-radius: 22px;
-
       box-shadow:
         0 8px 30px rgba(0, 0, 0, 0.12);
     }
 
     .map-card-title {
       font-size: 19px;
-
       font-weight: 800;
-
       margin-bottom: 6px;
     }
 
     .map-card-description {
       font-size: 14px;
-
       line-height: 1.4;
-
       color: #667085;
-
       margin-bottom: 14px;
     }
 
     .select-location-button {
       width: 100%;
-
       border: none;
-
       border-radius: 14px;
-
       padding: 15px;
-
       background: #ff4f87;
-
       color: white;
-
       font-size: 16px;
-
       font-weight: 800;
-
       cursor: pointer;
     }
 
@@ -459,28 +309,20 @@
       transform: scale(0.98);
     }
 
-
-    /* =========================
-       АДРЕС
-    ========================= */
+    .select-location-button:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
 
     .address-input {
       width: 100%;
-
       margin-top: 12px;
-
       border: 1px solid #d9dee7;
-
       border-radius: 12px;
-
       padding: 14px;
-
       font-size: 16px;
-
       outline: none;
-
       background: #fff;
-
       color: #172033;
     }
 
@@ -490,223 +332,135 @@
 
     .coordinates {
       margin-top: 8px;
-
       font-size: 12px;
-
       color: #98a2b3;
     }
 
-
-    /* =========================
-       ОШИБКИ
-    ========================= */
-
     .error {
       color: #d92d20;
-
       font-size: 14px;
-
       margin-top: 8px;
     }
 
-
-    /* =========================
-       УСЛУГИ
-    ========================= */
-
     .service {
       background: white;
-
       border: 2px solid transparent;
-
       border-radius: 18px;
-
       padding: 18px;
-
       margin-top: 14px;
-
       cursor: pointer;
-
       box-shadow:
         0 3px 15px rgba(0, 0, 0, 0.05);
     }
 
     .service.selected {
       border-color: #ff4f87;
-
       background: #fff0f5;
     }
 
     .service-title {
       font-size: 18px;
-
       font-weight: 700;
-
       margin-bottom: 6px;
     }
 
     .service-description {
       color: #667085;
-
       font-size: 14px;
-
       line-height: 1.4;
     }
 
     .service-price {
       margin-top: 12px;
-
       font-size: 18px;
-
       font-weight: 700;
-
       color: #ed3972;
     }
 
-
-    /* =========================
-       КАРТОЧКИ
-    ========================= */
-
     .profile-card {
       background: white;
-
       border-radius: 18px;
-
       padding: 20px;
-
       margin-top: 20px;
-
       box-shadow:
         0 3px 15px rgba(0, 0, 0, 0.05);
     }
 
-
-    /* =========================
-       EMPTY STATE
-    ========================= */
-
     .empty-state {
       background: white;
-
       border-radius: 20px;
-
       padding: 40px 20px;
-
       margin-top: 20px;
-
       text-align: center;
-
       box-shadow:
         0 3px 15px rgba(0, 0, 0, 0.05);
     }
 
     .empty-icon {
       font-size: 52px;
-
       margin-bottom: 15px;
     }
 
     .empty-title {
       font-size: 20px;
-
       font-weight: 800;
-
       margin-bottom: 8px;
     }
 
     .empty-description {
       color: #667085;
-
       font-size: 15px;
-
       line-height: 1.5;
     }
-
-
-    /* =========================
-       ПРОФИЛЬ
-    ========================= */
 
     .profile-avatar {
       width: 60px;
       height: 60px;
-
       display: flex;
-
       align-items: center;
       justify-content: center;
-
       margin-bottom: 12px;
-
       border-radius: 50%;
-
       background: #fff0f5;
-
       font-size: 30px;
     }
 
     .profile-name {
       font-size: 18px;
-
       font-weight: 700;
     }
 
-
-    /* =========================
-       НИЖНЯЯ НАВИГАЦИЯ
-    ========================= */
-
     .bottom-nav {
       position: relative;
-
       flex-shrink: 0;
-
       width: 100%;
-
       height: 72px;
-
       z-index: 3000;
-
       display: flex;
-
       align-items: center;
-
       justify-content: space-around;
-
       padding:
         7px 8px
         calc(7px + env(safe-area-inset-bottom));
-
       background: rgba(255, 255, 255, 0.97);
-
       border-top:
         1px solid #eeeeee;
     }
 
     .nav-item {
       position: relative;
-
       flex: 1;
-
       height: 58px;
-
       border: none;
-
       background: transparent;
-
       color: #98a2b3;
-
       font-size: 11px;
-
       font-weight: 600;
-
       cursor: pointer;
     }
 
     .nav-icon {
       font-size: 21px;
-
       margin-bottom: 2px;
     }
 
@@ -716,38 +470,20 @@
 
     .badge {
       position: absolute;
-
       top: 1px;
-
       right: 22%;
-
       min-width: 18px;
-
       height: 18px;
-
       padding: 0 5px;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       border-radius: 20px;
-
       background: #ed3972;
-
       color: white;
-
       font-size: 10px;
-
       font-weight: 800;
     }
-
-
-    /* =========================
-       МОБИЛЬНЫЕ УСТРОЙСТВА
-    ========================= */
 
     @media (max-width: 380px) {
 
@@ -762,9 +498,7 @@
       .map-card {
         left: 10px;
         right: 10px;
-
         bottom: 10px;
-
         padding: 15px;
       }
 
@@ -781,9 +515,7 @@
 <div class="app">
 
 
-  <!-- =========================
-       ГЛАВНЫЙ ЭКРАН
-  ========================= -->
+  <!-- ГЛАВНЫЙ ЭКРАН -->
 
   <section
     id="screen-home"
@@ -833,9 +565,7 @@
   </section>
 
 
-  <!-- =========================
-       ЭКРАН КАРТЫ
-  ========================= -->
+  <!-- КАРТА -->
 
   <section
     id="screen-location"
@@ -931,9 +661,7 @@
   </section>
 
 
-  <!-- =========================
-       УСЛУГИ
-  ========================= -->
+  <!-- УСЛУГИ -->
 
   <section
     id="screen-services"
@@ -1040,9 +768,7 @@
   </section>
 
 
-  <!-- =========================
-       ЗАКАЗЫ
-  ========================= -->
+  <!-- ЗАКАЗЫ -->
 
   <section
     id="screen-orders"
@@ -1077,9 +803,7 @@
   </section>
 
 
-  <!-- =========================
-       СООБЩЕНИЯ
-  ========================= -->
+  <!-- СООБЩЕНИЯ -->
 
   <section
     id="screen-messages"
@@ -1115,9 +839,7 @@
   </section>
 
 
-  <!-- =========================
-       ПРОФИЛЬ
-  ========================= -->
+  <!-- ПРОФИЛЬ -->
 
   <section
     id="screen-profile"
@@ -1148,9 +870,7 @@
   </section>
 
 
-  <!-- =========================
-       ПОДТВЕРЖДЕНИЕ
-  ========================= -->
+  <!-- ПОДТВЕРЖДЕНИЕ -->
 
   <section
     id="screen-summary"
@@ -1210,6 +930,7 @@
 
 
       <button
+        id="create-order-button"
         class="button"
         onclick="createOrder()"
       >
@@ -1229,9 +950,7 @@
   </section>
 
 
-  <!-- =========================
-       УСПЕШНЫЙ ЗАКАЗ
-  ========================= -->
+  <!-- УСПЕШНЫЙ ЗАКАЗ -->
 
   <section
     id="screen-success"
@@ -1268,9 +987,7 @@
   </section>
 
 
-  <!-- =========================
-       НИЖНЯЯ НАВИГАЦИЯ
-  ========================= -->
+  <!-- НИЖНЯЯ НАВИГАЦИЯ -->
 
   <nav class="bottom-nav">
 
@@ -1365,6 +1082,24 @@
   tg.ready();
 
   tg.expand();
+
+
+  /* =========================
+     SUPABASE
+  ========================= */
+
+  const SUPABASE_URL =
+    "https://dghcnwzqqmrsysewnvkn.supabase.co";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_OObcKHZ0AGc5AI5c_3KY-Q_GpzEKI8C";
+
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
 
   /* =========================
@@ -1552,7 +1287,7 @@
 
 
   /* =========================
-     НИЖНЯЯ НАВИГАЦИЯ
+     НАВИГАЦИЯ
   ========================= */
 
   function updateNavigation(name) {
@@ -1605,7 +1340,7 @@
 
 
   /* =========================
-     ВЫБОР МЕСТА + ГЕОКОДИРОВАНИЕ
+     ВЫБОР МЕСТА
   ========================= */
 
   async function selectMapLocation() {
@@ -1625,11 +1360,6 @@
         "location-next"
       );
 
-    const selectButton =
-      document.getElementById(
-        "select-location-button"
-      );
-
 
     errorElement.textContent = "";
 
@@ -1646,25 +1376,8 @@
     }
 
 
-    /* =========================
-       ПОЛУЧАЕМ ЦЕНТР КАРТЫ
-    ========================= */
-
     const center =
       map.center;
-
-
-    if (
-      !center ||
-      center.length < 2
-    ) {
-
-      errorElement.textContent =
-        "Не удалось определить координаты.";
-
-      return;
-
-    }
 
 
     order.longitude =
@@ -1692,196 +1405,18 @@
       "block";
 
 
-    addressInput.value =
-      "Определяем адрес...";
+    /*
+      Геокодирование пока оставляем
+      на следующий этап.
+    */
 
+    addressInput.value = "";
 
     order.address = "";
 
 
-    /* =========================
-       БЛОКИРУЕМ КНОПКУ
-    ========================= */
-
-    selectButton.disabled = true;
-
-    selectButton.textContent =
-      "⏳ Определяем адрес...";
-
-
-    try {
-
-      /* =========================
-         ЗАПРОС К ЯНДЕКС ГЕОКОДЕРУ
-      ========================= */
-
-      const url =
-        "https://geocode-maps.yandex.ru/v1/" +
-
-        "?apikey=" +
-        encodeURIComponent(
-          "c355cb46-e31f-4942-a74d-336abc2cb19a"
-        ) +
-
-        "&geocode=" +
-        encodeURIComponent(
-          order.longitude +
-          "," +
-          order.latitude
-        ) +
-
-        "&format=json" +
-
-        "&lang=ru_RU";
-
-
-      console.log(
-        "Запрос геокодера:",
-        url
-      );
-
-
-      const response =
-        await fetch(url);
-
-
-      console.log(
-        "Ответ геокодера:",
-        response.status
-      );
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          "HTTP " +
-          response.status
-        );
-
-      }
-
-
-      const data =
-        await response.json();
-
-
-      console.log(
-        "Данные геокодера:",
-        data
-      );
-
-
-      /* =========================
-         ИЩЕМ АДРЕС
-      ========================= */
-
-      const members =
-        data &&
-        data.response &&
-        data.response
-          .GeoObjectCollection &&
-        data.response
-          .GeoObjectCollection
-          .featureMember;
-
-
-      if (
-        !members ||
-        members.length === 0
-      ) {
-
-        throw new Error(
-          "Адрес не найден"
-        );
-
-      }
-
-
-      const geoObject =
-        members[0].GeoObject;
-
-
-      const meta =
-        geoObject
-          .metaDataProperty
-          .GeocoderMetaData;
-
-
-      const address =
-        meta.text;
-
-
-      if (!address) {
-
-        throw new Error(
-          "Пустой адрес"
-        );
-
-      }
-
-
-      /* =========================
-         СОХРАНЯЕМ АДРЕС
-      ========================= */
-
-      addressInput.value =
-        address;
-
-      order.address =
-        address;
-
-
-      /* =========================
-         ПОКАЗЫВАЕМ ПРОДОЛЖИТЬ
-      ========================= */
-
-      nextButton.style.display =
-        "block";
-
-
-      console.log(
-        "Адрес определён:",
-        address
-      );
-
-
-    } catch (error) {
-
-      console.error(
-        "Ошибка геокодирования:",
-        error
-      );
-
-
-      /*
-        Даже если Геокодер не сработал,
-        пользователь сможет ввести адрес
-        самостоятельно.
-      */
-
-      addressInput.value = "";
-
-      order.address = "";
-
-
-      errorElement.textContent =
-        "Не удалось автоматически определить адрес. Введите его вручную.";
-
-
-      nextButton.style.display =
-        "block";
-
-    }
-
-
-    /* =========================
-       ВОЗВРАЩАЕМ КНОПКУ
-    ========================= */
-
-    selectButton.disabled = false;
-
-    selectButton.textContent =
-      "📍 Выбрать это место";
+    nextButton.style.display =
+      "block";
 
   }
 
@@ -2026,23 +1561,108 @@
      СОЗДАНИЕ ЗАКАЗА
   ========================= */
 
-  function createOrder() {
+  async function createOrder() {
 
-    const orderNumber =
-      Math.floor(
-        1000 +
-        Math.random() *
-        9000
+    const button =
+      document.getElementById(
+        "create-order-button"
       );
 
 
-    document.getElementById(
-      "order-number"
-    ).textContent =
-      "#" + orderNumber;
+    button.disabled = true;
+
+    button.textContent =
+      "⏳ Создаём заказ...";
 
 
-    showScreen("success");
+    try {
+
+      console.log(
+        "Отправляем заказ в Supabase..."
+      );
+
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("orders")
+        .insert({
+
+          latitude:
+            order.latitude,
+
+          longitude:
+            order.longitude,
+
+          address:
+            order.address,
+
+          service:
+            services[
+              order.service
+            ].name,
+
+          price:
+            order.price,
+
+          status:
+            "searching"
+
+        })
+        .select()
+        .single();
+
+
+      if (error) {
+
+        console.error(
+          "Supabase error:",
+          error
+        );
+
+        throw error;
+
+      }
+
+
+      console.log(
+        "Заказ создан:",
+        data
+      );
+
+
+      document.getElementById(
+        "order-number"
+      ).textContent =
+        "#" + data.id;
+
+
+      showScreen("success");
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка создания заказа:",
+        error
+      );
+
+
+      alert(
+        "Не удалось создать заказ.\n\n" +
+        error.message
+      );
+
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "🚗 Заказать исполнителя";
+
+    }
 
   }
 
