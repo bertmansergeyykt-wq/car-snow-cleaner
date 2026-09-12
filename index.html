@@ -2,13 +2,22 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
 
   <title>Уборка снега</title>
 
+  <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+  <!-- Яндекс Карты API 3.0 -->
+  <script src="https://api-maps.yandex.ru/v3/?apikey=c355cb46-e31f-4942-a74d-336abc2cb19a&lang=ru_RU"></script>
+
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -16,7 +25,13 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
       background: #f4f7fb;
       color: #172033;
     }
@@ -86,23 +101,84 @@
       color: #172033;
     }
 
+    /* КАРТА */
+
+    .map-wrapper {
+      margin-top: 20px;
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
+
+    #map {
+      width: 100%;
+      height: 360px;
+    }
+
+    .map-hint {
+      padding: 12px 15px;
+      text-align: center;
+      font-size: 14px;
+      color: #667085;
+      background: white;
+    }
+
+    /* Фиксированная метка */
+
+    .map-marker {
+      position: absolute;
+
+      left: 50%;
+      top: 50%;
+
+      transform:
+        translate(-50%, -100%);
+
+      z-index: 1000;
+
+      font-size: 42px;
+
+      pointer-events: none;
+
+      filter:
+        drop-shadow(0 3px 3px rgba(0,0,0,0.25));
+    }
+
     .location-box {
-      margin-top: 25px;
-      padding: 20px;
+      margin-top: 18px;
+      padding: 18px;
       background: white;
       border-radius: 18px;
       box-shadow: 0 3px 15px rgba(0,0,0,0.05);
     }
 
-    .location-icon {
-      font-size: 40px;
-      margin-bottom: 10px;
+    .location-label {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
-    .location-text {
+    .address-input {
+      width: 100%;
+      border: 1px solid #d9dee7;
+      border-radius: 12px;
+      padding: 14px;
       font-size: 16px;
-      line-height: 1.5;
-      color: #667085;
+      outline: none;
+      background: #fff;
+      color: #172033;
+    }
+
+    .address-input:focus {
+      border-color: #2481cc;
+    }
+
+    .coordinates {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #98a2b3;
     }
 
     .service {
@@ -201,6 +277,7 @@
       font-size: 14px;
       margin-top: 10px;
     }
+
   </style>
 </head>
 
@@ -208,21 +285,29 @@
 
 <div class="app">
 
-  <!-- ЭКРАН 1 -->
+  <!-- ========================= -->
+  <!-- ГЛАВНЫЙ ЭКРАН -->
+  <!-- ========================= -->
+
   <section id="screen-home" class="screen active">
 
     <div class="hero">
 
       <div class="snow">❄️</div>
 
-      <h1>Уборка снега с автомобиля</h1>
+      <h1>
+        Уборка снега с автомобиля
+      </h1>
 
       <p>
         Не трать время на очистку машины.
         Найдём исполнителя рядом с вами.
       </p>
 
-      <button class="button" onclick="showScreen('location')">
+      <button
+        class="button"
+        onclick="openLocationScreen()"
+      >
         Заказать уборку
       </button>
 
@@ -231,35 +316,88 @@
   </section>
 
 
-  <!-- ЭКРАН 2 -->
+  <!-- ========================= -->
+  <!-- ЭКРАН КАРТЫ -->
+  <!-- ========================= -->
+
   <section id="screen-location" class="screen">
 
-    <div class="back" onclick="showScreen('home')">
+    <div
+      class="back"
+      onclick="showScreen('home')"
+    >
       ← Назад
     </div>
 
-    <h2>Где находится автомобиль?</h2>
+    <h2>
+      Где находится автомобиль?
+    </h2>
 
     <p>
-      Укажите местоположение автомобиля,
-      чтобы мы могли найти исполнителя рядом.
+      Передвиньте карту так, чтобы метка
+      находилась точно возле автомобиля.
     </p>
+
+
+    <div class="map-wrapper">
+
+      <div
+        id="map"
+        style="position: relative;"
+      >
+
+        <div class="map-marker">
+          📍
+        </div>
+
+      </div>
+
+      <div class="map-hint">
+        Передвиньте карту под метку
+      </div>
+
+    </div>
+
+
+    <button
+      id="select-location-button"
+      class="button"
+      onclick="selectMapLocation()"
+    >
+      📍 Выбрать это место
+    </button>
+
 
     <div class="location-box">
 
-      <div class="location-icon">📍</div>
+      <label
+        class="location-label"
+        for="address"
+      >
+        Адрес автомобиля
+      </label>
 
-      <div class="location-text" id="location-text">
-        Местоположение ещё не указано
+      <input
+        id="address"
+        class="address-input"
+        type="text"
+        placeholder="Например: ул. Ленина, 25"
+      >
+
+      <div
+        id="coordinates"
+        class="coordinates"
+      >
+        Координаты ещё не выбраны
       </div>
 
-      <button class="button" onclick="getLocation()">
-        📍 Указать местоположение
-      </button>
-
-      <div id="location-error" class="error"></div>
+      <div
+        id="location-error"
+        class="error"
+      ></div>
 
     </div>
+
 
     <button
       id="location-next"
@@ -273,14 +411,22 @@
   </section>
 
 
-  <!-- ЭКРАН 3 -->
+  <!-- ========================= -->
+  <!-- УСЛУГИ -->
+  <!-- ========================= -->
+
   <section id="screen-services" class="screen">
 
-    <div class="back" onclick="showScreen('location')">
+    <div
+      class="back"
+      onclick="showScreen('location')"
+    >
       ← Назад
     </div>
 
-    <h2>Что нужно сделать?</h2>
+    <h2>
+      Что нужно сделать?
+    </h2>
 
     <p>
       Выберите подходящий вариант уборки.
@@ -362,21 +508,29 @@
   </section>
 
 
-  <!-- ЭКРАН 4 -->
+  <!-- ========================= -->
+  <!-- ПОДТВЕРЖДЕНИЕ -->
+  <!-- ========================= -->
+
   <section id="screen-summary" class="screen">
 
-    <div class="back" onclick="showScreen('services')">
+    <div
+      class="back"
+      onclick="showScreen('services')"
+    >
       ← Назад
     </div>
 
-    <h2>Проверьте заказ</h2>
+    <h2>
+      Проверьте заказ
+    </h2>
 
     <div class="summary">
 
       <div class="summary-row">
 
         <div class="summary-label">
-          Место
+          Адрес
         </div>
 
         <div
@@ -421,7 +575,10 @@
       </div>
 
 
-      <div class="total" id="summary-total">
+      <div
+        class="total"
+        id="summary-total"
+      >
         Итого: —
       </div>
 
@@ -446,7 +603,10 @@
   </section>
 
 
-  <!-- ЭКРАН 5 -->
+  <!-- ========================= -->
+  <!-- УСПЕХ -->
+  <!-- ========================= -->
+
   <section id="screen-success" class="screen">
 
     <div class="success">
@@ -465,8 +625,11 @@
       </p>
 
       <div class="order-number">
+
         Номер заказа:
+
         <strong id="order-number"></strong>
+
       </div>
 
       <button
@@ -485,23 +648,39 @@
 
 <script>
 
-  // Подключение Telegram
+  /* =====================================
+     TELEGRAM
+  ===================================== */
+
   const tg = window.Telegram.WebApp;
 
   tg.ready();
   tg.expand();
 
 
-  // Данные текущего заказа
+  /* =====================================
+     ДАННЫЕ ЗАКАЗА
+  ===================================== */
+
   let order = {
+
     latitude: null,
+
     longitude: null,
+
+    address: "",
+
     service: null,
+
     price: null
+
   };
 
 
-  // Названия услуг
+  /* =====================================
+     УСЛУГИ
+  ===================================== */
+
   const services = {
 
     1: {
@@ -522,151 +701,508 @@
   };
 
 
-  // Переключение экранов
+  /* =====================================
+     ЯНДЕКС КАРТА
+  ===================================== */
+
+  let map = null;
+
+
+  async function initMap() {
+
+    try {
+
+      await ymaps3.ready;
+
+      const {
+        YMap,
+        YMapDefaultSchemeLayer
+      } = ymaps3;
+
+
+      map = new YMap(
+
+        document.getElementById("map"),
+
+        {
+
+          location: {
+
+            /*
+              Екатеринбург.
+              Карта стартует здесь.
+            */
+
+            center: [
+              60.6122,
+              56.8389
+            ],
+
+            zoom: 14
+
+          }
+
+        }
+
+      );
+
+
+      map.addChild(
+        new YMapDefaultSchemeLayer()
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка загрузки Яндекс Карты:",
+        error
+      );
+
+      document.getElementById(
+        "location-error"
+      ).textContent =
+        "Не удалось загрузить карту.";
+
+    }
+
+  }
+
+
+  /*
+    Загружаем карту сразу.
+  */
+
+  initMap();
+
+
+  /* =====================================
+     ОТКРЫТИЕ ЭКРАНА КАРТЫ
+  ===================================== */
+
+  function openLocationScreen() {
+
+    showScreen("location");
+
+  }
+
+
+  /* =====================================
+     ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ
+  ===================================== */
+
   function showScreen(name) {
 
-    document.querySelectorAll(".screen").forEach(function(screen) {
-      screen.classList.remove("active");
-    });
+    document
+      .querySelectorAll(".screen")
+      .forEach(function(screen) {
+
+        screen.classList.remove("active");
+
+      });
+
 
     document
       .getElementById("screen-" + name)
       .classList.add("active");
 
+
     window.scrollTo(0, 0);
+
+
+    /*
+      Когда возвращаемся
+      на экран карты,
+      обновляем размер карты.
+    */
+
+    if (
+      name === "location" &&
+      map
+    ) {
+
+      setTimeout(function() {
+
+        map.container.fitToViewport();
+
+      }, 100);
+
+    }
+
   }
 
 
-  // Получение геолокации
-  function getLocation() {
+  /* =====================================
+     ВЫБОР МЕСТА НА КАРТЕ
+  ===================================== */
+
+  async function selectMapLocation() {
 
     const errorElement =
-      document.getElementById("location-error");
+      document.getElementById(
+        "location-error"
+      );
 
     errorElement.textContent = "";
 
-    if (!navigator.geolocation) {
+
+    if (!map) {
 
       errorElement.textContent =
-        "Ваш браузер не поддерживает определение местоположения.";
+        "Карта ещё загружается. Попробуйте ещё раз.";
 
       return;
+
     }
 
 
-    navigator.geolocation.getCurrentPosition(
+    /*
+      Получаем текущее положение центра карты.
+    */
 
-      function(position) {
-
-        order.latitude =
-          position.coords.latitude;
-
-        order.longitude =
-          position.coords.longitude;
+    const camera =
+      map.camera;
 
 
-        document.getElementById("location-text").innerHTML =
-          "📍 Местоположение получено";
+    const center =
+      camera.center;
 
 
-        document.getElementById("location-next").style.display =
-          "block";
+    order.longitude =
+      center[0];
 
-      },
 
-      function(error) {
+    order.latitude =
+      center[1];
 
-        errorElement.textContent =
-          "Не удалось получить местоположение. Разрешите доступ к геолокации.";
 
-      },
+    /*
+      Показываем координаты.
+    */
 
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
+    document.getElementById(
+      "coordinates"
+    ).textContent =
+
+      "Координаты: " +
+
+      order.latitude.toFixed(6) +
+
+      ", " +
+
+      order.longitude.toFixed(6);
+
+
+    /*
+      В первой версии автоматически
+      получаем приблизительный адрес
+      через геокодер Яндекса.
+    */
+
+    try {
+
+      const response = await fetch(
+
+        "https://geocode-maps.yandex.ru/1.x/?" +
+
+        new URLSearchParams({
+
+          apikey:
+            "c355cb46-e31f-4942-a74d-336abc2cb19a",
+
+          geocode:
+            order.longitude +
+            "," +
+            order.latitude,
+
+          format:
+            "json",
+
+          lang:
+            "ru_RU",
+
+          results:
+            "1"
+
+        })
+
+      );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Geocoder error"
+        );
+
       }
 
-    );
 
-  }
-
-
-  // Выбор услуги
-  function selectService(id) {
-
-    document.querySelectorAll(".service").forEach(function(service) {
-      service.classList.remove("selected");
-    });
+      const data =
+        await response.json();
 
 
-    document
-      .getElementById("service-" + id)
-      .classList.add("selected");
+      /*
+        Если адрес найден —
+        показываем его.
+      */
+
+      const foundAddress =
+        extractAddress(data);
 
 
-    order.service = id;
-    order.price = services[id].price;
+      if (foundAddress) {
+
+        document.getElementById(
+          "address"
+        ).value =
+          foundAddress;
 
 
-    document.getElementById("service-next").style.display =
+        order.address =
+          foundAddress;
+
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "Ошибка геокодирования:",
+        error
+      );
+
+      /*
+        Даже если адрес автоматически
+        не определился, пользователь
+        сможет ввести его вручную.
+      */
+
+    }
+
+
+    /*
+      Показываем кнопку продолжения.
+    */
+
+    document.getElementById(
+      "location-next"
+    ).style.display =
       "block";
 
   }
 
 
-  // Формирование итогового заказа
-  function showSummary() {
+  /* =====================================
+     ИЗВЛЕЧЕНИЕ АДРЕСА
+  ===================================== */
 
-    if (!order.service) {
+  function extractAddress(data) {
 
-      alert("Выберите услугу.");
+    try {
 
-      return;
+      const featureMember =
+        data
+          .response
+          .GeoObjectCollection
+          .featureMember;
+
+
+      if (
+        !featureMember ||
+        !featureMember.length
+      ) {
+
+        return "";
+
+      }
+
+
+      return featureMember[0]
+        .GeoObject
+        .metaDataProperty
+        .GeocoderMetaData
+        .text || "";
+
+    } catch (error) {
+
+      return "";
+
     }
-
-
-    document.getElementById("summary-location").textContent =
-      "Геолокация получена";
-
-
-    document.getElementById("summary-service").textContent =
-      services[order.service].name;
-
-
-    document.getElementById("summary-price").textContent =
-      order.price + " ₽";
-
-
-    document.getElementById("summary-total").textContent =
-      "Итого: " + order.price + " ₽";
-
-
-    showScreen("summary");
 
   }
 
 
-  // Создание заказа
+  /* =====================================
+     РУЧНОЕ ИЗМЕНЕНИЕ АДРЕСА
+  ===================================== */
+
+  document
+    .getElementById("address")
+    .addEventListener(
+      "input",
+      function(event) {
+
+        order.address =
+          event.target.value;
+
+      }
+    );
+
+
+  /* =====================================
+     ВЫБОР УСЛУГИ
+  ===================================== */
+
+  function selectService(id) {
+
+    document
+      .querySelectorAll(".service")
+      .forEach(function(service) {
+
+        service.classList.remove(
+          "selected"
+        );
+
+      });
+
+
+    document
+      .getElementById(
+        "service-" + id
+      )
+      .classList.add(
+        "selected"
+      );
+
+
+    order.service =
+      id;
+
+
+    order.price =
+      services[id].price;
+
+
+    document.getElementById(
+      "service-next"
+    ).style.display =
+      "block";
+
+  }
+
+
+  /* =====================================
+     ФОРМИРОВАНИЕ ЗАКАЗА
+  ===================================== */
+
+  function showSummary() {
+
+    if (
+      !order.latitude ||
+      !order.longitude
+    ) {
+
+      alert(
+        "Сначала выберите место автомобиля."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      !order.address.trim()
+    ) {
+
+      alert(
+        "Введите адрес автомобиля."
+      );
+
+      return;
+
+    }
+
+
+    if (!order.service) {
+
+      alert(
+        "Выберите услугу."
+      );
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "summary-location"
+    ).textContent =
+      order.address;
+
+
+    document.getElementById(
+      "summary-service"
+    ).textContent =
+      services[
+        order.service
+      ].name;
+
+
+    document.getElementById(
+      "summary-price"
+    ).textContent =
+      order.price + " ₽";
+
+
+    document.getElementById(
+      "summary-total"
+    ).textContent =
+      "Итого: " +
+      order.price +
+      " ₽";
+
+
+    showScreen(
+      "summary"
+    );
+
+  }
+
+
+  /* =====================================
+     СОЗДАНИЕ ЗАКАЗА
+  ===================================== */
+
   function createOrder() {
 
     const orderNumber =
-      Math.floor(1000 + Math.random() * 9000);
+      Math.floor(
+        1000 +
+        Math.random() *
+        9000
+      );
 
 
-    document.getElementById("order-number").textContent =
+    document.getElementById(
+      "order-number"
+    ).textContent =
       "#" + orderNumber;
 
 
     /*
-      Пока мы только показываем созданный заказ.
+      Пока заказ не сохраняется
+      в базе данных.
 
-      На следующем этапе подключим базу данных,
-      и заказ действительно будет сохраняться.
+      Это сделаем следующим
+      большим этапом.
     */
 
 
-    showScreen("success");
+    showScreen(
+      "success"
+    );
 
   }
 
